@@ -1,0 +1,4 @@
+interface IDataBaseObj {
+    
+    id?: number;
+}

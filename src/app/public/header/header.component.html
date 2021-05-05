@@ -1,0 +1,299 @@
+<header class="main-header">
+  <!-- Logo -->
+  <!-- <a href="index.html" class="logo"> -->
+     <!-- <span class="logo-mini"><img src="../../assets/img/min-logo.png" alt="logo"/></span> -->
+     <!-- logo for regular state and mobile devices -->
+     <!-- <span class="logo-lg hidden-xs"><img src="../../assets/img/logo.png" alt="logo"/></span> -->
+   <!-- </a> -->
+ <!-- Header Navbar: style can be found in header.less -->
+ <nav class="navbar navbar-static-top navbar-fixed-top" role="navigation" id="main-nav">
+   <!-- Sidebar toggle button
+   <a class="sidebar-toggle" data-toggle="offcanvas" role="button" (click)="headerWidth()">
+   </a>
+-->
+<!-- search form -->
+   <div class="app-search">
+      <div class="form-group">
+        <input type="text" class="form-control" [placeholder]="'GENERAL.APP_SEARCH_MSG'|translate" [(ngModel)]="general">
+        <div ngbDropdown class="d-inline-block search-options">
+          <button class="btn btn-success" id="app-search-options" ngbDropdownToggle >{{chosenSectionTitle | translate}} <i class="fa fa-angle-down fa-lg" aria-hidden="true"></i>
+          </button>
+          <div ngbDropdownMenu aria-labelledby="app-search-options">
+            <button ngbDropdownItem (click)="chosenSection='users';chosenSectionTitle='USERS.USERS'">{{'USERS.USERS' | translate}}</button>
+            <button ngbDropdownItem (click)="chosenSection='tickets';chosenSectionTitle='TICKET.TICKET'">{{'TICKET.TICKET' | translate}}</button>
+            <button ngbDropdownItem (click)="chosenSection='beneficaries';chosenSectionTitle='BENEFICIARIES.THE_BENEFICIARIES'">{{'BENEFICIARIES.THE_BENEFICIARIES' | translate}}</button>
+          </div>
+    </div>
+        <button type="button" class="app-search-btn" (click)="appSearch()"><i class="fa fa-search"></i></button>
+      </div>
+   </div>
+<div class="navbar-custom-menu">
+     <ul class="nav navbar-nav">
+        <li ngbDropdown class="dropdown">
+            <a class="dropdown-toggle" id="addBtn" ngbDropdownToggle ti [title]="'GENERAL.ADD' | translate" class="add-btn">
+              <i class="fa fa-plus"></i>
+            </a>
+            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="addBtn">
+              <li>
+                <a routerLink="/tickets/add-ticket" ngbDropdownItem><i class="fa fa-ticket"></i> {{ 'TICKET.ADD_TICKET' | translate}}</a>
+              </li>
+              <li>
+                <a routerLink="/clients" ngbDropdownItem><i class="fa fa-user-plus"></i> {{'BENEFICIARIES.ADD_BENEFICIARY' | translate}}</a>
+              </li>
+              <li (click)="openNewUser(addNewUser)" *ngIf="isGranted('Add User')">
+                <a ngbDropdownItem class="c-pointer"><i class="fa fa-user-plus"></i> {{'USERS.ADD_USER' | translate}}</a>
+              </li>
+            </ul>
+        </li>
+        <li>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" (click)="changeLanguage($event)">{{'GENERAL.LANGUAGE' | translate}}</a>
+        </li>
+         <li>
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <i class="fa fa-phone"></i>
+           </a>
+         </li>
+         <!-- /.messages start -->
+         <li class="dropdown messages-menu" ngbDropdown>
+             <a class="dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>
+               <i class="fa fa-envelope-o"></i>
+               <span class="label label-danger"></span>
+             </a>
+             <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+               <li class="header">لديك 4 رسائل جديدة</li>
+               <li>
+                 <ul class="menu scrollbar style-3">
+                   <li><!-- start message -->
+                     <a href="#" ngbDropdownItem>
+                       <div class="pull-left">
+                         <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+                       </div>
+                       <h4>
+                         فريق الدعم
+                         <small><i class="fa fa-clock-o"></i> 5 دقائق</small>
+                       </h4>
+                       <p>عنوان الرسالة يظهر هنا بهذا الشكل</p>
+                     </a>
+                   </li><!-- end message -->
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <div class="pull-left">
+                         <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+                       </div>
+                       <h4>
+                         فريق التصميم
+                         <small><i class="fa fa-clock-o"></i> 3 ساعات</small>
+                       </h4>
+                       <p>عنوان الرسالة يظهر هنا بهذا الشكل</p>
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <div class="pull-left">
+                         <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+                       </div>
+                       <h4>
+                         المطورين
+                         <small><i class="fa fa-clock-o"></i> اليوم</small>
+                       </h4>
+                       <p>عنوان الرسالة يظهر هنا بهذا الشكل</p>
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <div class="pull-left">
+                         <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+                       </div>
+                       <h4>
+                         فريق المبيعات
+                         <small><i class="fa fa-clock-o"></i> أمس</small>
+                       </h4>
+                       <p>عنوان الرسالة يظهر هنا بهذا الشكل</p>
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <div class="pull-left">
+                         <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+                       </div>
+                       <h4>
+                         المراجعين
+                         <small><i class="fa fa-clock-o"></i> يومين</small>
+                       </h4>
+                       <p>عنوان الرسالة يظهر هنا بهذا الشكل</p>
+                     </a>
+                   </li>
+                 </ul>
+               </li>
+               <li class="footer"><a href="#">عرض جميع الرسائل</a></li>
+             </ul>
+         </li>
+         <!-- /.notifications start -->
+         <li class="dropdown notifications-menu" ngbDropdown>
+             <a class="dropdown-toggle" id="dropdownBasic1" ngbDropdownToggle>
+               <i class="fa fa-bell-o"></i>
+               <span class="label label-danger"></span>
+             </a>
+             <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+               <li class="header">{{'MESSAGES.NOTIFICATIOSN_MSG' | translate}}</li>
+               <li>
+                 <!-- inner menu: contains the actual data -->
+                 <ul class="menu scrollbar style-3">
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <i class="fa fa-users text-aqua"></i> {{'MESSAGES.NEW_MEMBER_MSG' | translate}}
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <i class="fa fa-warning text-yellow"></i> شرح طويل جدا يظهر هنا لضبط شكل التصميم في حالة اطالة عنوان الاشعار لنرى كيف سيظهر...
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <i class="fa fa-users text-red"></i> تم تسجيل 5 اعضاء جدد
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <i class="fa fa-shopping-cart text-green"></i> تم عمل 25 تذكرة جديدة
+                     </a>
+                   </li>
+                   <li>
+                     <a href="#" ngbDropdownItem>
+                       <i class="fa fa-user text-red"></i> {{'USERS.CHANGE_PASSWORD_MSG' | translate}}
+                     </a>
+                   </li>
+                 </ul>
+               </li>
+               <li class="footer"><a href="#">{{'GENERAL.SHOW_ALL' | translate}}</a></li>
+             </ul>
+         </li>
+       <li class="dropdown user user-menu" ngbDropdown>
+         <a class="dropdown-toggle c-pointer" id="dropdownBasic1" ngbDropdownToggle>
+           <img src="../../assets/img/user-160x160.png" class="user-image" alt="User Image">
+           <span class="hidden-xs">{{userInfo.name}}</span>
+         </a>
+         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+           <!-- User image -->
+           <li class="user-header">
+             <img src="../../assets/img/user-160x160.png" class="img-circle" alt="User Image">
+             <p>
+              {{userInfo.name}}
+             </p>
+           </li>
+           <!-- Menu Footer-->
+           <li class="user-footer">
+             <div class="pull-left">
+               <a class="btn btn-default btn-flat" ngbDropdownItem routerLink="user-profile">{{'GENERAL.PROFILE_PAGE' | translate}}</a>
+             </div>
+             <div class="pull-right">
+               <a (click)="logOut($event)" class="btn btn-default btn-flat" ngbDropdownItem>{{'GENERAL.LOG_OUT' | translate}}</a>
+             </div>
+           </li>
+         </ul>
+       </li>
+     </ul>
+   </div>
+ </nav>
+<ng-template #addNewUser let-newUserModal let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">{{'USERS.ADD_USER' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeClearUser(newUserModal)">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal" #addUserForm="ngForm" (ngSubmit)="submit(addUserForm)">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="Name">{{'GENERAL.NAME' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="text" required  #firstName="ngModel" class="form-control" name="name"  id="Name" [(ngModel)]="userModel.name">
+                            <span class="validate-msg" *ngIf="firstName.touched && !firstName.valid">{{'GENERAL.NAME_INPUT_REQUIERED' | translate}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'GENERAL.EMAIL' | translate}}</label>
+                        <div class="col-sm-8">
+                            <input #userEmail="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" name="email" [(ngModel)]="userModel.email">
+                            <span class="validate-msg" *ngIf="userEmail.touched && !userEmail.valid">{{'MESSAGES.EMAIL_INPUT_REQUIERED' | translate}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'GENERAL.PASS_WORD' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="password" required #passWord="ngModel" minlength="8" class="form-control" name="password" [(ngModel)]="userModel.password">
+                            <span class="validate-msg" *ngIf="passWord.touched && !passWord.valid">{{'MESSAGES.PASS_WORD_INPUT_REQUIERED' | translate}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'MESSAGES.REPEAT_PASS_WORD' | translate}} <i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="password" required appConfirmEqualValidator="password" class="form-control" #passwordConfirmation="ngModel" name="password_confirmation" [(ngModel)]="userModel.password_confirmation">
+                            <span class="validate-msg" *ngIf="passwordConfirmation.touched && !passwordConfirmation.valid">{{'MESSAGES.INPUT_REQUIERED' | translate}}</span>
+                            <span class="validate-msg" *ngIf="passwordConfirmation.touched && !passwordConfirmation.valid">{{'MESSAGES.PASS_WORD_MASK' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="national_id"
+                                [(ngModel)]="userModel.national_id" required pattern="^(0|[1-9][0-9]*)$" minlength="10" maxlength="10" #nationalId="ngModel">
+                                <span class="validate-msg" *ngIf="nationalId.touched && !nationalId.valid">{{'IDENTIFICATION.IDENTIFICATION_VALID_MSG' | translate}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-4 control-label">{{'USERS.USERS_GROUP' | translate}}</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" [(ngModel)]="userModel.role_id" name="role_id" required #roleId="ngModel">
+                                    <option [value]="0">{{'GENERAL.CHOSE_JOB' | translate}}</option>
+                                    <option *ngFor="let role of roleIdData.data" [value]="role.id">{{role.name}}</option>
+                                </select>
+                                <span class="validate-msg" *ngIf="roleId.touched && !roleId.valid">{{'MESSAGES.ROLLE_INPUT_REQUIERED' | translate}}</span>
+                            </div>
+                        </div>    
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'GENERAL.SECTION' | translate}}</label>
+                        <div class="col-sm-8">
+                                <div class="radio radio-inline">
+                                        <label>
+                                          <input type="radio" name="optionsRadios" value="1" #hospitalRadio checked>
+                                          {{'GENERAL.HOSPITALS' | translate}}
+                                        </label>
+                                      </div>              
+                                <div class="radio radio-inline">
+                                        <label>
+                                          <input type="radio" name="optionsRadios" #sectionRadio value="2" (click)="userModel.hospital_id=0" >
+                                          {{'GENERAL.ADMINISTRATIVE_SECTOR' | translate}}
+                                        </label>
+                                      </div>
+                            <select class="form-control mt-5" [(ngModel)]="userModel.hospital_id" name="hospital_id" [disabled]="sectionRadio.checked">
+                                <option [value]="0">{{'GENERAL.CHOSE_HOSPITAL' | translate}}</option>
+                                <option *ngFor="let hosp of hospitalsData.data" [value]="hosp.id">{{hosp.title_ar}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">{{'GENERAL.MOBILE' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="mobileNum" required pattern="^(0|[1-9][0-9]*)$" [(ngModel)]="userModel.mobile" #mobileNum="ngModel">
+                                <span class="validate-msg" *ngIf="mobileNum.touched && !mobileNum.valid">{{'MESSAGES.MOBILE_INPUT_REQUIERED' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <button type="button" class="btn btn-success"
+            (click)="saveNewUser(); newUserModal.dismiss('Cross click');" [disabled]="!addUserForm.valid">{{'GENERAL.SAVE' | translate}} <i class="fa fa-check fa-lg" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-danger mR-10" aria-label="Close" (click)="closeClearUser(newUserModal)">{{'GENERAL.CANCEL' | translate}} <i class="fa fa-ban fa-lg" aria-hidden="true"></i></button>
+    </div>
+</ng-template>
+</header>

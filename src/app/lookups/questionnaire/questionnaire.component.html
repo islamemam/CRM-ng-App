@@ -1,0 +1,45 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+         الاستبيان
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+          <li class="active"> الاستبيان</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="nav-tabs-custom">
+
+            <ngb-tabset  (tabChange)="onTabChange($event)">
+                <ngb-tab *ngIf="isGranted('Display QuestionCategories')">
+                    <ng-template ngbTabTitle>التصنيفات</ng-template>
+                    <ng-template ngbTabContent>
+            
+                     <app-question-category>
+            
+                     </app-question-category>
+            
+                    </ng-template>
+                </ngb-tab>
+                
+                <ngb-tab *ngIf="isGranted('Display Questions')">
+                    <ng-template ngbTabTitle>الاسئله</ng-template>
+                    <ng-template ngbTabContent>
+            
+                     <app-questions>
+            
+                     </app-questions>
+            
+                    </ng-template>
+                </ngb-tab>
+            
+            </ngb-tabset>
+
+        </div>
+         
+    </section><!-- /.content -->
+  </div>

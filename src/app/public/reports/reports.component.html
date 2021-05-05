@@ -1,0 +1,161 @@
+<div class="content-wrapper" id="content-wrapper" style="min-height: 704px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+         التقارير
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+          <li class="active"> التقارير</li>
+        </ol>
+    </section>
+    <!-- add report modal -->
+    <ng-template #addReportModal let-modal>
+        <div class="modal-content">
+            <div class="modal-header bg-default">
+                <h4 class="modal-title text-green" id="exampleModalLabel">إنشاء تقرير</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body margin" style="height: auto; width: auto;">
+                <form class="form-horizontal">
+                  <div class="form-group">
+                      <label for="inputReportName" class="col-sm-4 control-label">اسم التقرير</label>
+                      <div class="col-sm-8"><!-- has-success -->
+                        <input type="text" class="form-control" id="inputReportName" placeholder="اسم التقرير">
+                        <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                      </div>
+                  </div><!-- /.form-group -->
+                  
+                  <div class="form-group">
+                    <label for="inputCallDetails" class="col-sm-4 control-label">مرئي</label>
+                    
+                    <div class="radio radio-inline">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">
+                          انا فقط
+                        </label>
+                      </div>
+                      <div class="radio radio-inline">
+                        <label>
+                          <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                          الجميع
+                        </label>
+                      </div>
+                  </div>
+                  <!-- /.form-group -->
+                </form>
+              </div>
+            <div class="modal-footer">
+                <a routerLink="/report-details" (click)="modal.close('Close click')" class="btn btn-success">حفظ</a>
+                <a class="btn bg-gray-dark" (click)="modal.close('Close click')" data-dismiss="modal">إلغاء</a>
+            </div>
+          </div>
+      </ng-template>
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+          <!-- Search Customers -->
+          <div class="col-xs-12">
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 class="box-title text-green">تصنيفات التقارير</h3>
+                  <div class="box-tools pull-right">
+                    <div class="has-feedback inline-block">
+                      <form>
+                        <input type="text" class="form-control" placeholder="ابحث...">
+                        <button type="submit" name="search" class="btn btn-flat search-btn"><i class="fa fa-search"></i></button>
+                      </form>
+                    </div>
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                  <h4>ما تم مشاهدتة مؤخراً</h4>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                      <!-- small box report-->
+                      <a href="report-details.html" class="report-box">
+                        <div class="small-box">
+                          <h3 class="text-gray text-center">
+                            <i class="fa fa-ban"></i>
+                          </h3>
+                          <p class="text-center report-text">لا يوجد بيانات</p>
+                        </div>
+                        <p class="report-text">اسم التقرير</p>
+                        <p class="text-gray">اخر تحديث: الاثنين ٢٠ يناير ٢٠٢٠</p>
+                      </a>
+                    </div><!-- ./col -->
+
+                  </div>  
+                  <hr>
+                  <form class="form-horizontal">
+                    <div class="form-group">
+                      <label for="inputCategories" class="col-sm-3 col-md-2 col-lg-1 control-label">التصنيفات</label>
+                      <div class="col-sm-6 col-md-4 col-lg-3"><!-- add class "has-warning" for validation-->
+                        <select class="form-control">
+                          <option selected="">جميع التقارير</option>
+                          <option>تحليل النظام</option>
+                          <option>الانتاجية</option>
+                          <option>رضاء العملاء</option>
+                        </select>
+                        <!-- <label class="control-label" for="inputWarning"><i class="fa fa-bell-o"></i>رسالة تنبية تظهر هنا</label> -->
+                      </div>
+                      <button type="button" class="btn btn-success pull-right margin-r-20" (click)="openAddReportModal(addReportModal)"><i class="fa fa-plus text-xs"></i> إضافة  تقرير</button>
+                    </div>
+                  </form>
+                  <hr>
+                  <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="example1_length"><label>عرض <select name="example1_length" aria-controls="example1" class="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> مدخلات</label></div></div><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"><label> بحث:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row"><div class="col-sm-12 table-responsive"><table id="example1" class="table table-bordered table-striped text-center dataTable no-footer" role="grid" aria-describedby="example1_info">
+                      <thead class="bg-gray-dark">
+                        <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="اسم التقرير: activate to sort column descending" style="width: 350px;">اسم التقرير</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="تاريخ اخر تحديث: activate to sort column ascending" style="width: 377px;">تاريخ اخر تحديث</th><th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="عدد المحتويات: activate to sort column ascending" style="width: 371.2px;">عدد المحتويات</th></tr>
+                      </thead>
+                      <tbody>
+                      <tr role="row" class="odd">
+                          <td class="sorting_1">...الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>05</td>
+                        </tr><tr role="row" class="even">
+                          <td class="sorting_1"> ..الاسم يظهر هنا</td>
+                          <td>01/01/2020</td>
+                          <td>15</td>
+                        </tr><tr role="row" class="odd">
+                          <td class="sorting_1">..الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>05</td>
+                        </tr><tr role="row" class="even">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>05</td>
+                        </tr><tr role="row" class="odd">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>10</td>
+                        </tr><tr role="row" class="even">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>20</td>
+                        </tr><tr role="row" class="odd">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>01</td>
+                        </tr><tr role="row" class="even">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>00</td>
+                        </tr><tr role="row" class="odd">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>08</td>
+                        </tr><tr role="row" class="even">
+                          <td class="sorting_1">الاسم يظهر هنا</td>
+                          <td>20/01/2020</td>
+                          <td>16</td>
+                        </tr></tbody>
+                  </table></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="example1_info" role="status" aria-live="polite">عرض 1 إلى 10 من 24 مدخلات</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="example1_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="example1_previous"><a href="#" aria-controls="example1" data-dt-idx="0" tabindex="0">&lt;</a></li><li class="paginate_button active"><a href="#" aria-controls="example1" data-dt-idx="1" tabindex="0">1</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0">2</a></li><li class="paginate_button "><a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0">3</a></li><li class="paginate_button next" id="example1_next"><a href="#" aria-controls="example1" data-dt-idx="4" tabindex="0">&gt;</a></li></ul></div></div></div></div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div>

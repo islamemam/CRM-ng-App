@@ -1,0 +1,260 @@
+<div class="content-wrapper"id="content-wrapper" style="min-height: 392px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+          {{ 'AUTO_REPLY.NAME' | translate}}
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> {{ 'HOME.NAME' | translate}}</a></li>
+          <li class="active">{{ 'AUTO_REPLY.NAME' | translate}}</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+          <!-- Search Customers -->
+          <div class="col-xs-12">
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 class="box-title text-green">{{ 'AUTO_REPLY.NAME' | translate}}</h3>
+                  <div class="box-tools pull-right">
+                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                 
+                    <hr>
+                      <button type="button" *ngIf="isGranted('Add Auto Response')"(click)="openModal(add)" class="btn btn-success" data-toggle="modal" data-target="#editCustomer">{{ 'AUTO_REPLY.ADD' | translate}}</button>
+                   
+                    <hr>
+                    <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                      <div class="row"><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"><label> بحث:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row"><div class="col-sm-12 table-responsive">
+                        <table id="example1" class="table table-bordered table-striped text-center dataTable no-footer" role="grid" aria-describedby="example1_info">
+                        <thead class="bg-gray-dark">
+                          <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="الاسم: activate to sort column descending" style="width: 122px;">
+                              {{ 'AUTO_REPLY.ar' | translate}}
+                        </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="الهاتف: activate to sort column ascending" style="width: 122px;">
+                                {{ 'AUTO_REPLY.en' | translate}}
+                            </th>
+                            
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="تعديل: activate to sort column ascending" style="width: 70px;">{{ 'AUTO_REPLY.EDIT' | translate}}</th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="تعديل: activate to sort column ascending" style="width: 70px;">{{ 'AUTO_REPLY.DELETE' | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody  *ngIf="autoreplys != null">
+                            <tr *ngFor="let reply of autoreplys.data" role="row" class="odd">
+                                <td class="sorting_1">{{reply.title_ar}}</td>
+                                <td>{{reply.title_en}}</td>
+                                <td *ngIf="isGranted('Edit Auto Response')">
+                                  <a style="cursor:pointer" (click)="openEditConfirmation(edit,reply.id)"><i class="fa fa-pencil margin-r-5 text-green"></i></a>
+                                </td>
+                                <td *ngIf="isGranted('Delete Auto Response')">
+                                  <a style="cursor:pointer" (click)="openDeleteConfirmation(DeleteContent,reply.id, $event)" class=""><i class="fa fa-trash-o margin-r-5 text-red"></i></a >
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div></div>
+                <ngb-pagination *ngIf="autoreplys != null" [collectionSize]="autoreplys.meta.total" [rotate]="true"
+                [maxSize]="paginationMaxSize" class="pull-right"
+                [pageSize] = "pageSize" (pageChange)="onpageChange($event)" [(page)]="autoreplys.meta.current_page"
+                aria-label="Default pagination"></ngb-pagination>
+
+                            </div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div>
+
+    <!-- add reply modal -->
+    <ng-template #add let-modal>
+            <div class="modal-header bg-default">
+                <h4 class="modal-title text-green" id="exampleModalLabel">{{ 'AUTO_REPLY.ADD' | translate}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h3 *ngIf="adddone" class="edit-done" >{{ 'AUTO_REPLY.MODAL.add_done' | translate}}</h3>
+            <form *ngIf="!adddone"class="form-horizontal" [formGroup] ="addReplyForm" >
+            <div class="modal-body margin h-auto">
+                    
+                        <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'GENERAL.AVALIBALE' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                                    <select class="form-control" >
+                                        <option *ngFor="let role of roles" value="{{role.id}}">{{role.name_ar}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.title_ar' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                                <input type="text" formControlName="title_ar" class="form-control" placeholder="{{ 'AUTO_REPLY.MODAL.title_ar' | translate}}">
+                                <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.value' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-6"> <!-- add class "has-success" for validation-->
+                                    <select class="form-control"#valueArtoadd>
+                                        <option *ngFor="let keyword of keywords" value="{{keyword.title_en}}">{{keyword.title_ar}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                   <button (click)="addArkeyinadd(valueArtoadd)" class=" form-control btn-success">{{ 'AUTO_REPLY.MODAL.add' | translate}}</button>
+                                </div>
+                            </div><!-- /.form-group -->
+                            
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.reply' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <textarea rows="3" formControlName="details_ar" class="form-control"  placeholder="{{ 'AUTO_REPLY.MODAL.reply' | translate}}"></textarea>
+                                </div>
+                            </div><!-- /.form-group -->
+    
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.title_en' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                                <input type="text" formControlName="title_en" class="form-control" placeholder="{{ 'AUTO_REPLY.MODAL.title_en' | translate}}">
+                                <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                </div>
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.value' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-6"> <!-- add class "has-success" for validation-->
+                                    <select class="form-control" #valueEntoadd dir="ltr">
+                                        <option *ngFor="let keyword of keywords" value="{{keyword.title_en}}">{{keyword.title_en}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button (click)="addEnkeyinadd(valueEntoadd)"class=" form-control btn-success">{{ 'AUTO_REPLY.MODAL.add' | translate}}</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{ 'AUTO_REPLY.MODAL.reply' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <textarea rows="3" dir="ltr" class="form-control" formControlName="details_en"  placeholder="{{ 'AUTO_REPLY.MODAL.reply' | translate}}"></textarea>
+                                </div>
+                            </div><!-- /.form-group -->
+                            
+                        </div><!-- /.col-->
+                        </div><!-- /.row-->
+                    
+                    </div>
+            <div class="modal-footer">
+                <button type="text" (click)="addReply(addReplyForm.value)" [disabled]="!addReplyForm.valid" class="btn btn-success">{{ 'AUTO_REPLY.ADD' | translate}}</button>
+                <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="modal.close('Cancel')">{{ 'AUTO_REPLY.MODAL.close' | translate}}</button>
+            </div>
+        </form>
+            <div *ngIf="adddone" class="modal-footer">
+                <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="modal.close('Cancel')">{{ 'AUTO_REPLY.MODAL.close' | translate}}</button>
+            </div>
+        </ng-template>
+
+        <!-- edit reply modal -->
+    <ng-template #edit let-modal>
+        <div class="modal-header bg-default">
+            <h4 class="modal-title text-green" id="exampleModalLabel">{{ 'AUTO_REPLY.EDIT' | translate}}</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <h3 *ngIf="editDone" class="edit-done" >{{ 'AUTO_REPLY.MODAL.done' | translate}}</h3>
+        <form *ngIf="!editDone"class="form-horizontal" [formGroup] ="editReplyForm" >
+        <div class="modal-body margin h-auto">
+                
+                    <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.title_ar' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                            <input type="text" formControlName="title_ar" class="form-control" placeholder="{{ 'AUTO_REPLY.MODAL.title_ar' | translate}}">
+                            <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.value' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-6"> <!-- add class "has-success" for validation-->
+                                <select class="form-control"#valueAr>
+                                    <option *ngFor="let keyword of keywords" value="{{keyword.title_en}}">{{keyword.title_ar}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                               <button (click)="addArkey(valueAr)" class=" form-control btn-success">{{ 'AUTO_REPLY.MODAL.add' | translate}}</button>
+                            </div>
+                        </div><!-- /.form-group -->
+                        
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.reply' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8">
+                                <textarea rows="3" formControlName="details_ar" class="form-control"  placeholder="{{ 'AUTO_REPLY.MODAL.reply' | translate}}"></textarea>
+                            </div>
+                        </div><!-- /.form-group -->
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.title_en' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                            <input type="text" formControlName="title_en" class="form-control" placeholder="{{ 'AUTO_REPLY.MODAL.title_en' | translate}}">
+                            <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                            </div>
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> {{ 'AUTO_REPLY.MODAL.value' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-6"> <!-- add class "has-success" for validation-->
+                                <select class="form-control" #valueEn dir="ltr">
+                                    <option *ngFor="let keyword of keywords" value="{{keyword.title_en}}">{{keyword.title_en}}</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button (click)="addEnkey(valueEn)"class=" form-control btn-success">{{ 'AUTO_REPLY.MODAL.add' | translate}}</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{ 'AUTO_REPLY.MODAL.reply' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8">
+                                <textarea rows="3" dir="ltr" class="form-control" formControlName="details_en"  placeholder="{{ 'AUTO_REPLY.MODAL.reply' | translate}}"></textarea>
+                            </div>
+                        </div><!-- /.form-group -->
+                        
+                    </div><!-- /.col-->
+                    </div><!-- /.row-->
+                
+                </div>
+        <div class="modal-footer">
+            <button type="text" (click)="editReply(editReplyForm.value)" class="btn btn-success">{{ 'AUTO_REPLY.EDIT' | translate}}</button>
+            <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="modal.close('Cancel')">{{ 'AUTO_REPLY.MODAL.close' | translate}}</button>
+        </div>
+    </form>
+        <div *ngIf="editDone" class="modal-footer">
+            <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="modal.close('Cancel')">{{ 'AUTO_REPLY.MODAL.close' | translate}}</button>
+        </div>
+    </ng-template>
+
+    <!-- delte reply modal -->
+    <ng-template #DeleteContent let-modal>
+        <div class="modal-header bg-danger">
+          <h4 class="modal-title text-red" id="modal-basic-title" style="color:white">{{ 'AUTO_REPLY.MODAL.delete_title' | translate}}</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body"style="height:auto">
+              <label>{{ 'AUTO_REPLY.MODAL.delete_message' | translate}}</label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">نعم</button>
+          <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel')">الغاء</button>
+        </div>
+      </ng-template>
+      
+
+

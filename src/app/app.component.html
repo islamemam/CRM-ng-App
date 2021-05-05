@@ -1,0 +1,10 @@
+<div class="hold-transition skin-blue sidebar-mini" [class.ltr]="ltrboolean">
+  <div>
+    <app-header *ngIf="login"></app-header>
+    <app-sidebar *ngIf="login"></app-sidebar>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

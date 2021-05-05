@@ -1,0 +1,139 @@
+
+                   
+          
+
+                         <form [formGroup]="addProcModel ">
+                            <div class="border-box gray">
+                                <input type="hidden" formControlName="id" >
+    
+                              <div class="form-group margin-l-0 pad">
+                                <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                                  <label class="sr-only" for="ٌEmail">{{'USERS.USER_EMAIL' | translate}}</label>
+                             
+                                   <select class="form-control" 
+                                   (change)="onActionChange($event.target.value)"
+                                   formControlName="br_action_id">
+                                   <option selected></option>
+                                    <option  *ngFor="let y of actionList"  [ngValue]="y.id">{{y.name_ar}}</option>
+                                  </select> 
+    
+                                   <div *ngIf="displayActionError && submitted"
+                                   class="alert alert-danger">
+                                   الرجاء اختيار الفعل
+                                 </div>
+      
+                                </div>
+                                <div *ngIf="addProcModel.value['br_action_id'] != 4" class="col-lg-3 col-md-7 no-padding margin-r-15">
+                                  <label class="sr-only" for="Requester">العميل</label>
+                                  <select  (change)="onReciverTypeChange($event.target.value)" 
+                                  formControlName="reciever_type" class="form-control">
+                                    <option selected value="client"> العميل</option>
+                                    <option value="user"> {{'USERS.USER' | translate}}</option>   
+                                  </select>
+                                  <div *ngIf="addProcModel.get('reciever_type').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال الاسم
+                                </div>
+                                  
+      
+                                </div>
+        
+    
+                                
+                                <div *ngIf="addProcModel.value['br_action_id'] != 4 && displayUserList" class="col-lg-3 col-md-7 no-padding margin-r-15">
+                                  <label class="sr-only" for="Requester">العميل</label>
+                                
+                                  
+                                  <ng-multiselect-dropdown
+                                    [ngModelOptions]="{standalone: true}"
+                                     [placeholder]="'اختر'"
+                                     [data]="rolesList"
+                                     [(ngModel)]="selectedRoles"
+                                     [settings]="dropdownSettings"
+                                     (onSelect)="onItemSelect($event)"
+                                     (onDeSelect)="onItemDeSelect($event)"
+                                     (onDeSelectAll)="onItemsDeSelct($event)"
+                                     (onSelectAll)="onSelectAll($event)">
+                                     </ng-multiselect-dropdown>   
+      
+                                  <!-- <div *ngIf="addProcModel.get('reciever_id').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال الاسم
+                                </div> -->
+      
+                                </div>
+                              </div>
+                              <div *ngIf="addProcModel.value['br_action_id'] != 4" class="form-group margin-l-0 pad">
+                                <div *ngIf="addProcModel.value['br_action_id'] == 2" class="col-md-9 no-padding margin-r-15">
+                                  <label for="InputEmail3">موضوع الرسالة</label>
+                                  <input formControlName="subject" type="email"
+                                  (change)="subjectChanged($event)" 
+                                   class="form-control" id="InputEmail3" placeholder="موضوع الرسالة">
+      
+                                  <div *ngIf="addProcModel.get('subject').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال الاسم
+                                </div>
+      
+                                </div>
+                                <div class="col-md-9 no-padding margin-r-15">
+                                  <label for="InputEmailBody">نص الرسالة</label>
+                                  <textarea formControlName="body"
+                                  (ngModelChange)="bodyChanged($event)" 
+                                   rows="6" class="form-control" id="InputEmailBody" placeholder="نص الرسالة"></textarea>
+                                  <div *ngIf="displayBodyError && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال الموضوع 
+                                </div>
+                                </div>
+                              </div>
+
+
+                              <div *ngIf="addProcModel.value['br_action_id'] == 4" class="form-group margin-l-0 pad">
+                                <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                                  <label class="sr-only" for="ٌEmail">{{'USERS.USER_EMAIL' | translate}}</label>
+                             
+                                   <select class="form-control" 
+                                   (change)="onMainChange($event.target.value)"
+                                   formControlName="set_key">
+                                   <option selected></option>
+                                    <option  *ngFor="let y of mainList"  [ngValue]="y.id">{{y.key_title_ar}}</option>
+                                  </select> 
+    
+                                   <div *ngIf="addProcModel.get('set_key').invalid && submitted"
+                                   class="alert alert-danger">
+                                   الرجاء اختيار قيمه
+                                 </div>
+      
+                                </div>
+                                <div  class="col-lg-3 col-md-7 no-padding margin-r-15">
+                                  <label class="sr-only" for="Requester">العميل</label>
+                                  <select class="form-control" 
+                                   (change)="onSubMainChange($event.target.value)"
+                                   formControlName="set_value">
+                                   <option selected></option>
+                                    <option  *ngFor="let y of subMainList"  [ngValue]="y.id">{{y.title_ar}}</option>
+                                  </select> 
+                                  <div *ngIf="addProcModel.get('set_value').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء اختيار قيمه
+                                                                </div>
+                                  
+      
+                                </div>
+                              </div>
+
+                            </div>
+                            <!-- && submitted -->
+
+                          
+
+                            <div 
+                            *ngIf="displayGeneralError" class="alert alert-danger">
+يجب ادخال كل الحقول   
+                            </div>
+                         </form>
+                  
+  
+                       
+          

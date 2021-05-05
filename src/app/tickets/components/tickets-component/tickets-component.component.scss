@@ -1,0 +1,31 @@
+.content-wrapper{
+    margin-right: 0px ;
+}
+.hand-over-form{
+    padding: 8px 24px;
+}
+.mr-5{
+    margin-right: 5px;
+}
+.search-ticket-btn{
+    background: none;
+    border:none;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    height: 34px;
+    &:focus{
+        outline: none;
+        border:none;
+    }
+
+}
+.w-100{
+    width:100%;
+}
+.mb-5{
+    margin-bottom: 12px;
+}
+.finish-message{
+    padding: 12px;
+  }

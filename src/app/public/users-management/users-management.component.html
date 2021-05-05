@@ -1,0 +1,246 @@
+<div class="content-wrapper" id="content-wrapper">
+    <section class="content-header">
+        <h1>
+            {{'USERS.USERS_MANAGEMENT' | translate}}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+            <li class="active">{{'USERS.USERS_MANAGEMENT' | translate}}</li>
+        </ol>
+    </section>
+    <section class="content">
+        <ng-template #addNewUser let-newUserModal let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">{{'USERS.USERS_MANAGEMENT' | translate}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="closeClearUser(newUserModal)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" #addUserForm="ngForm" (ngSubmit)="submit(addUserForm)">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label" for="Name">الاسم <i
+                                        class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <input type="text" required  #firstName="ngModel" class="form-control" name="name"  id="Name" [(ngModel)]="userModel.name">
+                                    <span class="validate-msg" *ngIf="firstName.touched && !firstName.valid">من فضلك أدخل الأسم</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">البريد الالكتروني</label>
+                                <div class="col-sm-8">
+                                    <input #userEmail="ngModel" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" class="form-control" name="email" [(ngModel)]="userModel.email">
+                                    <span class="validate-msg" *ngIf="userEmail.touched && !userEmail.valid">من فضلك أدخل البريد الاليكتروني /مثال (abc@abc.domain)</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">كلمة السر <i
+                                        class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <input type="password" required #passWord="ngModel" minlength="8" class="form-control" name="password" [(ngModel)]="userModel.password">
+                                    <span class="validate-msg" *ngIf="passWord.touched && !passWord.valid">كلمة السر مطلوبة لا تقل عن 8حروف وأرقام</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">اعد كتابة كلمة السر <i class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <input type="password" required appConfirmEqualValidator="password" class="form-control" #passwordConfirmation="ngModel" name="password_confirmation" [(ngModel)]="userModel.password_confirmation">
+                                    <span class="validate-msg" *ngIf="passwordConfirmation.touched && !passwordConfirmation.valid">هذا الحقل مطلوب</span>
+                                    <span class="validate-msg" *ngIf="passwordConfirmation.touched && !passwordConfirmation.valid">كلمة السر و تأكيد كلمة السر لا يتطابقان</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}} <i
+                                        class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="national_id"
+                                        [(ngModel)]="userModel.national_id" required pattern="^(0|[1-9][0-9]*)$" minlength="10" maxlength="10" #nationalId="ngModel">
+                                        <span class="validate-msg" *ngIf="nationalId.touched && !nationalId.valid">{{'IDENTIFICATION.IDENTIFICATION_VALID_MSG' | translate}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label class="col-sm-4 control-label">{{'USERS.USERS_GROUP' | translate}}</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" [(ngModel)]="userModel.role_id" name="role_id" required #roleId="ngModel">
+                                            <option [value]="0">اختر الوظيفة</option>
+                                            <option *ngFor="let role of roleIdData.data" [value]="role.id">{{role.name}}</option>
+                                        </select>
+                                        <span class="validate-msg" *ngIf="roleId.touched && !roleId.valid">من فضلك قم بإختيار المنصب</span>
+                                    </div>
+                                </div>    
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">القسم</label>
+                                <div class="col-sm-8">
+                                        <div class="radio radio-inline">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" value="1" (click)="sectionChange(false)" #hospitalRadio checked>
+                                                    مستشفيات
+                                                </label>
+                                              </div>              
+                                        <div class="radio radio-inline">
+                                                <label>
+                                                    <input type="radio" name="optionsRadios" #sectionRadio value="2" (click)="sectionChange(true)" >
+                                                    قطاع إداري
+                                                </label>
+                                              </div>
+                                    <select class="form-control mt-5" [(ngModel)]="userModel.hospital_id" name="hospital_id" [disabled]="sectionRadio.checked">
+                                        <option [value]="0">اختر المستشفى</option>
+                                        <option *ngFor="let hosp of hospitalsData.data" [value]="hosp.id">{{hosp.title_ar}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">رقم الجوال <i
+                                        class="text-red fa fa-asterisk text-xs"></i></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="mobileNum" required pattern="^(0|[1-9][0-9]*)$" [(ngModel)]="userModel.mobile" #mobileNum="ngModel">
+                                        <span class="validate-msg" *ngIf="mobileNum.touched && !mobileNum.valid">من فضلك أدخل رقم الجوال</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-success"
+                    (click)="saveNewUser(); newUserModal.dismiss('Cross click');" [disabled]="!addUserForm.valid">حفظ <i class="fa fa-check fa-lg" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger mR-10" aria-label="Close" (click)="closeClearUser(newUserModal)">الغاء <i class="fa fa-ban fa-lg" aria-hidden="true"></i></button>
+            </div>
+        </ng-template> <!--  Adding New User -->
+
+        <ng-template #addNewUserGroup let-newUserGroupModal>
+            <div class="modal-header">
+                <h4 class="modal-title">{{'USERS.USERS_GROUP' | translate}}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="closeClearUserGroup(newUserGroupModal)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" #addUserGroupForm="ngForm" (ngSubmit)="submit(addUserGroupForm)">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="GroupNameEn">{{'USERS.USERS_GROUP_NAME_EN' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="text" required  #GroupNameEn="ngModel" class="form-control" name="GroupNameEn"  id="GroupNameEn" [(ngModel)]="userGroupModel.name">
+                            <span class="validate-msg" *ngIf="GroupNameEn.touched && !GroupNameEn.valid">من فضلك أدخل أسم المجموعة باللغة الإنجليزية</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="GroupNameAr">{{'USERS.USERS_GROUP_NAME' | translate}} <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <input type="text" required  #GroupNameAr="ngModel" class="form-control" name="GroupNameAr"  id="GroupNameAr" [(ngModel)]="userGroupModel.name_ar">
+                            <span class="validate-msg" *ngIf="GroupNameAr.touched && !GroupNameAr.valid">من فضلك أدخل أسم المجموعة</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="Name">أختر صلاحيات المجموعة <i
+                                class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-8">
+                            <ng-multiselect-dropdown
+                                [ngModelOptions]="{standalone: true}"
+                                 [placeholder]="'اختر الصلاحيات'"
+                                 [data]="groupPermissions.data"
+                                 [(ngModel)]="selectedPermissions"
+                                 [settings]="dropdownSettings"
+                                 >
+                                 </ng-multiselect-dropdown>   
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn btn-success"
+                    (click)="saveNewUserGroup(); newUserGroupModal.dismiss('Cross click');" [disabled]="!addUserGroupForm.valid">حفظ <i class="fa fa-check fa-lg" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger mR-10" aria-label="Close" (click)="closeClearUserGroup(newUserGroupModal)">الغاء <i class="fa fa-ban fa-lg" aria-hidden="true"></i></button>
+            </div>
+        </ng-template> <!--  Adding New User Group-->
+        <div class="container">
+            <div class="col-sm-7 col-sm-offset-2 text-center" *ngFor="let alert of alerts">
+                <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+              </div>          
+        </div> <!--  Success MSG -->
+        <div class="nav-tabs-custom">
+            <ngb-tabset>
+                <ngb-tab *ngIf="isGranted('Display Users')">
+                    <ng-template ngbTabTitle>{{'USERS.USERS' | translate}}</ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="box box-solid">
+                            <div class="box-header with-border bg-default">
+                                <h3 class="box-title text-green">{{'USERS.USERS_LIST' | translate}}</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="submit" class="custom-btn ml-10" *ngIf="isGranted('Add User')" title="إضافة مستخدم جديد" (click)="openNewUser(addNewUser)">{{'USERS.ADD_USER' | translate}} <i class="fa fa-user" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="has-feedback inline-block">
+                                            <input type="text" class="form-control" placeholder="بحث..." [(ngModel)]="general">
+                                            <button type="button" name="search" class="btn btn-flat search-btn" (click)="search()"><i
+                                                    class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row border-box gray" *ngFor="let newUser of usersManagementData.data">
+                                        <div class="subject-crud">
+                                                <button *ngIf="isGranted('Edit User')" type="button" title="تعديل" (click)="editUser(newUser,addNewUser)" class="crud-btn"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                                <button *ngIf="isGranted('Delete User')" type="button" (click)="confirmDelete(newUser)" title="حذف" class="crud-btn trash-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                            </div>
+                                    <a class="user-info">
+                                        <img src="../../../assets/img/user-160x160.png"/>
+                                        <p>{{newUser.name}}
+                                            <span>
+                                        {{newUser.email}}
+                                        </span>
+                                    </p>
+                                    </a>
+                                </div>
+                                <!-- block End-->
+                                <ngb-pagination [collectionSize]="usersManagementData.meta.total" [(page)]="page"
+                                    aria-label="Default pagination" class="custom-pagination" (click)="changeUserPage($event)"></ngb-pagination>
+                                <!--pagination end-->
+                            </div><!-- /.box-body -->
+                        </div><!-- /.box -->
+                    </ng-template>
+                </ngb-tab> <!--  users -->
+                <ngb-tab *ngIf="isGranted('Display Groups')">
+                    <ng-template ngbTabTitle>{{'USERS.USERS_GROUP' | translate}}</ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="box box-solid">
+                            <div class="box-header with-border bg-default">
+                                <h3 class="box-title text-green">{{'USERS.USERS_LIST' | translate}}</h3>
+                                <div class="box-tools pull-right">
+                                    <button *ngIf="isGranted('Add Group')" class="custom-btn ml-10" title="إضافة مجموعة جديدة" (click)="openNewUserGroup(addNewUserGroup)">إضافة مجموعة <i class="fa fa-users" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="has-feedback inline-block">
+                                        <form>
+                                            <input type="text" class="form-control" placeholder="بحث...">
+                                            <button type="button" name="search" class="btn btn-flat search-btn"><i
+                                                    class="fa fa-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+
+                                <div class="box-group" id="accordion">
+
+                                    <div class="row panel border-box gray" *ngFor="let newGroup of usersGroupData.data">
+                                        <div class="subject-crud">
+                                            <button *ngIf="isGranted('Edit Group')" type="button" title="تعديل" (click)="editUser(newGroup,addNewUserGroup)" class="crud-btn"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                            <button *ngIf="isGranted('Delete Group')" type="button" (click)="confirmDelete(newGroup)" title="حذف"  class="crud-btn trash-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                        </div>
+                                        <a class="user-info">
+                                            <img src="../../../assets/img/user-160x160.png"/>
+                                            <p>{{newGroup.name}}</p>
+                                        </a>
+                                    </div>
+                                    <ngb-pagination [collectionSize]="usersGroupData.meta.total" [(page)]="page"
+                                    aria-label="Default pagination" class="custom-pagination" (click)="changeUserGroupPage($event)"></ngb-pagination>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+    </section>
+</div>

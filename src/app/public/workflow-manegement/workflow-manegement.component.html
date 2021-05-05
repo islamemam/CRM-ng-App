@@ -1,0 +1,401 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        إدارة سير العمل
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+          <li class="active">إدارة سير العمل</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="nav-tabs-custom">
+          <!-- tabs -->
+
+<ngb-tabset [activeId]="selectedTab" (tabChange)="onTabChange($event)">
+    <ngb-tab *ngIf="isGranted('Display Business Rules')">
+        <ng-template ngbTabTitle>المشغلات</ng-template>
+        <ng-template ngbTabContent>
+
+         <app-buseniss-role-manegement>
+
+         </app-buseniss-role-manegement>
+
+        </ng-template>
+    </ngb-tab>
+
+    <ngb-tab *ngIf="false" >
+        <ng-template ngbTabTitle>التشغيل التلقائي</ng-template>
+        <ng-template ngbTabContent>
+
+            <div class="tab-pane" id="automation">
+                <div class="box box-solid">
+                  <div class="box-header with-border bg-default">
+                    <h3 class="box-title text-green">إدارة التشغيل التلقائي</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                      </div>
+                  </div><!-- /.box-header -->
+                  <div class="box-body">
+                      <span class="pull-right"> تفعيل الكل
+                        <!-- Rounded switch -->
+                        <label class="btn-switch">
+                          <input type="checkbox">
+                          <span class="switch-slider round"></span>
+                        </label>
+                      </span>
+                      <a href="add-automation-rule.html" class="btn btn-success"> إضافة قاعدة جديد</a>
+                      <hr/>
+
+                      <div class="box-group draggable" id="accordion2">
+
+                      <div class="row panel border-box gray">
+
+                        <!-- controls start -->
+                        <a href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                        <a href="add-automation-rule.html" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                        <span class="pull-right margin-r-10"> تفعيل
+                          <!-- Rounded switch -->
+                          <label class="btn-switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider round"></span>
+                          </label>
+                        </span>
+                        <!-- controls end -->
+                        <div class="col-md-9 col-xs-7">
+                        <span class="handle">
+                          <i class="fa fa-long-arrow-down"></i>
+                          <i class="fa fa-long-arrow-up"></i>
+                        </span>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2-1" class="margin-r-5">
+                          <strong class="margin-r-5">اسم القاعدة</strong><small class="text-gray"><i class="fa fa-clock-o"></i> اخر تحديث: 17/09/2019 | 02:09 PM</small>
+                        </a>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                        <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+                        </div>
+                        <div id="collapse2-1" class="panel-collapse collapse col-xs-12">
+                          <div class="box-body">
+                            <hr/>
+                            <p>الوصف يظهر هنا بهذا الشكل، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر ...</p>
+
+                            <p class="bold">الشروط:</p>
+                            <p class="text-gray">يجب ان تتحقق أي من هذه الشروط</p>
+                            <!-- Conditions Start -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">حالة التذكرة</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">يكون</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">جديدة</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">الساعات منذ الانشاء</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">اكبر من</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">24</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <!-- Conditions End -->
+
+                            <p class="bold">الإجراءات:</p>
+                            <!-- action start -->
+                            <div class="margin-buttom">
+                              <div class="row margin-l-0">
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">البريد الالكتروني</p><!-- ./col -->
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">العميل</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">موضوع الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">محتوى الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                            </div>
+                            <!-- action end -->
+                          </div><!-- ./box-body -->
+                        </div>
+                      <!-- block End-->
+                      </div><!-- ./row border-box -->
+
+                      <div class="row panel border-box gray">
+                        <!-- controls start -->
+                        <a href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                        <a href="add-automation-rule.html" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                        <span class="pull-right margin-r-10"> تفعيل
+                          <!-- Rounded switch -->
+                          <label class="btn-switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider round"></span>
+                          </label>
+                        </span>
+                        <!-- controls end -->
+                        <div class="col-md-9 col-xs-7">
+                        <span class="handle">
+                            <i class="fa fa-long-arrow-down"></i>
+                            <i class="fa fa-long-arrow-up"></i>
+                        </span>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2-2" class="margin-r-5">
+                          <strong class="margin-r-5">اسم القاعدة</strong><small class="text-gray"><i class="fa fa-clock-o"></i> اخر تحديث: 17/09/2019 | 02:09 PM</small>
+                        </a>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                        <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+                        </div>
+                        <div id="collapse2-2" class="panel-collapse collapse col-xs-12">
+                          <div class="box-body">
+                            <hr/>
+                            <p>الوصف يظهر هنا بهذا الشكل، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر ...</p>
+
+                            <p class="bold">الشروط:</p>
+                            <p class="text-gray">يجب ان تتحقق أي من هذه الشروط</p>
+                            <!-- Conditions Start -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">حالة التذكرة</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">يكون</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">جديدة</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">الساعات منذ الانشاء</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">اكبر من</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">24</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <!-- Conditions End -->
+
+                            <p class="bold">الإجراءات:</p>
+                            <!-- action start -->
+                            <div class="margin-buttom">
+                              <div class="row margin-l-0">
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">البريد الالكتروني</p><!-- ./col -->
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">العميل</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">موضوع الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">محتوى الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                            </div>
+                            <!-- action end -->
+                          </div><!-- ./box-body -->
+                        </div>
+                      <!-- block End-->
+                      </div><!-- ./row border-box -->
+
+                      <div class="row panel border-box gray">
+                        <!-- controls start -->
+                        <a href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                        <a href="add-automation-rule.html" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                        <span class="pull-right margin-r-10"> تفعيل
+                          <!-- Rounded switch -->
+                          <label class="btn-switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider round"></span>
+                          </label>
+                        </span>
+                        <!-- controls end -->
+                        <div class="col-md-9 col-xs-7">
+                        <span class="handle">
+                            <i class="fa fa-long-arrow-down"></i>
+                            <i class="fa fa-long-arrow-up"></i>
+                        </span>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2-3" class="margin-r-5">
+                          <strong class="margin-r-5">اسم القاعدة</strong><small class="text-gray"><i class="fa fa-clock-o"></i> اخر تحديث: 17/09/2019 | 02:09 PM</small>
+                        </a>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                        <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+                        </div>
+                        <div id="collapse2-3" class="panel-collapse collapse col-xs-12">
+                          <div class="box-body">
+                            <hr/>
+                            <p>الوصف يظهر هنا بهذا الشكل، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر ...</p>
+
+                            <p class="bold">الشروط:</p>
+                            <p class="text-gray">يجب ان تتحقق أي من هذه الشروط</p>
+                            <!-- Conditions Start -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">حالة التذكرة</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">يكون</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">جديدة</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">الساعات منذ الانشاء</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">اكبر من</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">24</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <!-- Conditions End -->
+
+                            <p class="bold">الإجراءات:</p>
+                            <!-- action start -->
+                            <div class="margin-buttom">
+                              <div class="row margin-l-0">
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">البريد الالكتروني</p><!-- ./col -->
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">العميل</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">موضوع الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">محتوى الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                            </div>
+                            <!-- action end -->
+                          </div><!-- ./box-body -->
+                        </div>
+                      <!-- block End-->
+                      </div><!-- ./row border-box -->
+
+                      <div class="row panel border-box gray">
+                        <!-- controls start -->
+                        <a href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                        <a href="add-automation-rule.html" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                        <span class="pull-right margin-r-10"> تفعيل
+                          <!-- Rounded switch -->
+                          <label class="btn-switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider round"></span>
+                          </label>
+                        </span>
+                        <!-- controls end -->
+                        <div class="col-md-9 col-xs-7">
+                        <span class="handle">
+                            <i class="fa fa-long-arrow-down"></i>
+                            <i class="fa fa-long-arrow-up"></i>
+                        </span>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2-4" class="margin-r-5">
+                          <strong class="margin-r-5">اسم القاعدة</strong><small class="text-gray"><i class="fa fa-clock-o"></i> اخر تحديث: 17/09/2019 | 02:09 PM</small>
+                        </a>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                        <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+                        </div>
+                        <div id="collapse2-4" class="panel-collapse collapse col-xs-12">
+                          <div class="box-body">
+                            <hr/>
+                            <p>الوصف يظهر هنا بهذا الشكل، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر ...</p>
+
+                            <p class="bold">الشروط:</p>
+                            <p class="text-gray">يجب ان تتحقق أي من هذه الشروط</p>
+                            <!-- Conditions Start -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">حالة التذكرة</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">يكون</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">جديدة</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">الساعات منذ الانشاء</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">اكبر من</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">24</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <!-- Conditions End -->
+
+                            <p class="bold">الإجراءات:</p>
+                            <!-- action start -->
+                            <div class="margin-buttom">
+                              <div class="row margin-l-0">
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">البريد الالكتروني</p><!-- ./col -->
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">العميل</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">موضوع الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">محتوى الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                            </div>
+                            <!-- action end -->
+                          </div><!-- ./box-body -->
+                        </div>
+                      <!-- block End-->
+                      </div><!-- ./row border-box -->
+
+                      <div class="row panel border-box gray">
+                        <!-- controls start -->
+                        <a href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                        <a href="add-automation-rule.html" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                        <span class="pull-right margin-r-10"> تفعيل
+                          <!-- Rounded switch -->
+                          <label class="btn-switch">
+                            <input type="checkbox" checked>
+                            <span class="switch-slider round"></span>
+                          </label>
+                        </span>
+                        <!-- controls end -->
+                        <div class="col-md-9 col-xs-7">
+                        <span class="handle">
+                            <i class="fa fa-long-arrow-down"></i>
+                            <i class="fa fa-long-arrow-up"></i>
+                        </span>
+                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2-5" class="margin-r-5">
+                          <strong class="margin-r-5">اسم القاعدة</strong><small class="text-gray"><i class="fa fa-clock-o"></i> اخر تحديث: 17/09/2019 | 02:09 PM</small>
+                        </a>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                        <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+                        </div>
+                        <div id="collapse2-5" class="panel-collapse collapse col-xs-12">
+                          <div class="box-body">
+                            <hr/>
+                            <p>الوصف يظهر هنا بهذا الشكل، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر، لوريم ابيسوم هو ببساطة نص شكلي بمعنى ان الغايه هي الشكل وليس المحتوى ويستخدم في صناعات المطابع ودور النشر ...</p>
+
+                            <p class="bold">الشروط:</p>
+                            <p class="text-gray">يجب ان تتحقق أي من هذه الشروط</p>
+                            <!-- Conditions Start -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">حالة التذكرة</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">يكون</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">جديدة</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <div class="row margin-l-0 margin">
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">الساعات منذ الانشاء</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">اكبر من</p><!-- ./col -->
+                              <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">24</p><!-- ./col -->
+                            </div><!-- ./row -->
+                            <!-- Conditions End -->
+
+                            <p class="bold">الإجراءات:</p>
+                            <!-- action start -->
+                            <div class="margin-buttom">
+                              <div class="row margin-l-0">
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">البريد الالكتروني</p><!-- ./col -->
+                                <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">العميل</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">موضوع الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                              <div class="row margin-l-0">
+                                <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">محتوى الرسالة</p><!-- ./col -->
+                              </div><!-- ./row -->
+                            </div>
+                            <!-- action end -->
+                          </div><!-- ./box-body -->
+                        </div>
+                      <!-- block End-->
+                      </div><!-- ./row border-box -->
+
+                      <ul class="pagination pull-right no-margin inline-block ">
+                        <li class="disabled"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a></li>
+                        <li class="active"><a href="javascript:void(0)">1</a></li>
+                        <li><a href="javascript:void(0)">2</a></li>
+                        <li><a href="javascript:void(0)">3</a></li>
+                        <li><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a></li>
+                      </ul> <!--pagination end-->
+                    </div><!-- /.box-group -->
+                  </div><!-- /.box-body -->
+                </div><!-- /.box -->
+              </div>
+
+        </ng-template>
+    </ngb-tab>
+
+    <ngb-tab *ngIf="isGranted('Display SLA')">
+        <ng-template ngbTabTitle>اتفاقيات مستوى الخدمة</ng-template>
+        <ng-template ngbTabContent>
+
+          <sla-manegement >
+
+          </sla-manegement>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>
+        </div>
+    </section>
+  </div>
+
+

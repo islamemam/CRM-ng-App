@@ -1,0 +1,31 @@
+<div class="box box-solid">
+    <div class="box-header with-border bg-default">
+      <h3 class="box-title text-green">بيانات العميل <small>اسم العميل يظهر هنا</small></h3>
+      <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-toggle="modal" data-target="#editCustomer"><i class="fa fa-pencil text-green"></i></button>
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div><!-- /.box-header -->
+    <div class="box-body">
+      <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label for="inputTel" class="col-sm-3 control-label"> {{'IDENTIFICATION.SEARCH_BY_IDENTIFICATION_NUM' | translate}}</label>
+              <div class="col-sm-7">
+                <input type="text" class="form-control" id="inputTel" placeholder=" رقم الهوية">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat search-btn"><i class="fa fa-search"></i></button>
+                <img src="/assets/img/loader.gif"/>
+              </div>
+              <div class="col-sm-2 no-padding"><a href="#" class="link" data-toggle="modal" data-target="#editCustomer">اضف عميل</a></div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+      </form><!-- /.form -->
+      <hr/>
+        <dl class="dl-horizontal">
+          <dt>الاسم:</dt><dd>اسم العميل يظهر هنا...</dd>
+          <dt>الهاتف:</dt><dd>00000000000</dd>
+          <dt>{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}} :</dt><dd>example@company.com</dd>
+        </dl>
+    </div><!-- /.box-body -->
+  </div>

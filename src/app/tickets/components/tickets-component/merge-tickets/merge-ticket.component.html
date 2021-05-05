@@ -1,0 +1,124 @@
+  <!-- Modal -->
+  <div bsModal #mergeTickets="bs-modal" class="modal fade" 
+  tabindex="-1" role="dialog" aria-labelledby="mergeTickets" aria-hidden="true">
+  
+ 
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-default">
+          <h4 class="modal-title text-green" id="exampleModalLabel">دمج/ربط التذاكر</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form class="form-horizontal" [formGroup] ="mergeModel"
+        (ngSubmit) = "saveMerge()">
+
+        <div class="modal-body margin">
+            <div class="row">
+              <div class="col-md-12">
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">نوع العملية <i class="text-red fa fa-asterisk text-xs"></i></label>
+                      <div class="col-sm-8">
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" (click)="ismerged(true)" checked="">
+                            دمج
+                          </label>
+                        </div>
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" (click)="ismerged(false)" value="option2">
+                            ربط
+                          </label>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div  class="form-group">
+                    <label class="col-sm-4 control-label"> الرئيسية<i class="text-red fa fa-asterisk text-xs"></i></label>
+                    <div class="col-sm-8">
+                        <select  
+                        (change)="change()" class="form-control"  formControlName="ticket_id"
+                        >
+                         <option  [ngValue]="i" *ngFor="let i of ticketsIds">{{i}}</option>
+                       </select>  
+
+                       <div *ngIf="mergeModel.get('ticket_id').invalid && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال التذكره الرئيسيه
+                            </div>
+
+                    </div>
+                  </div>
+
+
+                  <div class="form-group">
+                   
+                      <label class="col-sm-4 control-label"> التذاكر الفرعيه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                      <div class="col-sm-8">
+                         <ng-multiselect-dropdown
+                         [ngModelOptions]="{standalone: true}"
+                          [placeholder]="'اختر التذكره'"
+                          [data]="subTicketsIds"
+                          [(ngModel)]="selectedItems"
+                          [settings]="dropdownSettings"
+                          (onSelect)="onItemSelect($event)"
+                          (onSelectAll)="onSelectAll($event)">
+                          </ng-multiselect-dropdown>   
+                          
+                          
+                          <div *ngIf="displaySelectSubTicketError && submitted"
+                          class="alert alert-danger">
+                          الرجاء ادخال التذاكر الفرعيه
+                        </div>
+                      </div>
+                      
+                    </div> 
+
+                    <div class="form-group">
+                          <label  class="col-sm-4 control-label"> السبب: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-8">
+                              <select class="form-control"  formControlName="merge_reason_id"
+                               name="sel3">
+                                <option [ngValue]="i.id" *ngFor="let i of mergeReasonsList">{{i.title_ar}}</option>
+                              </select>               
+                            
+                              <div *ngIf="mergeModel.get('merge_reason_id').invalid && submitted"
+                              class="alert alert-danger">
+                              الرجاء اختيار السبب
+                            </div>
+
+                            </div>
+                      </div>
+
+                  <div class="form-group">
+                      <label class="col-sm-4 control-label">التفاصيل: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                      <div class="col-sm-8">
+                          <textarea formControlName="details" rows="3" 
+                          (ngModelChange)="detailsChanged($event)" 
+                          class="form-control" id="inputDetails"
+                           placeholder="التفاصيل"></textarea>
+
+                          <div *ngIf="displayDetailError && submitted"
+                          class="alert alert-danger">
+                          الرجاء ادخال الوصف و الا يقل عن ثلاث احرف
+                        </div>
+                      </div>
+                  </div>
+                 
+              </div><!-- /.col-->
+            </div><!-- /.row-->
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">حفظ</button>
+          <button type="button" (click)="close()" class="btn bg-gray-dark" data-dismiss="modal">إلغاء</button>
+        </div>
+        </form>
+      </div>
+    </div>
+
+  <!-- </form> -->
+
+  </div>

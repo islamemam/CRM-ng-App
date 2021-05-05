@@ -1,0 +1,526 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper" id="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {{'BENEFICIARIES.THE_BENEFICIARIES' | translate}}
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> {{'GENERAL.LAND_PAGE' | translate}}</a></li>
+      <li class="active"> {{'BENEFICIARIES.THE_BENEFICIARIES' | translate}}</li>
+    </ol>
+  </section>
+
+  
+  <!-- Modal -->
+  <div class="modal fade" *ngIf="imprtFile" style="display:block" id="imprtFilemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle"> {{'GENERAL.UPLOAD' | translate}}</h5>
+  
+        </div>
+        <div class="modal-body text-center">
+            <img *ngIf="!imprtFileDone"src="../../../assets/img/loader.gif" alt="">
+            <h2 *ngIf="!imprtFileDone"class="text-center">{{'MESSAGES.UPLOADING' | translate}}</h2>
+            <h2 *ngIf="imprtFileSuccess" class="text-center">{{'MESSAGES.UPLOADING_SUCCESS' | translate}}</h2>
+            <!-- <h2 *ngIf="imprtFileError" class="text-center">حدث خطأ في رفع البيانات</h2> -->
+            <div class="alert alert-danger" role="alert" *ngFor="let fail of failures">
+               حقل {{fail.attribute}}   الصف رقم {{fail.row_number}}<ul *ngIf="fail.errors"><li *ngFor="let error of fail.errors">{{error}}</li></ul>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click)="closeimportmodal()" *ngIf="imprtFileDone" class="btn btn-success" data-dismiss="modal">{{'GENERAL.CANCEL' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <!-- Search Customers -->
+      <div class="col-xs-12">
+        <div class="box box-solid">
+          <div class="box-header with-border bg-default">
+            <h3 class="box-title text-green">{{'BENEFICIARIES.BENEFICIARIES_LSIT' | translate}}</h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+
+              <form class="form-horizontal" [formGroup] ="clientSearchForm"(ngSubmit) = "searchClient()" >
+                  <div *ngIf="clientSearchForm.errors && clientSearchForm.errors.emptyform " class="alert alert-danger" role="alert">
+                    {{'MESSAGES.INSERT_INPUT_FIELD' | translate}}
+                  </div>
+                  <div class="form-group">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <label for="inputName" class="col-sm-3 control-label">{{'GENERAL.NAME' | translate}}</label>
+                      <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                        <input type="text" formControlName = "name" class="form-control" placeholder="الأسم">
+                        <div *ngIf="clientSearchForm.get('name').touched && clientSearchForm.get('name').invalid " class="alert alert-danger" role="alert">
+                    {{'MESSAGES.NAME_INPUT_VALID' | translate}}
+                       </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <label for="inputCompany" class="col-sm-3 control-label">{{'IDENTIFICATION.IDENTIFICATION' | translate}}</label>
+                      <div class="col-sm-9">
+                        <input type="number" formControlName = "national_id" class="form-control" placeholder="رقم الهوية">
+                        <div *ngIf="clientSearchForm.get('national_id').touched && clientSearchForm.get('national_id').invalid" class="alert alert-danger" role="alert">
+                          {{'IDENTIFICATION.WRONG_IDENTIFICATION_NUM' | translate}}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <label for="inputMobile" class="col-sm-3 control-label">{{'GENERAL.MOBILE' | translate}}</label>
+                      <div class="col-sm-9">
+                        <input type="phone"  formControlName = "mobile"  class="form-control" placeholder="رقم الجوال">
+                        <div *ngIf="clientSearchForm.get('mobile').touched && clientSearchForm.get('mobile').invalid" class="alert alert-danger" role="alert">
+                          {{'MESSAGES.MOBILE_NUM_VALIDATE' | translate}}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <label for="inputPhone" class="col-sm-3 control-label">{{'GENERAL.PHONE' | translate}}</label>
+                        <div class="col-sm-9">
+                          <input type="phone" formControlName = "telephone" name="telephone" class="form-control" placeholder="رقم الهاتف">
+                          <div *ngIf="clientSearchForm.get('telephone').touched && clientSearchForm.get('telephone').invalid" class="alert alert-danger" role="alert">
+                             {{'MESSAGES.PHONE_NUM_VALIDATE' | translate}}
+                          </div>
+                         
+                        </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                   
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                      <label for="inputGender" class="col-sm-3 control-label">{{'GENERAL.GENDER' | translate}}</label>
+                      
+                      <div class="radio radio-inline">
+                        <label>
+                          <input type="radio" formControlName = "gender" value="male">
+                          {{'GENERAL.MALE' | translate}}
+                        </label>
+                      </div>
+                      <div class="radio radio-inline">
+                        <label>
+                          <input type="radio" formControlName = "gender"  value="female">
+                          {{'GENERAL.FMALE' | translate}}
+                        </label>
+                    
+                      </div>
+                    </div>
+                  </div>
+               
+                 
+                  <div class="form-group">
+                  <span class="margin col-xs-12">
+                    <button (click)="emptySearchForm()" type="reset" class="btn bg-gray-dark margin-r-20 pull-right">{{'GENERAL.CLEAR_BTN' | translate}}</button>
+                    <button type="submit" class="btn btn-success margin-r-10 pull-right"> {{'GENERAL.FILTER_BTN' | translate}}</button>
+                  </span>
+                  </div><!-- /.form-group -->
+                </form>
+            
+
+            <hr />
+            <ng-template #content let-modal>
+                <div class="modal-header bg-default">
+                    <h4 class="modal-title text-green" id="exampleModalLabel">{{'BENEFICIARIES.BENEFICIARY_INFO' | translate}}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true" (click)="modal.close()">×</span>
+                    </button>
+                  </div>
+                  <div style="text-align:center" *ngIf="addClientSpinner" >
+                      <img src="../../../assets/img/loader.gif" alt="">
+                  </div>
+                  <div *ngIf="clientisadded" class="alert alert-sucsses" role="alert">
+                    {{'MESSAGES.ADD_CLIENT_SUCCESS' | translate}}
+                  </div>
+                <form [formGroup] ="addClientForm" (ngSubmit) = "addClient()" *ngIf="!addClientSpinner && !clientisadded" >
+                  <div *ngIf="addClientForm.errors && addClientForm.errors.emptyform " class="alert alert-danger" role="alert">
+                      {{'MESSAGES.INSERT_INPUT_FIELD' | translate}}
+                  </div>
+                  <div *ngIf="haserror" class="alert alert-danger" role="alert">
+                    <div  *ngFor="let errorms of errorarrays | keyvalue" class="alert alert-danger" role="alert">
+                        <span>  {{errorms.value}} </span>
+                     </div>
+                    <!-- <ul *ngIf="haserror"><li *ngFor="let error of addclienterrormsg.errors | keyvalue">{{ error.key }} - {{ error.value }}</li></ul> -->
+                  </div>
+
+                  
+                <div class="modal-body">
+                        <div class="form-group">
+                          <div class="col-md-6">
+                            <label for="inputName"  name="name"class="col-sm-4 control-label">{{'GENERAL.NAME' | translate}}</label>
+                            <div class="col-sm-8"><!-- has-success -->
+                              <input  type="text"  class="form-control" placeholder="الأسم" formControlName="name">
+                              <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                              <div *ngIf="addClientForm.get('name').touched && addClientForm.get('name').invalid" class="alert alert-danger" role="alert">
+                                  {{'MESSAGES.NAME_INPUT_VALID' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                            <div class="col-md-6">
+                            <label for="inputMob" class="col-sm-4 control-label">{{'GENERAL.MOBILE' | translate}}</label>
+                            <div class="col-sm-8">
+                              <input type="number" formControlName="mobile" class="form-control" placeholder="5X XXX XXXX">
+                              <div *ngIf="addClientForm.get('mobile').touched && addClientForm.get('mobile').invalid" class="alert alert-danger" role="alert">
+                                  {{'MESSAGES.MOBILE_INPUT_REQUIERED' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <div class="col-md-6">
+                            <label for="inputBGroup" class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_TYPE' | translate}}</label>
+                            <div class="col-sm-8">
+                                <img src="../../../../assets/img/loader.gif" *ngIf="nationalidspinner" class="small-loading-spinner" alt="">
+                                <select class="form-control" *ngIf="!nationalidspinner"formControlName="national_id_type_id">
+                                    <option selected value="" disabled>{{'GENERAL.CHOSE' | translate}} </option>
+                                    <option *ngFor ="let nationalIdType of nationalidtypes" value="{{nationalIdType.id}}">{{nationalIdType.title_ar}}</option>
+                                </select>
+                                <div *ngIf="addClientForm.get('national_id_type_id').touched && addClientForm.get('national_id_type_id').invalid" class="alert alert-danger" role="alert">
+                                  {{'IDENTIFICATION.CHOSE_IDENTIFICATION_TYPE_MSG' | translate}}
+                                </div>
+                            </div>
+                          </div><!-- /.col-->
+                          <div class="col-md-6">
+                              <label for="inputJob" class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</label>
+                              <div class="col-sm-8"><!-- has-warning -->
+                                <input  type="number" formControlName="national_id" class="form-control" placeholder="رقم الهوية">
+                                <!-- <label class="control-label" for="inputWarning"><i class="fa fa-bell-o"></i>رسالة تنبية تظهر هنا</label> -->
+                                <div *ngIf="addClientForm.get('national_id').touched && addClientForm.get('national_id').invalid" class="alert alert-danger" role="alert">
+                                  {{'IDENTIFICATION.IDENTIFICATION_NUM_VALID_MSG' | translate}}
+                                </div>
+                              </div>
+                          </div><!-- /.col-->                      
+                        </div><!-- /.form-group -->                        
+                        <div class="form-group">
+                          <div class="col-md-6">
+                            <label for="inputPhone" class="col-sm-4 control-label">{{'GENERAL.PHONE' | translate}} </label>
+                            <div class="col-sm-8">
+                              <input type="phone" class="form-control" formControlName="telephone" placeholder="011 XXX XXXX">
+                              <div *ngIf="addClientForm.get('telephone').touched && addClientForm.get('telephone').invalid" class="alert alert-danger" role="alert">
+                                  {{'MESSAGES.PHONE_INPUT_REQUIERED' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                          <div class="col-md-6">
+                            <label for="inputBGroup" class="col-sm-4 control-label">{{'GENERAL.NATIONALITY' | translate}}</label>
+                            <div class="col-sm-8">
+                              <img src="../../../../assets/img/loader.gif" *ngIf="nationalidspinner" class="small-loading-spinner" alt="">
+                              <select class="form-control" *ngIf="!nationalidspinner" formControlName="nationality_id" >
+                                  <option selected value="" disabled>{{'GENERAL.CHOSE' | translate}} </option>
+                                  <option *ngFor ="let nationalitie of nationalities" value="{{nationalitie.id}}">{{nationalitie.title_ar}}</option>
+                              </select>
+                              <div *ngIf="addClientForm.get('nationality_id').touched && addClientForm.get('nationality_id').invalid" class="alert alert-danger" role="alert">
+                                  {{'MESSAGES.NATIONALITY_INPUT_REQUIERED' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                         <div class="form-group">
+                          <div class="col-md-6">
+                            <label for="inputPhone" class="col-sm-4 control-label">{{'GENERAL.ADDRESS' | translate}} </label>
+                            <div class="col-sm-8">
+                              <input type="text" formControlName="address"  name="address" class="form-control" placeholder="العنوان">
+                              <div *ngIf="addClientForm.get('address').touched && addClientForm.get('address').invalid" class="alert alert-danger" role="alert">
+                                {{'MESSAGES.ADDRESS_INPUT_REQUIERED' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                         <div class="col-md-6">
+                            <label for="inputPhone" class="col-sm-4 control-label">{{'GENERAL.EMAIL' | translate}} </label>
+                            <div class="col-sm-8">
+                              <input type="text" formControlName="email" class="form-control" id="email" placeholder="البريد الالكترونى">
+                              <div *ngIf="addClientForm.get('email').touched && addClientForm.get('email').invalid" class="alert alert-danger" role="alert">
+                                  {{'MESSAGES.EMAIL_INPUT_REQUIERED' | translate}}
+                              </div>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-md-6">
+                            <label for="input-Gender" class="col-sm-4 control-label">{{'GENERAL.MINISTRY_MEMBER' | translate}}</label>
+                            <div class="radio radio-inline" style="margin-top:0;">
+                              <label>
+                                <input type="radio" formControlName="ministry_member" value="1">
+                                {{'GENERAL.YES' | translate}}
+                              </label>
+                            </div>
+                            <div class="radio radio-inline">
+                              <label>
+                                <input type="radio" formControlName="ministry_member" value="0">
+                                {{'GENERAL.NO' | translate}}
+                              </label>
+                            </div>
+                            <div *ngIf="addClientForm.get('ministry_member').touched && addClientForm.get('ministry_member').invalid" class="alert alert-danger" style="margin:15px"role="alert">
+                              {{'MESSAGES.QUESTION_INPUT_REQUIERED' | translate}}
+                            </div>
+                          </div><!-- /.col-->
+                           <div class="col-md-6">
+                            <label for="input-Gender" class="col-sm-4 control-label">{{'GENERAL.GENDER' | translate}}</label>
+                            <div class="radio radio-inline" style="margin-top:0;">
+                              <label>
+                                <input type="radio" formControlName="gender" id="gender" value="male">
+                                {{'GENERAL.MALE' | translate}}
+                              </label>
+                            </div>
+                            <div class="radio radio-inline">
+                              <label>
+                                <input type="radio" formControlName="gender" value="female">
+                                {{'GENERAL.FMALE' | translate}}
+                              </label>
+                            </div>
+                            <div *ngIf="addClientForm.get('gender').touched && addClientForm.get('gender').invalid" class="alert alert-danger" style="margin:15px"role="alert">
+                                {{'MESSAGES.GENDER_INPUT_REQUIERED' | translate}}
+                            </div>
+                          </div><!-- /.col-->
+                        </div>
+                        <!-- radio -->
+                        <div class="form-group">
+                         <div class="col-md-6">
+                            <label for="inputBGroup" class="col-sm-4 control-label">{{'BENEFICIARIES.BENEFICIARIES_TYPE' | translate}}</label>
+                            <div class="col-sm-8">
+                                <img src="../../../../assets/img/loader.gif" *ngIf="clientTypesSpinner" class="small-loading-spinner" alt="">
+                                <select class="form-control" *ngIf="!clientTypesSpinner" #customer formControlName="client_type_id" (change)="selectParent($event.target.value)">
+                                    <option selected value="" disabled>{{'GENERAL.CHOSE' | translate}} </option>
+                                    <option *ngFor ="let clientType of clientTypes" value="{{clientType.id}}">{{clientType.title_ar}}</option>
+                                </select>
+                                <input type="text" *ngIf="needparent"  (keyup)="parentSearch($event)" name="address" class="form-control" placeholder="رقم هوية المستفيد الرئيسي">
+                                <input *ngIf="hiddenInput" type="text" formControlName="client_id" name="address" class="form-control" placeholder="رقم هوية المستفيد الرئيسي">                                
+                                <i  *ngIf="needparent" class="fa fa-search parentSearch"></i>
+                                <img src="../../../assets/img/loader.gif" *ngIf="mainclientspinner" class="small-loading-spinner" alt="">
+                                <span>{{mainClientName}}</span>
+                                <!--  إضافة مستفيد جديد<img src="../../../assets/img/loader.gif" alt=""> -->
+                                <!-- <div *ngIf="addClientForm.get('client_type_id').invalid" class="alert alert-danger"role="alert">
+                                    الرجاء اختيار نوع المستفيد
+                                </div> -->
+                            </div>
+                          </div><!-- /.col-->
+                          
+                          <div class="col-md-6">
+                                <label for="inputID" class="col-sm-4 control-label">{{'GENERAL.BIRTH_DATE' | translate}}</label>
+                                <div class="col-sm-8">
+                                  <input id="dateOfBirth" class="form-control" (click)="dp.toggle()" [minDate]="minDate" [maxDate]="maxDate" formControlName="birthdate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker  #dp="ngbDatepicker" (dateSelect)="formatDate(dp)">
+                                  
+                                </div>
+                          </div><!-- /.col-->
+
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-6">
+                            <label for="inputID" class="col-sm-4 control-label">{{'GENERAL.ORGANISATION' | translate}}</label>
+                            <div class="col-sm-8" formArrayName="hospitals">
+                              <div *ngFor="let hospitalCounter of addClientForm.get('hospitals')['controls']; let i = index" id="" class="fields_wrapper">
+                                  <img src="../../../../assets/img/loader.gif" *ngIf="hospitalsSpinner" class="small-loading-spinner" alt="">                                
+                                <div [formGroupName]="i">
+                                    <select  formControlName="hospital_id" class="form-control"  *ngIf="!hospitalsSpinner">
+                                        <option selected value="" disabled>{{'GENERAL.CHOSE' | translate}} </option>
+                                        <option *ngFor ="let hospital of hospitals" value="{{hospital.id}}">{{hospital.title_ar}}</option>
+                                      </select>  
+                                      <input  formControlName="file_number"  class="form-control" name="hospitals[{i}][file_number]" type="phone" placeholder="رقم الملف">
+                                      <a *ngIf="i >= 1" (click)="removeHospital(i)" class="link remove_field text-danger"><i class="fa fa-times"></i>{{'GENERAL.DELETE_BTN' | translate}}</a>
+                                      <hr>
+                                </div>
+                                
+                                
+                               
+                              </div>
+                              <a (click)="addhospital()"class="link add_fields"> {{'GENERAL.ADD_ANOTHER_ORGANISATION' | translate}}</a>
+                            </div>
+                          </div><!-- /.col-->
+                        </div>
+                </div>
+           
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{{'GENERAL.SAVE' | translate}}</button>
+                    <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="modal.close()">{{'GENERAL.CANCEL' | translate}}</button>
+                </div>
+                </form>
+        
+              </ng-template>
+            <button *ngIf="isGranted('Add Client')" type="button" class="btn btn-success custom-en" (click)="open(content)"> {{'BENEFICIARIES.ADD_BENEFICIARY' | translate}}</button>
+            <div class="pull-right margin-r-10 xs-fix">
+              <!-- import file -->
+              <label *ngIf="isGranted('Upload Client Data')" for="file-upload" class="custom-file-upload-btn btn btn-default btn-sm" data-toggle="tooltip"
+                title="رفع بيانات المستفيدين
+                ">
+                <i class="fa fa-upload"></i>
+                <form [formGroup]="importFiles">
+                    <input formControlName="importClientsFile" id="file-upload" type="file"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    #clientsFileInput (click)="clientsFileInput.value = null"(change)="importClients($event)">
+                </form>
+               
+              </label>
+              <label *ngIf="isGranted('Upload Hospital Data')" for="hospital-file-upload" class="custom-file-upload-btn btn btn-default btn-sm" data-toggle="tooltip"
+              title="رفع بيانات مستشفيات المستفيدين">
+              <i class="fa fa-upload"></i>
+              <!-- <input id="file-upload" type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                (change)="importClientsHospitals($event)"> -->
+                <form [formGroup]="importHospitalFiles">
+                  <input formControlName="importhospitalFile" id="hospital-file-upload" type="file"
+                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  #hospitalsClientsFileInput (click)="hospitalsClientsFileInput.value = null" (change)="importClientsHospitals($event)">
+              </form>
+            </label>
+            <label (click)="downloadTemplates()" for="download-templates" class="custom-file-upload-btn btn btn-default btn-sm" data-toggle="tooltip"
+            title="تحميل القوالب ">
+            <i class="fa fa-file-excel-o"></i>
+               
+          </label>
+          <label  for="download-clients"  [class.disabled-btn]="!filterdClientsGet" class="custom-file-upload-btn btn btn-default btn-sm" data-toggle="tooltip"
+            [title]="'TICKET.EXPORT' | translate">
+            <button class="export-btn"  (click)="opendExportModal(exportModal)" [disabled]="!filterdClientsGet" >
+              <i class="fa fa-download" [class.disabled-btn]="!filterdClientsGet"></i>
+            </button>
+               
+          </label>
+          <ng-template #exportModal let-modal>
+            <div class="modal-header bg-default">
+              <h4 class="modal-title text-green" id="exampleModalLabel"> تصدير بيانات المستفيدين</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <h3 class="finish-message" *ngIf="exportdone">{{'GENERAL.EXPORT_DONE' | translate}}</h3>
+            <form *ngIf="!exportdone" [formGroup] ="exportForm" (ngSubmit) = "exportClients()">
+            <div class="modal-body" style="height: auto;">
+             
+                  <div class="form-group" >
+                      <!-- radio -->
+                      <label class="col-sm-4 control-label">{{'GENERAL.FILE_EXT' | translate}}<i class="text-red fa fa-asterisk text-xs"></i></label>
+                      <div class="col-sm-8">
+                        <div class="radio radio-inline" style="margin-top:0">
+                          <label>
+                            <input type="radio" formControlName="extension" value="pdf">
+                            pdf
+                          </label>
+                        </div>
+                        <div class="radio radio-inline">
+                          <label>
+                            <input type="radio" formControlName="extension" value="xlsx">
+                            xlsx
+                          </label>
+                        </div>
+                      </div>
+                </div>
+            </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success" [disabled]="!exportForm.valid">{{'GENERAL.EXPORT' | translate}}</button>
+                <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">{{'GENERAL.CLOSE' | translate}}</button>
+              </div>
+              </form>
+              <div class="modal-footer" *ngIf="exportdone">
+                  <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">{{'GENERAL.CLOSE' | translate}}</button>
+              </div>
+          </ng-template>
+
+            </div>
+            <div class="clients-table-spinner" *ngIf="clientsObjectSpinner">
+                <img src="../../../assets/img/loader.gif" alt="">
+            </div>
+            <form *ngIf="!clientsObjectSpinner" >
+              <div class="form-group form-inline">
+                <!-- Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="service.searchTerm"/>
+                  <span class="ml-3" *ngIf="service.loading$ | async">Loading...</span> -->
+               
+              </div>
+            
+              <table class="table table-bordered table-striped text-center">
+                <thead class="bg-gray-dark">
+                  <tr>
+                    <th scope="row">الاسم</th>
+                    <th>{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</th>
+                    <th>{{'GENERAL.MOBILE' | translate}}</th>
+                    <th>{{'GENERAL.PHONE' | translate}}</th>
+                    <th>{{'GENERAL.GENDER' | translate}}</th>
+                    <th>{{'GENERAL.BIRTH_DATE' | translate}}</th>
+                    <!-- <th>تعديل</th> -->
+                  </tr>
+                </thead>
+                <tbody *ngIf="firstClientsGet" class="table table-bordered table-striped text-center">
+                  <tr *ngFor="let client of clientsObject">
+                    <!-- <th scope="row">{{ country.id }}</th> -->
+                    <th scope="row">
+                        {{client.name}}
+                    </th>
+                    <td>
+                        {{client.national_id}}
+                    </td>
+                    <td>
+                        {{client.mobile}}
+                    </td>
+                    <td>
+                        {{client.telephone}}
+                    </td>
+                    <td>
+                        {{client.gender}}
+                    </td>
+                    <td>
+                      {{client.birthdate}}
+                    </td>
+                    <!-- <td>
+                      <a (click)="open(content)">
+                        <i class="fa fa-pencil margin-r-5 text-green" ></i>
+                      </a>
+                      <a href="#"><i class="fa fa-trash-o margin-r-5 text-red"></i></a>
+                    </td> -->
+                  </tr>
+                </tbody>
+                <tbody *ngIf="filterdClientsGet" class="table table-bordered table-striped text-center">
+                  <tr  *ngFor="let fclient of filterdClientResponse.data">
+                      <!-- <th scope="row">{{ country.id }}</th> -->
+                      <th scope="row">
+                          {{fclient.name}}
+                      </th>
+                      <td>
+                          {{fclient.national_id}}
+                      </td>
+                      <td>
+                          {{fclient.mobile}}
+                      </td>
+                      <td>
+                          {{fclient.telephone}}
+                      </td>
+                      <td>
+                          {{fclient.gender}}
+                      </td>
+                      <td>
+                        {{fclient.birthdate}}
+                      </td>
+                      <!-- <td>
+                        <a (click)="open(content)">
+                          <i class="fa fa-pencil margin-r-5 text-green" ></i>
+                        </a>
+                        <a href="#"><i class="fa fa-trash-o margin-r-5 text-red"></i></a>
+                      </td> -->
+                    </tr>
+                </tbody>
+              </table>
+          
+
+              <div class="d-flex justify-content-between p-2 table-pagination">
+                <!-- <ngb-pagination [collectionSize]="20" [pageSize]="10" [(page)]="1" [maxSize]="50" [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination> -->
+                <ngb-pagination *ngIf="firstClientsGet"[collectionSize]="response.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                [pageSize] = "response.meta.per_page" [(page)]="response.meta.current_page" (pageChange)="changeClientPage($event)" aria-label="Default pagination">
+            
+              </ngb-pagination>
+
+                <ngb-pagination *ngIf="filterdClientsGet" [collectionSize]="filterdClientResponse.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                [pageSize] = "filterdClientResponse.meta.per_page" [(page)]="filterdClientResponse.meta.current_page" (pageChange)="changeFilterdClientPage($event)" aria-label="Default pagination"></ngb-pagination>
+              </div>
+
+            </form>
+
+          </div><!-- /.box-body -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->

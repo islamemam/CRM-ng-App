@@ -1,0 +1,138 @@
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper" id="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {{'KNOWLEDGE_BASE.KNOWLEDGE_BASE' | translate}}
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> {{'GENERAL.LAND_PAGE' | translate}}</a></li>
+      <li class="active">{{'KNOWLEDGE_BASE.KNOWLEDGE_BASE' | translate}}</li>
+    </ol>
+  </section>
+  <!-- Main content -->
+  <section class="content">
+    <div class="box box-solid">
+      <div class="box-header with-border bg-default">
+        <h3 class="box-title text-green">{{'KNOWLEDGE_BASE.KNOWLEDGE_BASE' | translate}}</h3>
+        <div class="box-tools pull-right">
+          <button type="submit" class="custom-btn mt-5" (click)="openNewCategory(addNewCategory)">{{'KNOWLEDGE_BASE.ADD_NEW_CATEGORY' | translate}} <i class="fa fa-folder-open" aria-hidden="true"></i></button>
+          <button type="submit" class="custom-btn mR-10 mt-5" (click)="open(addNewSubject)">{{'KNOWLEDGE_BASE.ADD_NEW_SUBJECT' | translate}} <i class="fa fa-file-text" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-2">
+                  <label class=" control-label"> {{'KNOWLEDGE_BASE.SEARCH_SUBJECT' | translate}}</label>
+                </div>
+                <div class="col-sm-5">
+                  <input type="text" name="Search" class="form-control" [(ngModel)]="keyWord" placeholder=" بحث...">
+                  <button type="button" class="btn btn-flat search-btn" (click)="search()"><i
+                      class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </div><!-- /.form-group -->
+        </form>
+        <hr />
+          <ng-template #addNewSubject let-modalSubject let-d="dismiss">
+              <div class="modal-header bg-default">
+                  <h4 class="modal-title text-green">{{'KNOWLEDGE_BASE.SUBJECTS_ADMIN' | translate}}</h4>
+                  <button type="button" class="close" data-dismiss="modalSubject" aria-label="Close" (click)="closeClearsub('modalSubject')">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label>{{'KNOWLEDGE_BASE.CHOSE_CATEGORY' | translate}}</label>
+                    <select class="form-control" [(ngModel)]="subjectModel.category_id" name="category_id">
+                      <option [value]="0">{{'KNOWLEDGE_BASE.CHOSE_CATEGORY' | translate}}</option>
+                      <option  *ngFor="let cat of categoriesData.data" [value]="cat.id">{{cat.title_ar}}</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                      <label>{{'KNOWLEDGE_BASE.CHOSE_SUBJECT' | translate}}</label>
+                      <select class="form-control" [(ngModel)]="subjectModel.role_id" name="role_id">
+                        <option [value]="0">{{'KNOWLEDGE_BASE.CHOSE_SUBJECT' | translate}}</option>
+                        <option *ngFor="let role of roleIdData.data" [value]="role.id">{{role.name}}</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                    <label>{{'KNOWLEDGE_BASE.SUBJECT_TITLE' | translate}}</label>
+                    <input type="text" class="form-control" name="title_ar"  [(ngModel)]="subjectModel.title_ar">
+                    
+                  </div>
+                  <div class="form-group">
+                      <label>{{'KNOWLEDGE_BASE.SUBJECT_TITLE_EN' | translate}}</label>
+                      <input type="text" class="form-control" name="title_en" [(ngModel)]="subjectModel.title_en" >
+                    </div>
+                    <div class="form-group">
+                        <label>{{'GENERAL.DETAILS' | translate}}</label>
+                        <textarea class="form-control" rows="3" name="details_ar" [(ngModel)]="subjectModel.details_ar" ></textarea>
+                          </div>
+          
+                  <div class="form-group">
+                    <label>{{'GENERAL.DETAILS_EN' | translate}}</label>
+                    <textarea class="form-control" rows="3" name="details_en" [(ngModel)]="subjectModel.details_en" ></textarea>
+                  </div>
+                </form>
+                <button type="button" class="btn btn-success" (click)="saveSubject(); modalSubject.dismiss('Cross click');">{{'GENERAL.SAVE' | translate}} <i class="fa fa-check fa-lg" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger mR-10" aria-label="Close" (click)="closeClearsub(modalSubject)">{{'GENERAL.CANCEL' | translate}} <i class="fa fa-ban fa-lg" aria-hidden="true"></i>
+                </button>
+              </div>
+            </ng-template><!-- Add New Subject modal -->
+            <ng-template #addNewCategory let-modal>
+                <div class="modal-header bg-default">
+                    <h4 class="modal-title text-green">{{'KNOWLEDGE_BASE.ADD_NEW_CATEGORY' | translate}}</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="closeClearcat(modal)">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                        <label>{{'KNOWLEDGE_BASE.CATEGORY_TITLE_EN' | translate}}</label>
+                        <input type="text" class="form-control" name="title_en" [(ngModel)]="categoryModel.title_en" >
+                      </div>
+                      <div class="form-group">
+                          <label>{{'KNOWLEDGE_BASE.CATEGORY_TITLE' | translate}}</label>
+                          <input type="text" class="form-control" name="title_ar" [(ngModel)]="categoryModel.title_ar" >
+                        </div>          
+                  </form>
+                  <button type="button" class="btn btn-success" (click)="saveCategory(); modal.dismiss('Cross click');">{{'GENERAL.SAVE' | translate}} <i class="fa fa-check fa-lg" aria-hidden="true"></i></button>
+                  <button type="button" class="btn btn-danger mR-10" aria-label="Close" (click)="closeClearcat(modal)">{{'GENERAL.CANCEL' | translate}} <i class="fa fa-ban fa-lg" aria-hidden="true"></i></button>
+                </div>
+              </ng-template><!-- Add New Category modal -->  
+        <br>
+        <div class="container">
+            <div class="col-sm-7 col-sm-offset-2 text-center" *ngFor="let alert of alerts">
+                <ngb-alert [type]="alert.type" (close)="close(alert)">{{ alert.message }}</ngb-alert>
+              </div>          
+        </div> <!--  Success MSG -->
+        <div class="knBase" *ngFor="let cat of categoriesData.data">
+          <div class="page-header ">{{cat.title}}</div>
+          <ngb-accordion #acc="ngbAccordion">
+            <ngb-panel *ngFor="let kb of cat.knowledge_bases" id="toggle-{{kb.id}}" [title]="kb.title_ar">
+              <ng-template ngbPanelContent>
+                <div class="subject-crud">
+                    <button type="button" title="تعديل" (click)="editSubject(kb,addNewSubject)" class="crud-btn"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                    <button type="button" (click)="confirmDelete(kb)" title="حذف"  class="crud-btn trash-btn"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                </div>
+<p>
+    {{kb.details_ar}}
+</p>
+              </ng-template>
+            </ngb-panel>
+          </ngb-accordion>
+          <hr />
+        </div>
+        <ngb-pagination [collectionSize]="categoriesData.meta.total" [(page)]="page" aria-label="Default pagination"
+        class="custom-pagination" (click)="changePage($event)"></ngb-pagination>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->

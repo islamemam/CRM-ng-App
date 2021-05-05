@@ -1,0 +1,153 @@
+<div *ngIf="dataLoded" class="tab-pane" id="SLA">
+    <div class="box box-solid">
+      <div class="box-header with-border bg-default">
+        <h3 class="box-title text-green">إدارة اتفاقيات مستوى الخدمة</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+          <span class="pull-right"> تفعيل الكل
+            <!-- Rounded switch -->
+            <label class="btn-switch">
+              <input type="checkbox">
+              <span class="switch-slider round"></span>
+            </label>
+          </span>
+          <a *ngIf="isGranted('Add SLA')" routerLink="/sla"  class="btn btn-success"> إضافة سياسة جديد</a>
+          <hr/>
+
+          <div class="box-group draggable" id="accordion3">
+
+          <div *ngFor="let n of slaList | slice: (slaData.meta.current_page-1) * pageSize : (slaData.meta.current_page-1) * pageSize + pageSize" 
+          class="row panel border-box gray">
+
+            <!-- controls start -->
+            <a *ngIf="isGranted('Delete SLA')" (click)="open(content, n.id, $event)" class="pull-right">
+              <i class="fa fa-trash-o text-red margin-r-10"></i>
+            </a>
+            <a *ngIf="isGranted('Edit SLA')" routerLink="/sla/{{n.id}}" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+            <span class="pull-right margin-r-10"> تفعيل
+              <!-- Rounded switch -->
+              <label class="btn-switch">
+                <input type="checkbox" disabled [checked]="n.status">
+                <span class="switch-slider round"></span>
+              </label>
+            </span>
+            <!-- controls end -->
+            <div class="col-md-9 col-xs-7">
+            <span class="handle">
+              <i class="fa fa-long-arrow-down"></i>
+              <i class="fa fa-long-arrow-up"></i>
+            </span>
+            <a  (click)="displayDataFun(n.id)" class="margin-r-5">
+              <strong class="margin-r-5">{{n.title_ar}}</strong><small class="text-gray"><i class="fa fa-clock-o"></i>
+                {{n.updated_at}}</small>
+            </a>
+            <a (click)="preventNavigation($event)"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+            <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+            </div>
+            <div id="collapse3-1" [className]="n.displayData ?  'panel-collapse col-xs-12 collapse in': 'panel-collapse collapse col-xs-12'" class="panel-collapse collapse col-xs-12">
+              <div class="box-body">
+                <hr/>
+
+
+                <div class="form-group">
+                    <div class="col-md-9">
+                      <label for="inputPolicyDesc" class="col-sm-3 control-label">الوصف:</label>
+                      <div class="col-sm-6"><!-- add class "has-error" for validation-->
+                        <textarea disabled rows="6"  class="form-control" >
+                          {{n.details_ar}}
+                        </textarea>
+                                              </div>
+                    </div><!-- /.col-->
+                  </div>
+
+
+                  <div class="form-group">
+                    <div class="col-md-9">
+                      <label for="inputPolicyName" class="col-sm-3 control-label"> الاهميه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                      <div class="col-sm-6">
+                          <input type="text" disabled value="{{n.priority.title_ar}}" class="form-control" placeholder="وقت الحل">
+
+
+                        </div>
+                    </div><!-- /.col-->
+                  </div>
+
+
+
+                  <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyName" class="col-sm-3 control-label"> انواع التذاكر: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-6" >
+                            <input *ngFor="let u of n.ticket_types" type="text" disabled value="{{u.title_ar}}" class="form-control" placeholder="وقت الحل">
+
+
+                          </div>
+                      </div><!-- /.col-->
+                    </div>
+
+                    <hr>
+
+                <div class="form-group">
+                    <div class="col-md-9">
+                      <label for="inputPolicyName" class="col-sm-3 control-label"> وقت الحل: <i class="text-red fa text-xs"></i></label>
+                      <div class="col-sm-3">
+                          <input type="text" disabled value="{{n.resolve_count}}" class="form-control" placeholder="وقت الحل">
+
+                        </div>
+                      <div class="col-sm-3">
+                          <input type="text" disabled value="{{n.resolve_duration}}" class="form-control" placeholder="وقت الحل">
+                          <!-- <label  class="form-control">
+                              {{n.resolve_duration}}
+                          </label>                     -->
+                        </div>
+                    </div><!-- /.col-->
+                  </div>
+                  <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyName" class="col-sm-3 control-label"> وقت الرد: <i class="text-red fa text-xs"></i></label>
+                        <div class="col-sm-3">
+                            <input type="text" disabled value="{{n.response_count}}" class="form-control" placeholder="وقت الحل">
+
+                          </div>
+                        <div class="col-sm-3">
+                            <input type="text" disabled value="{{n.response_duration}}" class="form-control" placeholder="وقت الحل">
+                          </div>
+                      </div><!-- /.col-->
+                    </div>
+
+                <!-- targets end -->
+              </div><!-- ./box-body -->
+            </div>
+          <!-- block End-->
+          </div>
+          <div class="d-flex justify-content-between p-2 table-pagination">
+            <ngb-pagination  [collectionSize]="slaData.meta.total" [rotate]="true" 
+            [maxSize]="paginationMaxSize" class="pull-right"
+            [pageSize] = "pageSize" [(page)]="slaData.meta.current_page" aria-label="Default pagination"></ngb-pagination>
+          </div>
+
+        </div><!-- /.box-group -->
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </div>
+
+  
+  <ng-template #content let-modal>
+    <div class="modal-header" style="background:#009B86 ">
+      <h4 class="modal-title" id="modal-basic-title" style="color:white">رساله تاكيديه</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body"style="height: 100px !important;">
+          <label>هل انت متأكد من حذف سياسه العمل ؟</label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">نعم</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel')">الغاء</button>
+    </div>
+  </ng-template>

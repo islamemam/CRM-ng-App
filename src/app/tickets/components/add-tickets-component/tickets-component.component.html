@@ -1,0 +1,870 @@
+<div class="view-ticket-loader" *ngIf="getTicketLoader">
+    <img src="../../../../assets/img/loader.gif" alt="">
+</div>
+<div class="content-wrapper" id="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header" id="content-wrapper">
+      <h1>
+        التذكرة
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+          <li class="active"> التذكرة</li>
+        </ol>
+    </section>
+    <!-- Main content -->
+
+
+    <!-- edit client modal -->
+    <ng-template #editclientmodal let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title text-green" id="exampleModalLabel">بيانات العميل</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body margin text-center" *ngIf="editClientsSpinner"style="height: auto;">
+          <img src="../../../../assets/img/loader.gif" alt="">
+        </div>
+        <div class="modal-body margin text-center" *ngIf="editClientDone && !editClientsSpinner"style="height: auto;">
+          <h4 class="text-center"> تم تعديل البيانات بنجاح </h4>
+        </div>
+        <!-- <div class="modal-body margin text-center"  style="height: auto;">
+          <img src="../../../../assets/img/loader.gif" alt="">
+        </div> -->
+        <form class="form-horizontal" [formGroup]="editClientForm" *ngIf="!editClientDone && !editClientsSpinner" (ngSubmit)="editClient()">        
+        <div class="modal-body margin">
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label for="inputName" class="col-sm-4 control-label">الاسم</label>
+                    <div class="col-sm-8"><!-- has-success -->
+                      <input type="text" class="form-control" formControlName="name">
+                      <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                    </div>
+                  </div><!-- /.col-->
+                  <div class="col-md-6">
+                      <label for="inputJob" class="col-sm-4 control-label">الجوال</label>
+                      <div class="col-sm-8"><!-- has-warning -->
+                        <input type="phone" class="form-control"  formControlName="mobile">
+                        <!-- <label class="control-label" for="inputWarning"><i class="fa fa-bell-o"></i>رسالة تنبية تظهر هنا</label> -->
+                      </div>
+                  </div><!-- /.col-->
+                </div><!-- /.form-group -->
+                
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label for="inputPhone" class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</label>
+                    <div class="col-sm-8"><!-- has-error -->
+                      <select class="form-control" formControlName="national_id_type_id">
+                        <option *ngFor="let nationaltype of nationalIdTypes.data" value="{{nationaltype.id}}" >{{nationaltype.title_ar}}</option>
+                      </select>
+                      <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                    </div>
+                  </div><!-- /.col-->
+                  <div class="col-md-6">
+                      <label for="inputCompanyName" class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</label>
+                      <div class="col-sm-8">
+                        <input type="phone" class="form-control" formControlName="national_id">
+                      </div>
+                  </div>
+                  <!-- /.col-->
+                </div><!-- /.form-group -->
+                
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label for="inputMob" class="col-sm-4 control-label">الهاتف</label>
+                    <div class="col-sm-8">
+                      <input type="phone" class="form-control" formControlName="telephone">
+                    </div>
+                  </div><!-- /.col-->
+                  <div class="col-md-6">
+                    <label for="inputBGroup" class="col-sm-4 control-label">الجنسية</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="nationality_id">
+                          <option *ngFor="let nationality of nationalities.data" value="{{nationality.id}}" >{{nationality.title_ar}}</option>
+                      </select>
+                    </div>
+                  </div><!-- /.col-->
+                </div><!-- /.form-group -->
+
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="inputID" class="col-sm-4 control-label"> العنوان</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" formControlName="address">
+                        </div>
+                      </div><!-- /.col-->
+                  <div class="col-md-6">
+                    <label for="inputEmail" class="col-sm-4 control-label">البريد الالكتروني</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="email">
+                    </div>
+                  </div>
+                  <!-- /.col-->
+                </div>
+               <!-- /.form-group -->
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <label for="input-Gender" class="col-sm-4 control-label">عضو ف الوزارة</label>
+                    <div class="radio radio-inline" style="margin-top:0;">
+                      <label>
+                        <input type="radio" formControlName="ministry_member" value="1" >
+                        نعم
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label>
+                        <input type="radio" formControlName="ministry_member" value="0" >
+                        لا
+                      </label>
+                    </div>
+                  </div><!-- /.col-->
+                  <div class="col-md-6">
+                    <label for="input-Gender" class="col-sm-4 control-label">النوع</label>
+                    <div class="radio radio-inline" style="margin-top:0;">
+                      <label>
+                        <input type="radio" formControlName="gender" value="male">
+                        ذكر
+                      </label>
+                    </div>
+                    <div class="radio radio-inline">
+                      <label>
+                        <input type="radio" formControlName="gender" value="female">
+                        انثى
+                      </label>
+                    </div>
+                  </div><!-- /.col-->
+                </div><!-- /.form-group -->
+                <div class="form-group">
+                  <div class="col-md-6">
+                      <label for="inputBGroup" class="col-sm-4 control-label">{{'BENEFICIARIES.BENEFICIARIES_TYPE' | translate}}</label>
+                      <div class="col-sm-8">
+                          <!-- <img src="../../../../assets/img/loader.gif" *ngIf="clientTypesSpinner" class="small-loading-spinner" alt=""> -->
+                          <select  class="form-control" formControlName="client_type_id" (change)= "editClientType($event.target.value)"  >
+                            <option *ngFor="let clientType of clientTypes.data" value="{{clientType.id}}" >{{clientType.title_ar}}</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="inputBGroup" class="col-sm-4 control-label">تاريخ الميلاد</label>
+                    <div class="col-sm-8">
+                        <!-- <img src="../../../../assets/img/loader.gif" *ngIf="clientTypesSpinner" class="small-loading-spinner" alt=""> -->
+                        <input id="dateOfBirth" class="form-control" (click)="dp.toggle()" [minDate]="minDate" [maxDate]="maxDate" formControlName="birthdate" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker  #dp="ngbDatepicker" (dateSelect)="formatDate(dp)">
+                    </div>
+                </div>
+                </div>
+                <div class="form-group" *ngIf="selectclient">
+                  <div class="col-md-6">
+                    <label for="inputCompanyName" class="col-sm-4 control-label">رقم هوية المستفيد الرئيسي</label>
+                    <div class="col-sm-8">
+                      <input type="phone" placeholder="رقم الهوية" maxlength="10" class="form-control" (keyup)="getMainClientId($event.target.value)">
+                          <img src="../../../../assets/img/loader.gif" *ngIf="getMainClientSpinner" class="small-loading-spinner" alt="">
+                          <span>{{mainclientname}}</span>
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="form-group">
+                   
+                  <div class="col-md-6">
+                    <label for="inputID" class="col-sm-4 control-label">الجهة</label>
+                    <div class="col-sm-8" formArrayName="hospitals">
+                      <div *ngFor="let hospitalCounter of currentClientsHospitalsArrayWithName; let i = index" class="fields_wrapper">
+                        <select class="form-control">
+                          <option  value="{{hospitalCounter.hospital_id}}" >{{hospitalCounter.title_ar}}</option>
+                        </select>
+                        <input class="form-control" type="text" placeholder="رقم الملف" value="{{hospitalCounter.file_number}}">
+                          <a (click)="removeHospital(i)" class="link remove_field text-danger"><i class="fa fa-times"></i>حذف</a>                        
+                        <hr>
+                      </div>
+
+                      <div *ngFor="let hospitalCounter of editClientForm.get('hospitals')['controls']; let i = index" id="" class="fields_wrapper">
+                          <!-- <img src="../../../../assets/img/loader.gif" *ngIf="hospitalsSpinner" class="small-loading-spinner" alt="">                                 -->
+                        <div [formGroupName]="i">
+                            <select formControlName="hospital_id" class="form-control">
+                                <option selected value="" disabled>اختر </option>
+                                <option *ngFor ="let hospital of hospitals" value="{{hospital.id}}">{{hospital.title_ar}}</option>
+                              </select>  
+                              <input  formControlName="file_number"  class="form-control" name="hospitals[{i}][file_number]" type="phone" placeholder="رقم الملف">
+                              <a *ngIf="i >= 1" (click)="removeHospitalFromForm(i)" class="link remove_field text-danger"><i class="fa fa-times"></i>حذف</a>
+                              <hr>
+                        </div>
+                      </div>
+                      <a (click)="addhospital()" class="link add_fields">إضافة جهة أخرى</a> 
+                    </div>
+                  </div><!-- /.col-->
+                </div><!-- /.form-group -->        
+      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark">حفظ</button>
+        </div>
+      </form>
+      <div class="modal-footer" *ngIf="editClientDone">
+          <button type="submit" (click)="modal.dismiss('Cross click')" class="btn btn-outline-dark" >إغلاق</button>
+      </div>
+      </ng-template>
+      <ng-template #copyTicketModal let-modal>
+          <div class="modal-content">
+              <div class="modal-header bg-green-active modal-success">
+                <h4 class="modal-title"><i class="icon fa fa-check"></i> عمل ناجح!</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body" style="height:auto;">
+                <img *ngIf="copyTicketspinner" src="../../../../assets/img/loader.gif" alt="">
+                <p *ngIf="!copyTicketspinner">  تم نسخ التذكرة بنجاح, رقم التذكرة - <a>#{{copiedTicketNumber}}</a></p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success"(click)="modal.close('Close click')">تم</button>
+              </div>
+            </div>
+        </ng-template>
+        <ng-template #selectMainClientModal let-modal>
+          <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title"> تحديد المستفيد</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body margin" style="height: auto">
+                <h4 *ngIf="selectSubClientDone">تم اختيار المستفيد بنجاح</h4>
+                <form class="form-horizontal" #selectSubClientForm = "ngForm" *ngIf="!selectSubClientDone"(ngSubmit) = "selectSubClient(selectSubClientForm.value,selectMainClientModal)">
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <!-- radio -->
+                            <label class="col-sm-4 control-label">المستفيد<i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8">
+
+
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="subClient" required value="same" checked  ngModel (change)="getSub($event.target.value)">
+                                  لنفسة
+                                </label>
+                              </div>
+                              <div class="radio radio-inline">
+                                <label>
+                                  <input type="radio" name="subClient" required value="sub" ngModel (change)="getSub($event.target.value)">
+                                  تابع
+                                </label>
+                              </div>
+                              <div *ngIf="noClientTypeSelcted" class="alert alert-danger" role="alert">
+                                 الرجاء اختيار المستفيد
+                               </div>
+                            </div>
+                        </div><!-- /.form-group -->
+
+                        <div class="form-group" *ngIf="!subClient">
+                          <label class="col-sm-4 control-label">الملف <i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-6">
+                          <!-- <img src="../../../../assets/img/loader.gif" *ngIf="subClientSpinner" class="small-loading-spinner" alt=""> -->
+                            <select class="form-control" name="pivot" ngModel required>
+                              <option selected value="" disabled>اختر </option>
+                              <option *ngFor="let clientHospital of clientHospitals" value="{{clientHospital.pivot.id}}">{{clientHospital.pivot.file_number}}</option>
+                              
+                            </select>
+                            <div *ngIf="pivotSelected" class="alert alert-danger" role="alert">
+                                الرجاء اختيار رقم الملف    
+                             </div>
+                          </div>
+                       </div>
+
+                        <div class="form-group" *ngIf="subClient">
+                          <label class="col-sm-4 control-label"> اسم التابع<i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-8"> <!-- add class "has-success" for validation-->
+                            <img src="../../../../assets/img/loader.gif" *ngIf="subClientSpinner" class="small-loading-spinner" alt="">
+                            <select class="form-control" *ngIf="!subClientSpinner" name="subClientName" ngModel required>
+                              <option selected value="" disabled>اختر </option>
+                              <option *ngFor ="let subClients of subClientsObject" value="{{subClients.id}}">{{subClients.name}}</option>
+                            </select>
+                            <div *ngIf="subClientSelected" class="alert alert-danger" role="alert">
+                               الرجاء اختيار اسم التابع
+                            </div>
+                            <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                          </div>
+                        </div><!-- /.form-group -->
+                        
+                        <div class="form-group" *ngIf="subClient">
+                          
+                            <label class="col-sm-4 control-label">الملف <i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-8">
+                            <img src="../../../../assets/img/loader.gif" *ngIf="subClientSpinner" class="small-loading-spinner" alt="">
+                              <select class="form-control" *ngIf="!subClientSpinner" name="pivot" ngModel required>
+                                <option selected value="" disabled>اختر </option>
+                                <option *ngFor ="let pivotelement of pivotsObject; let i = index" value="{{pivotelement[i].pivot.id}}">{{pivotelement[i].pivot.file_number}}</option>
+                                
+                              </select>
+                              <div *ngIf="pivotSelected" class="alert alert-danger" role="alert">
+                      الرجاء اختيار رقم الملف
+                               </div>
+                            </div>
+                        </div><!-- /.form-group -->
+                       
+                    </div><!-- /.col-->
+                    </div><!-- /.row-->
+                    <div class="modal-footer">
+                      <button  type="submit" class="btn btn-success" *ngIf="!selectSubClientDone"  [disabled]="!selectSubClientForm.valid" >حفظ</button>
+                      <button  (click)="modal.close('Close click')"class="btn bg-gray-dark">إغلاق</button>
+                      
+                    </div>
+                  </form> 
+              </div>
+            </div>
+        </ng-template>
+        <ng-template #addTicketDone let-modal>
+          <div class="modal-content">
+              <div class="modal-header bg-green-active modal-success">
+                <h4 class="modal-title"><i class="icon fa fa-check"></i> عمل ناجح!</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body" style="height:auto;">
+                <img *ngIf="addTicketspinner" src="../../../../assets/img/loader.gif" alt="">
+                <p *ngIf="!addTicketspinner">  تم إضافة التذكرة بنجاح, رقم التذكرة - <a>#{{addedTicketNumber}}</a></p>
+              </div>
+              <div class="modal-footer">
+                <button *ngIf="!addTicketspinner" type="button" class="btn btn-success" (click)="modal.close('Close click')">تم</button>
+              </div>
+            </div>
+        </ng-template>
+    <section class="content">
+        <div class="row mb" *ngIf="viewOnly">
+            <div class="col-sm-7">
+              <ul class="list-unstyled rate-list" >
+                <li class="inline-block margin-r-10" *ngIf="!ratedTicket && isGranted('Show Rate')"><span class="text-gray">تقييم التذكرة : <span >لم يتم تقييم التذكرة</span> </span>
+                </li>
+                <li class="inline-block margin-r-10" *ngIf="ratedTicket && isGranted('Show Rate')"><span class="text-gray">تقييم التذكرة :</span>
+                  <!-- rating-stars -->
+                  <ng-template #star let-fill="fill">
+                      <span class="star" [class.full]="fill === 100">
+                        <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                      </span>
+                  </ng-template>
+                    <ngb-rating  *ngIf="ratedTicket" [(rate)]="currentRate" [starTemplate]="star" [readonly]="true" max="5"></ngb-rating>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-5">
+              <!-- <button type="button" class="pull-right btn btn-default btn-sm" data-toggle="tooltip" data-original-title="إغلاق التذكرة"><i class="fa fa-lock"></i></button> -->
+              <button type="button" *ngIf="isGranted('Copy Ticket')" class="pull-right btn btn-default btn-sm margin-r-5" data-toggle="tooltip" data-placement="top" title="نسخ التذكرة" data-original-title="نسخ التذكرة" (click)="copyTicket(copyTicketModal)">
+                <i class="fa fa-clipboard"></i>
+              </button>
+              <!-- <button type="button" class="pull-right btn btn-default btn-sm margin-r-5" data-toggle="tooltip" data-original-title="إعادة لصندوق المهام"><i class="fa fa-inbox"></i></button> -->
+            </div>
+          </div>
+        <div class="row">
+          <!-- information -->
+          <div class="col-md-5">
+                <!-- Modal -->
+  
+  
+  
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 class="box-title text-green">بيانات العميل </h3>
+                  <div class="box-tools pull-right">
+                      <!-- <button class="btn btn-box-tool" data-toggle="modal" data-target="#editCustomer"><i class="fa fa-pencil text-green"></i></button> -->
+                      <button class="btn btn-box-tool" *ngIf="clientIdToEdit != null && isGranted('Edit Client')" (click)="openEditClientModal(editclientmodal)" ><i class="fa fa-pencil text-green"></i></button>                      
+                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+  
+          
+  
+                <!-- save successfull -->
+                <div class="modal" tabindex="-1" role="dialog" id="saveSucces" *ngIf="addTicketDoneModal" >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header bg-green">
+                              <h4 class="modal-title text-green" id="exampleModalLabel"><i style="color:white" class="icon fa fa-check"></i></h4>
+                            </div>
+                        <div class="modal-body margin" style="height: 100px;">
+                            تم الحفظ بنجاح رقم التذكرة : {{addedTicketNumber}}
+                          </div>
+                        <div class="modal-footer">
+                            <button type="submit" (click)="closeAddTicket()" class="btn btn-success">تم</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                  
+                <div class="box-body">
+                  <form class="form-horizontal" *ngIf="!viewOnly" #clientSearchForm = "ngForm" (ngSubmit) = "clientSearch(clientSearchForm.value,selectMainClientModal)">
+                      <div class="form-group">
+                        <div class="col-sm-12">
+                          <label for="inputTel" class="col-sm-3 control-label"> {{'IDENTIFICATION.SEARCH_BY_IDENTIFICATION_NUM' | translate}}</label>
+                          <div class="col-sm-7">
+                            <input type="number" class="form-control" id="inputTel" name="national_id" placeholder=" رقم الهوية" ngModel>
+                            <button type="submit" name="search" id="search-btn" class="btn btn-flat search-btn search-disabled" >
+                              <i class="fa fa-search"></i>
+                            </button>
+                            <div *ngIf="nationalIdInputError" class="alert alert-danger" role="alert">
+                              {{'IDENTIFICATION.IDENTIFICATION_NUM_VALID_MSG' | translate}}
+                            </div>
+                            <div *ngIf="falseNationalId" class="alert alert-danger" role="alert">
+                              {{'IDENTIFICATION.WRONG_IDENTIFICATION_NUM' | translate}}
+                             </div>
+                            <img *ngIf="clientSearchLoading" src="../../../../assets/img/loader.gif">
+                          </div>
+                        </div><!-- /.col-->
+                      </div>
+                      <hr><!-- /.form-group -->
+                  </form><!-- /.form -->
+                 
+                    <dl class="dl-horizontal" *ngIf="clientSearchDone">
+                      <dt>الاسم:</dt><dd>{{clientObject.data[0].name}}</dd>
+                      <dt>الجوال:</dt><dd>{{clientObject.data[0].mobile}}</dd>
+                      <dt>{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}} :</dt><dd>{{clientObject.data[0].national_id}}</dd>
+                    </dl>
+                    <dl class="dl-horizontal" *ngIf="viewOnly">
+                      <dt>{{'BENEFICIARIES.THE_BENEFICIARY' | translate}}:</dt><dd>{{currentOpendTicket.data[0].client.name}}</dd>
+                      <dt>الطالب:</dt><dd>{{currentOpendTicket.data[0].requester.name}}</dd>
+                      <dt>الجوال:</dt><dd>{{currentOpendTicket.data[0].client.mobile}}</dd>
+                      <dt>{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}} :</dt><dd>{{currentOpendTicket.data[0].client.national_id}}</dd>
+                      <dt>رقم الملف:</dt><dd>{{currentOpendTicket.data[0].client_hospital.file_number}}</dd>
+                      <dt>المستشفى:</dt><dd>{{currentOpendTicket.data[0].hospital.title_ar}}</dd>
+                    
+
+                    </dl>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+           
+              <div class="box box-solid">
+                  <div class="box-header with-border bg-default">
+                    <h3 class="box-title text-green">بيانات التذكرة <small *ngIf="viewOnly">رقم التذكرة: #{{ViewTicketId}}</small></h3>
+                    <!-- addTicketErrorAlert -->
+                   
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div><!-- /.box-header -->
+                  <div *ngIf = "addTicketErrorAlert" class="alert alert-danger" role="alert">
+                      {{addTicketErrorMsg}}
+                      </div>
+                  <div class="box-body">
+                      <h5 *ngIf="!selectClient && !viewOnly ">الرجاء اختيار العميل </h5>
+                      <form *ngIf="selectClient" class="form-horizontal" [formGroup] ="addTicketForm" (ngSubmit)="addTicket(addTicketDone)">
+                          <!-- <p class="text-gray">تاريخ اخر رد: <span>13/10/2019</span> | الساعة: <span>11:10 AM</span></p><hr> -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputExperience" class="col-sm-3 control-label has-error">المصدر</label>
+                              <div class="col-sm-9">
+                                <img class="small-loading-spinner" *ngIf="getSourcesSpinner" src="../../../../assets/img/loader.gif">
+                                <select class="form-control" *ngIf="!getSourcesSpinner" name="sourceid" formControlName="source_id" required >
+                                  <option selected value="" disabled>اختر مصدر التذكرة</option>
+                                  <option *ngFor ="let source of sources" value="{{source.id}}">{{source.title_ar}}</option>
+                                </select>
+                                <div *ngIf = "(addTicketForm.get('source_id').dirty || addTicketForm.get('source_id').touched) && addTicketForm.get('source_id').invalid && addTicketForm.get('source_id').errors.required" class="alert alert-danger" role="alert">
+                                  الرجاء اختيار مصدر التذكرة
+                                </div>
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputGroup" class="col-sm-3 control-label">النوع</label>
+                              <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                <img class="small-loading-spinner" *ngIf="getTicketTypeSpinner" src="../../../../assets/img/loader.gif">
+                                <select class="form-control" *ngIf="!getTicketTypeSpinner" name="typeid" formControlName="ticket_type_id" (change)="getMainReason($event.target.value)">
+                                  <option selected value="" disabled>اختر النوع</option>
+                                  <option *ngFor ="let type of types" value="{{type.id}}">{{type.title_ar}}</option>
+                                </select>
+                                <div *ngIf="noTypeSelected" class="alert alert-danger" role="alert">
+                                  الرجاء اختيار النوع
+                                  </div>
+                                <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputQ1" class="col-sm-3 control-label"> سبب الاتصال الرئيسي</label>
+                              <div class="col-sm-9">
+                                <img class="small-loading-spinner" *ngIf="getMainReasonSpinner" src="../../../../assets/img/loader.gif">
+                                <select class="form-control" *ngIf="!getMainReasonSpinner" name="mainreasonid" formControlName="main_reason_id" (change)="getSubReason($event.target.value)">
+                                  <option disabled selected value="" *ngIf="noTypeSelectedForMainReasons">يجب اختيار النوع</option>
+                                  <option disabled selected value="" *ngIf="!noTypeSelectedForMainReasons">اختر سبب الاتصال الرئيسي</option>
+                                  <option *ngFor ="let mainReson of mainResons" value="{{mainReson.id}}">{{mainReson.title_ar}}</option>                              
+                                </select>
+                                <div *ngIf="noMainReasonSelected" class="alert alert-danger" role="alert">
+                                  الرجاء اختيار سبب الاتصال الرئيسي
+                                  </div>
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputQ2" class="col-sm-3 control-label"> سبب الاتصال الفرعي</label>
+                              <div class="col-sm-9">
+                                <img class="small-loading-spinner" *ngIf="getSubReasonsSpinner" src="../../../../assets/img/loader.gif">
+                                <select class="form-control" *ngIf="!getSubReasonsSpinner" name="subreasonid" formControlName="sub_reason_id" >
+                                    <option disabled selected value="" *ngIf="noMainReasonSelectedforSub">يجب اختيار السبب الرئيسي</option>
+                                    <option disabled selected value="" *ngIf="!noMainReasonSelectedforSub">اختر سبب الاتصال الفرعي</option>
+                                    <option *ngFor ="let subReason of subReasons" value="{{subReason.id}}">{{subReason.title_ar}}</option>                              
+                                </select>
+                                <div *ngIf="noSubReasonsSelected" class="alert alert-danger" role="alert">
+                                   الرجاء اختيار سبب الاتصال الفرعي
+                                  </div>
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <!-- radio -->
+                            <div class="col-sm-12">
+                              <label for="inputGender" class="col-sm-3 control-label">الاهمية</label>
+                              <img *ngIf="prioritiesSpinner" style="margin-right: 12px" class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                              <div class="col-sm-9">
+                                  <div class="radio radio-inline" style="margin-right: 0px;" *ngFor="let priority of priorities">
+                                      <label>
+                                        <input type="radio"value="{{priority.id}}" formControlName="priority_id">
+                                        {{priority.title_ar}}
+                                      </label>
+                                    </div>
+                                    <div *ngIf="noPrioritySelcted" class="alert alert-danger" role="alert">
+                                      الرجاء اختيار الاهمية
+                                    </div>
+                              </div>
+                           
+                       
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                              <div class="col-sm-12">
+                                <label for="inputTags" class="col-sm-3 control-label">العلامات</label>
+                                <div class="col-sm-9">
+                                    <mat-form-field class="example-chip-list">
+                                        <mat-chip-list #chipList>
+                                          <mat-chip
+                                            *ngFor="let tag of tags"
+                                            (removed)="remove(tag)">
+                                            {{tag}}
+                                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                          </mat-chip>
+                                          <input
+                                          #fruitInput
+                                            [formControl]="tagsCtrl"
+                                            [matAutocomplete]="auto"
+                                            [matChipInputFor]="chipList"
+                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                            [matChipInputAddOnBlur]="addOnBlur"
+                                            (matChipInputTokenEnd)="add($event)"
+                                            formControName="tags">
+                                        </mat-chip-list>
+                                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                                            {{tag}}
+                                          </mat-option>
+                                        </mat-autocomplete>
+                                      </mat-form-field>
+                           
+                                </div>
+                              </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputExperience" class="col-sm-3 control-label">تسليم الى</label>
+                              <div class="col-sm-9">
+                              <img *ngIf="getHospitalsSpinner" class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                                <select *ngIf="!getHospitalsSpinner" class="form-control" name="hospitalid" formControlName="hospital_id">
+                                    <option selected value="" disabled>اختر المستشفى</option>
+                                    <option *ngFor="let hospital of hospitals" value="{{hospital.id}}">{{hospital.title_ar}}</option>
+                                </select>
+                                <div *ngIf = "noHospitalAlert" class="alert alert-danger" role="alert">
+                                  الرجاء اختيار المستشفى
+                                </div>
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputExperience" class="col-sm-3 control-label">الحالة</label>
+                              <div class="col-sm-9">
+                              <img *ngIf="getStatusesSpinner"class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                                <select *ngIf="!getStatusesSpinner" class="form-control" name="statueid"  formControlName="status_id">
+                                  <option selected value="" disabled>اختر الحالة</option>
+                                  <option *ngFor="let statue of statuses" value="{{statue.id}}">{{statue.title_ar}}</option>
+                                </select>
+                                <div *ngIf="statusesAlert" class="alert alert-danger" role="alert">
+                                    الرجاء اختيار الحالة
+                                  </div>
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputDetails" class="col-sm-3 control-label" >تفاصيل</label>
+                              <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                <textarea rows="6" class="form-control" id="inputDetails" placeholder="التفاصيل" name="inputDetails" formControlName="details"></textarea>
+                                <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                              </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                          <div class="col-xs-12">
+                            <button type="button" class="pull-right btn btn-success margin-r-10" type="submit">حفظ</button>
+                          </div>
+                      </form>
+                      <form *ngIf="viewOnly" class="form-horizontal" [formGroup]="editTicketForm" (ngSubmit)="editTicket()">
+                        <!-- <p class="text-gray">تاريخ اخر رد: <span>13/10/2019</span> | الساعة: <span>11:10 AM</span></p><hr> -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputExperience" class="col-sm-3 control-label has-error">المصدر</label>
+                            <div class="col-sm-9">
+                              <img class="small-loading-spinner" *ngIf="getSourcesSpinner" src="../../../../assets/img/loader.gif">
+                              <select class="form-control" *ngIf="!getSourcesSpinner" name="sourceid" formControlName="source_id" required >
+                                <option *ngFor="let source of sources" value="{{source.id}}">{{source.title_ar}}</option>
+                              </select>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputGroup" class="col-sm-3 control-label">النوع</label>
+                            <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                              <img class="small-loading-spinner" *ngIf="getTicketTypeSpinner" src="../../../../assets/img/loader.gif">
+                              <select class="form-control" *ngIf="!getTicketTypeSpinner" name="typeid" formControlName="ticket_type_id" (change)="getMainReason($event.target.value)">
+                                <option *ngFor="let type of types" value="{{type.id}}">{{type.title_ar}}</option>
+                              </select>
+                              <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputQ1" class="col-sm-3 control-label"> سبب الاتصال الرئيسي</label>
+                            <div class="col-sm-9">
+                              <img class="small-loading-spinner" *ngIf="getMainReasonSpinner" src="../../../../assets/img/loader.gif">
+                              <select class="form-control" *ngIf="!getMainReasonSpinner" name="mainreasonid" formControlName="main_reason_id" (change)="getSubReason($event.target.value)">
+                                <option *ngFor ="let mainReson of mainResons" value="{{mainReson.id}}">{{mainReson.title_ar}}</option>                              
+                              </select>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputQ2" class="col-sm-3 control-label"> سبب الاتصال الفرعي</label>
+                            <div class="col-sm-9">
+                              <img class="small-loading-spinner" *ngIf="getSubReasonsSpinner" src="../../../../assets/img/loader.gif">
+                              <select class="form-control" *ngIf="!getSubReasonsSpinner" name="subreasonid" formControlName="sub_reason_id" >
+                                  <option *ngFor="let subReason of subReasons" value="{{subReason.id}}">{{subReason.title_ar}}
+                                  </option>                              
+                              </select>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <!-- radio -->
+                          <div class="col-sm-12">
+                            <label for="inputGender" class="col-sm-3 control-label">الاهمية</label>
+                            <img *ngIf="prioritiesSpinner" style="margin-right: 12px" class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                            <div class="col-sm-9">
+                                <div class="radio radio-inline" style="margin-right: 0px;" *ngFor="let priority of priorities">
+                                    <label>
+                                      <input type="radio" [checked]="priority.id === selectedPriorityId" value="{{priority.id}}" formControlName="priority_id">
+                                      {{priority.title_ar}}
+                                    </label>
+                                  </div>
+                            </div>
+                         
+                     
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group"style="margin-bottom:0">
+                            <div class="col-sm-12">
+                              <label for="inputTags" class="col-sm-3 control-label">العلامات</label>
+                              <div class="col-sm-9">
+                                  <span class="tag-span" *ngFor="let tag of currentOpendTicketTags; let i = index">{{tag.title}}<i (click)="deleteClickedTags(i)" class="fa fa-times-circle" aria-hidden="true"></i></span><br>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputTags" class="col-sm-3 control-label" style="color:white">العلامات</label>
+                              <div class="col-sm-9">
+                                <!-- old tags -->                        
+                                  <mat-form-field class="example-chip-list">
+                                      <mat-chip-list #chipList>
+                                        <mat-chip
+                                          *ngFor="let tag of tags;i as index"
+                                          [selectable]="selectable"
+                                          [removable]="removable"
+                                          
+                                          (removed)="remove(tag)">
+                                          {{tag}}
+                                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                        </mat-chip>
+                                        <input
+                                        #fruitInput
+                                          [formControl]="tagsCtrl"
+                                          [matAutocomplete]="auto"
+                                          [matChipInputFor]="chipList"
+
+                                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                          [matChipInputAddOnBlur]="addOnBlur"
+                                          (matChipInputTokenEnd)="add($event)"
+                                          formControlName="tags">
+                                      </mat-chip-list>
+                                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                        <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                                          {{tag}}
+                                        </mat-option>
+                                      </mat-autocomplete>
+                                    </mat-form-field>
+                         
+                              </div>
+                            </div><!-- /.col-->
+                          
+                          </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputExperience" class="col-sm-3 control-label">تسليم الى</label>
+                            <div class="col-sm-9">
+                            <img *ngIf="getHospitalsSpinner" class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                              <select *ngIf="!getHospitalsSpinner" class="form-control" name="hospitalid" formControlName="hospital_id">
+                                  <option *ngFor="let hospital of hospitals" value="{{hospital.id}}">{{hospital.title_ar}}</option>
+                              </select>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputExperience" class="col-sm-3 control-label">الحالة</label>
+                            <div class="col-sm-9">
+                            <img *ngIf="getStatusesSpinner"class="small-loading-spinner" src="../../../../assets/img/loader.gif"/>
+                              <select *ngIf="!getStatusesSpinner" class="form-control" name="statueid"  formControlName="status_id">
+                                <option *ngFor="let statue of statuses" value="{{statue.id}}">{{statue.title_ar}}</option>
+                              </select>
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <div class="col-sm-12">
+                            <label for="inputDetails" class="col-sm-3 control-label" >تفاصيل</label>
+                            <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                              <textarea rows="6" class="form-control" id="inputDetails" placeholder="التفاصيل" name="inputDetails" formControlName="details"></textarea>
+                              <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                            </div>
+                          </div><!-- /.col-->
+                        </div><!-- /.form-group -->
+                        <div class="col-xs-12">
+                          <button *ngIf="displayEditButton" type="button" class="pull-right btn btn-success margin-r-10" (click)="open(content)"  type="submit">تعديل</button>
+                          <button type="button" *ngIf="displayEvaluationButton" class="pull-right btn btn-success margin-r-10" (click)="open(contentEvaluation)">تقييم</button>
+                          
+                          <!-- <button *ngIf="displayEvaluationButton" type="button"  class="pull-right btn btn-success margin-r-10" (click)="openEvaluation(contentEvaluation)"  type="button">التقييم</button> -->
+                        </div>
+                      </form>
+                  </div><!-- /.box-body -->
+              </div><!-- /.box -->
+  
+          </div><!-- /.col -->
+          <ng-template #content let-modal>
+            <div class="modal-header" style="background:#009B86 ">
+              <h4 class="modal-title" id="modal-basic-title" style="color:white">عمل ناجح</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body"style="height: 100px !important;">
+                  <label>تم تعديل التذكرة بنجاح</label>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">تم</button>
+            </div>
+          </ng-template>
+
+
+          <ng-template #contentEvaluation let-modal>
+              <form [formGroup]="evauluationForm" (ngSubmit)="submitFeedback(evauluationForm)">
+            <div class="modal-content">
+              <div class="modal-header bg-default">
+                <h4 class="modal-title text-green" id="exampleModalLabel">التقييم</h4>
+                <button (click)="modal.close('Save click')"  type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body margin" style="height: auto; overflow-y: unset">
+                  <ul class="list-unstyled rate-list" >
+                    <li class="inline-block margin-r-10" *ngIf="ratedTicket">
+                      <span class="text-gray">تقييم التذكرة :</span>
+                      <!-- rating-stars -->
+                      <ng-template #star let-fill="fill"  >
+                          <span class="star" [class.full]="fill === 100">
+                            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                          </span>
+                      </ng-template>
+                        <ngb-rating  *ngIf="ratedTicket" [(rate)]="currentRate" [starTemplate]="star" [readonly]="true" max="5"></ngb-rating>
+                    </li>
+                  </ul>
+                  <h3 *ngIf="feedbackdone">تم تقييم التذكرة</h3>
+                  <ngb-accordion [closeOthers]="true" *ngIf="!ratedTicket && !feedbackdone" #acc="ngbAccordion" activeIds="ngb-panel-0">
+                      <ngb-panel class="panel box box-default" *ngFor="let cat of evauluations ; let i = index">
+                        <ng-template ngbPanelTitle class="box-header with-border">
+                            <h4 class="box-title">
+                                <a>
+                                   {{cat.title_ar}}
+                                </a>
+                            </h4>
+                        </ng-template>
+                        <ng-template ngbPanelContent class="panel-collapse collapse">
+                            <ul class="list-unstyled" formArrayName="questions" >
+                              <li *ngFor="let qes of cat.questions; let z=index">{{qes.title_ar}}
+                                <!-- rating-stars -->
+                                <div class="rating-stars pull-right" [formGroupName]="z+i" >
+                                  <div *ngIf="qes.id!=17"> 
+                                      <ng-template #t let-fill="fill">
+                                          <span class="star" [class.full]="fill === 100">
+                                            <span class="half" [style.width.%]="fill">&#9733;</span>&#9733;
+                                          </span>
+                                        </ng-template>
+                                      <ngb-rating  rate="0" formControlName="closed_ended_id" [starTemplate]="t" max="5"></ngb-rating>
+                                  </div>
+
+                                    <div class="radio radio-inline m-0"*ngIf="qes.id ==17" >
+                                        <label class="rate-label">
+                                          <input type="radio" formControlName="closed_ended_id" (change)="showNotSolvedDetails($event)" value="36">
+                                          نعم
+                                        </label>
+                                      </div>
+                                      <div class="radio radio-inline" *ngIf="qes.id ==17" >
+                                        <label class="rate-label">
+                                          <input type="radio" formControlName="closed_ended_id" (change)="showNotSolvedDetails($event)" value="37">
+                                          لا
+                                        </label>
+                                    
+                                      </div>  <br>
+                                      <div class="solved-ticket-details" *ngIf="showDetailsTextarea && qes.id ==17">
+                                          <textarea placeholder="الرجاء كتابة التفاصيل" maxlength="500" (input)="inputNotSolvedTicket($event.target.value)" [class] = "emptyDetails" formControlName="details">
+
+                                          </textarea>
+                                      </div>
+                                   
+                                  </div>
+                              </li>
+                              
+                            </ul>
+                        
+                        
+                        </ng-template>
+                      </ngb-panel>
+                    </ngb-accordion>
+            
+              </div>
+              <div class="modal-footer">
+                <button *ngIf="!ratedTicket && !feedbackdone" type="submit" class="btn btn-success">حفظ</button>
+                <button  class="btn bg-gray-dark" (click)="modal.close('Save click')" data-dismiss="modal">إغلاق</button>
+              </div>
+            </div>
+          </form>  
+          </ng-template>
+
+          <app-add-tickets-tabs [viewOnly] = "viewOnly" [ticketObject] = "currentOpendTicket"></app-add-tickets-tabs>
+          
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div>

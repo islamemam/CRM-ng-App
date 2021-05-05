@@ -1,0 +1,151 @@
+<!-- Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="editCustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-default">
+        <h4 class="modal-title text-green" id="exampleModalLabel">بيانات العميل</h4>
+        <button type="button" class="close pull-left" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body margin">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputName" class="col-sm-4 control-label">{{'GENERAL.NAME' | translate}}</label>
+              <div class="col-sm-8">
+                <!-- has-success -->
+                <input type="text" class="form-control" id="inputName" placeholder="الأسم">
+                <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+              </div>
+            </div><!-- /.col-->
+            <div class="col-md-6">
+              <label for="inputJob" class="col-sm-4 control-label">{{'GENERAL.JOB' | translate}}</label>
+              <div class="col-sm-8">
+                <!-- has-warning -->
+                <input type="text" class="form-control" id="inputJob" placeholder="الوظيفة">
+                <!-- <label class="control-label" for="inputWarning"><i class="fa fa-bell-o"></i>رسالة تنبية تظهر هنا</label> -->
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputPhone" class="col-sm-4 control-label">{{'GENERAL.PHONE' | translate}}</label>
+              <div class="col-sm-8">
+                <!-- has-error -->
+                <input type="text" class="form-control" id="inputPhone" placeholder="00000000000">
+                <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+              </div>
+            </div><!-- /.col-->
+            <div class="col-md-6">
+              <label for="inputCompanyName" class="col-sm-4 control-label">{{'GENERAL.COMPANY_NAME' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputCompanyName" placeholder="اسم الشركة">
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputMob" class="col-sm-4 control-label">{{'GENERAL.MOBILE' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputMob" placeholder="00000000000">
+              </div>
+            </div><!-- /.col-->
+            <div class="col-md-6">
+              <label for="inputBGroup" class="col-sm-4 control-label">{{'BENEFICIARIES.BENEFICIARIES_GROUP' | translate}}</label>
+              <div class="col-sm-8">
+                <select class="form-control">
+                  <option selected>اختر المجموعة</option>
+                  <option>اختيار 1</option>
+                  <option>اختيار 2</option>
+                  <option>اختيار 3</option>
+                  <option>اختيار 4</option>
+                  <option>اختيار 5</option>
+                </select>
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputID" class="col-sm-4 control-label">{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputID" placeholder="رقم الهوية">
+              </div>
+            </div><!-- /.col-->
+            <div class="col-md-6">
+              <label for="inputEmail" class="col-sm-4 control-label">{{'GENERAL.EMAIL' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputEmail" placeholder="البريد الالكتروني">
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputAddress" class="col-sm-4 control-label">{{'GENERAL.ADDRESS' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputAddress" placeholder="العنوان">
+              </div>
+            </div><!-- /.col-->
+            <div class="col-md-6">
+              <label for="inputRegion" class="col-sm-4 control-label">{{'GENERAL.REGION' | translate}}</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputRegion" placeholder="المنطقة">
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+
+
+          <!-- radio -->
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="input-Gender" class="col-sm-4 control-label">{{'GENERAL.GENDER' | translate}}</label>
+              <div class="radio radio-inline">
+                <label>
+                  <input type="radio" name="GenderRadios" id="GenderRadios1" value="option1" checked>
+                  ذكر
+                </label>
+              </div>
+              <div class="radio radio-inline">
+                <label>
+                  <input type="radio" name="GenderRadios" id="GenderRadios2" value="option2">
+                  انثى
+                </label>
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+          <div class="form-group">
+            <div class="col-md-6">
+              <label for="inputID" class="col-sm-4 control-label">{{'GENERAL.ORGANISATION' | translate}}</label>
+              <div class="col-sm-8">
+                <div class="fields_wrapper">
+                  <select class="form-control">
+                    <option value="">اختر اسم الجهة</option>
+                    <option value="0">مستشفى خميس مشيط</option>
+                    <option value="1">مستشفى حائل</option>
+                    <option value="2">مستشفى الرياض</option>
+                  </select>
+                  <input class="form-control" type="text" placeholder="رقم الملف">
+                  <hr />
+                </div>
+                <a href="#" class="link add_fields">{{'GENERAL.ADD_ANOTHER_ORGANISATION' | translate}}</a>
+              </div>
+            </div><!-- /.col-->
+          </div><!-- /.form-group -->
+
+        </form>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">{{'GENERAL.SAVE' | translate}}</button>
+        <button type="submit" class="btn bg-gray-dark" data-dismiss="modal">{{'GENERAL.CANCEL' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>

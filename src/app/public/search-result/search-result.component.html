@@ -1,0 +1,100 @@
+<div class="content-wrapper" id="content-wrapper">
+    <section class="content-header">
+        <h1>{{'GENERAL.SEARCH_RESULT' | translate}}</h1>
+      </section>
+<section class="content">
+<div *ngIf="section=='users'">
+    <div class="box box-solid">
+        <div class="box-header with-border bg-default">
+            <h3 class="box-title text-green">{{'USERS.USERS_LIST' | translate}}</h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+            <div class="row border-box gray" *ngFor="let newUser of usersManagementData.data">
+                <a>
+                    <img src="../../../assets/img/user-160x160.png" class="col-xs-2" />
+                    <strong>{{newUser.name}}</strong>
+                </a>
+                <p>{{newUser.email}}</p>
+            </div>
+            <!-- block End-->
+            <ngb-pagination [collectionSize]="usersManagementData.meta.total" [(page)]="page"
+                aria-label="Default pagination" class="custom-pagination" (click)="changeUserPage($event)">
+              </ngb-pagination>
+            <!--pagination end-->
+            <p class="bg-info text-center" *ngIf="usersManagementData.data.length==0">{{'MESSAGES.NO_SEARCH_RESULT' | translate}}</p>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</div>
+
+<div *ngIf="section=='ticket'">
+    <div class="box box-solid">
+        <div class="box-header with-border bg-default">
+          <h3 class="box-title text-green">التذاكر</h3>
+        </div>                          
+            <div class="table-responsive">
+              <table class="table table-hover table-striped text-center">
+                  <thead class="bg-gray-dark">
+                      <tr>
+                        <th>الاهمية</th>
+                        <th>{{'BENEFICIARIES.BENEFICIARY_NAME' | translate}}</th>
+                        <th>رقم التذكرة ونوعها</th>
+                        <th>حالة التذكرة</th>
+                        <th>اسم الموظف المسؤول</th>
+                        <th>وقت اخر تعديل</th>
+                      </tr>
+                    </thead>
+                <tbody>
+                  <tr *ngFor="let t of ticketssData.data">
+                    <td>{{t.priority.title_ar}}</td>
+                    <td>{{t.client.name}}</td>
+                    <td><b>{{t.ticket_type.title_ar}}</b> -#{{t.id}}</td>
+                    <td>{{t.status.title_ar}}</td>
+                    <td>{{t.user.name}}</td>
+                    <td class="text-gray">{{t.updated_at}}</td>
+                  </tr>
+          </tbody>
+              </table><!-- /.table -->
+            </div><!-- /.mail-box-messages -->
+      </div><!-- /.box -->
+</div>
+
+<div *ngIf="section=='beneficaries'">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center">
+            <thead class="bg-gray-dark">
+              <tr>
+                <th scope="row">الاسم</th>
+                <th>{{'IDENTIFICATION.IDENTIFICATION_NUM' | translate}}</th>
+                <th>{{'GENERAL.MOBILE' | translate}}</th>
+                <th>{{'GENERAL.PHONE' | translate}}</th>
+                <th>{{'GENERAL.GENDER' | translate}}</th>
+                <th>{{'GENERAL.BIRTH_DATE' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody class="table table-bordered table-striped text-center">
+              <tr *ngFor="let client of clientsData.data">
+                <th scope="row">
+                    {{client.name}}
+                </th>
+                <td>
+                    {{client.national_id}}
+                </td>
+                <td>
+                    {{client.mobile}}
+                </td>
+                <td>
+                    {{client.telephone}}
+                </td>
+                <td>
+                    {{client.gender}}
+                </td>
+                <td>
+                  {{client.birthdate}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+</section>
+</div>

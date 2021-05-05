@@ -1,0 +1,230 @@
+<div class="tab-pane active" id="questions">
+  <div class="box box-solid">
+    <div class="box-header with-border bg-default">
+      <h3 class="box-title text-green"> الاسئلة</h3>
+      <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+    </div><!-- /.box-header -->
+    <div *ngIf="questionnaireObj != null" class="box-body">
+      <button *ngIf="isGranted('Add Question')" type="button" (click)="openAddEdit(content)" class="btn btn-success" > إضافة سؤال جديد</button>
+      <hr>  
+
+      <div *ngFor="let r of questionnaireObj.data; let i = index" class="box-group" >
+        <div class="panel box box-default">
+          <div class="box-header with-border">
+            <!--  <span class="pull-right"> تفعيل الكل
+              <label class="btn-switch">
+                <input type="checkbox">
+                <span class="switch-slider round"></span>
+              </label>
+            </span> -->
+            <h4 class="box-title">
+            <a data-toggle="collapse" 
+            (click)="displayDataFun(r.id)"
+             aria-expanded="true" class="">
+              {{r.title_ar}}
+            </a>
+            </h4>
+          </div>
+          <div
+          [className]="r.displayData ?  'panel-collapse collapse in': 'panel-collapse collapse'"
+          class="panel-collapse collapse" 
+          aria-expanded="true">
+            <div class="box-body draggable ui-sortable">
+              
+              <div *ngFor="let q of questionnaireObj.data[i].questions" class="row border-box gray">
+                <a *ngIf="isGranted('Delete Question')" (click)="openDeleteConfirmation(DeleteContent,q.id, $event)"
+                 class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                <a *ngIf="isGranted('Edit Question')" (click)="getbyId(q.id, content)" 
+                class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+                <!-- <span class="pull-right margin-r-10"> تفعيل
+                  <label class="btn-switch">
+                    <input type="checkbox">
+                    <span class="switch-slider round"></span>
+                  </label>
+                </span> -->
+                <div class="col-md-9 col-xs-7">
+                  <span class="handle ui-sortable-handle">
+                    <i class="fa fa-long-arrow-down"></i>
+                    <i class="fa fa-long-arrow-up"></i>
+                  </span>
+                  <strong class="margin-r-5">{{q.title_ar}}</strong><small class="text-gray margin-r-10"><i class="fa fa-clock-o"></i> اخر تحديث:{{r.updated_at}}</small>
+                  <a href="#"><small class="text-gray"><i class="fa fa-user"></i> اسم المستخدم</small></a>
+                  <p>نوع السؤال :<span>{{q.type| questionTypeText}}</span></p>
+                </div>
+              <!-- block End-->
+              </div><!-- ./row border-box -->
+
+              <!-- <ngb-pagination *ngIf="questionnaireObj != null" [collectionSize]="questionnaireObj.meta.total" [rotate]="true"
+              [maxSize]="paginationMaxSize" class="pull-right"
+              [pageSize] = "pageSize" (pageChange)="onpageChange($event)" [(page)]="questionnaireObj.meta.current_page"
+              aria-label="Default pagination"></ngb-pagination>  -->
+
+            </div><!-- ./box-body -->
+          </div><!-- ./panel-collapse -->
+        </div><!-- ./panel box -->
+
+      </div><!-- /.box-group -->
+  
+      <ngb-pagination *ngIf="questionnaireObj != null" [collectionSize]="questionnaireObj.meta.total" [rotate]="true"
+        [maxSize]="paginationMaxSize" class="pull-right"
+        [pageSize] = "pageSize" (pageChange)="onpageChange($event)" [(page)]="questionnaireObj.meta.current_page"
+        aria-label="Default pagination"></ngb-pagination>
+  </div><!-- /.box-body -->
+  </div><!-- /.box -->
+</div>
+
+
+<ng-template #content let-modal>
+       
+       <div class="modal-content">
+           <div class="modal-header bg-default">
+           <h4 class="modal-title text-green" id="exampleModalLabel">تفاصيل السؤال</h4>
+           <button (click)="close()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">×</span>
+           </button>
+           </div>
+           <div style="text-align:center" *ngIf="spinnerLoaded" >
+               <img src="../../../assets/img/loader.gif" alt="">
+           </div>
+           <div class="modal-body margin">
+               <form class="form-horizontal" [formGroup]="addQuestionForm" (ngSubmit)="addQuestion()">
+                  <div class="form-group">
+                    <label for="inputName" (keypress)="arabicTitleChange()" name="name"class="col-sm-4 control-label">الإسم باللغه العربيه</label>
+                    <div class="col-sm-8">
+                      <input  type="text"  class="form-control" placeholder="الإسم باللغه العربيه" formControlName="title_ar">
+                      <div *ngIf="addQuestionForm.get('title_ar').touched && addQuestionForm.get('title_ar').invalid" class="alert alert-danger" role="alert">
+                        الرجاء ادخال الإسم باللغه العربيه و ان يكون ثلاث احرف على الاقل
+                      </div>
+                      <div *ngIf="displayTitleArErrorDuplication && submitted" class="alert alert-danger" role="alert">
+                        الإسم مستخدم من قبل
+                      </div>
+                    </div>
+                </div>
+                   
+       
+                <div class="form-group">
+                  <label for="inputName"  name="name"class="col-sm-4 control-label">الإسم باللغه بالإنجليزيه</label>
+                  <div class="col-sm-8">
+                    <input   type="text" (keypress)="englishTitleChange()" class="form-control" placeholder="الإسم باللغه بالإنجليزيه" formControlName="title_en">
+                    <div *ngIf="addQuestionForm.get('title_en').touched && addQuestionForm.get('title_en').invalid" class="alert alert-danger" role="alert">
+                      الرجاء ادخال الإسم باللغه الإنجليزيه و ان يكون ثلاث احرف على الاقل
+                  </div>
+                  <div *ngIf="displayTitleEnErrorDuplication && submitted" class="alert alert-danger" role="alert">
+                    الإسم مستخدم من قبل
+                  </div>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputName" name="name"class="col-sm-4 control-label">تصنيف السؤال</label>
+                  <div class="col-sm-8">
+                
+                    <select class="form-control" 
+                    (change)="onQuestionCategoryChange($event.target.value)"
+                    formControlName="question_category_id">
+                    <option selected value="0"></option>
+                    <option  *ngFor="let y of questionCategoriesList"  [ngValue]="y.id">{{y.title_ar}}</option>
+                  </select> 
+                  <div *ngIf="addQuestionForm.get('question_category_id').touched 
+                  && addQuestionForm.get('question_category_id').invalid" class="alert alert-danger" role="alert">
+                      ألرجاء اختيار تصنيف السؤال
+                  </div>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputName" name="name"class="col-sm-4 control-label">نوع السؤال</label>
+                  <div class="col-sm-8">
+                    <select class="form-control" 
+                    (change)="onQuestionTypeChange($event.target.id)"
+                    formControlName="type">
+                    <option selected value=""></option>
+                    <option  *ngFor="let y of questionTypeList"  [ngValue]="y.id">{{y.title_ar}}</option>
+                  </select> 
+                  <div *ngIf="addQuestionForm.get('type').touched 
+                  && addQuestionForm.get('type').invalid" class="alert alert-danger" role="alert">
+                      ألرجاء اختيار نوع السؤال
+                  </div>
+                  </div>
+              </div>
+                   
+                   <div class="form-group">
+                       <div class="col-md-12">
+                       <label class="col-sm-4 control-label"> تفعيل</label>
+                       <div class="col-sm-8">
+                        <span class=""> 
+                          <label class="btn-switch">
+                            <input type="checkbox" formControlName="active">
+                            <span class="switch-slider round"></span>
+                        </label>
+                          </span>
+                       </div>
+                       </div>
+                   </div>
+
+                   <div class="form-group">
+                       <div class="col-md-12">
+                       <label class="col-sm-4 control-label"> تفعيل</label>
+                       <div class="col-sm-8">
+                        <span class=""> 
+                          <label class="btn-switch">
+                            <input type="checkbox" formControlName="details_required">
+                            <span class="switch-slider round"></span>
+                        </label>
+                          </span>
+                       </div>
+                       </div>
+                   </div>
+     
+                   <div *ngIf="addQuestionForm.get('type').value != 'open_ended'">
+                    <div *ngFor="let r of questionOptionsList;index as i; last as isLast" class="form-group">
+                        <div class="col-md-12">
+                        <label class="col-sm-4 control-label">الخيارات</label>
+                        <div class="col-sm-8">
+                            <div class="fields_wrapper">
+                            <input (keypress)="optionsTextChange()" [ngModelOptions]="{standalone: true}"
+                              [(ngModel)]="options[i]" class="form-control" type="text" placeholder="الخيار">
+                            <hr>
+                            </div>
+                            <a *ngIf="isLast" (click)="addChoice()" class="link add_fields">إضافة خيار آخر</a> 
+                        </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="displayOptionErrorMessage && submitted" class="alert alert-danger" role="alert">
+                      الرجاء ادخال الاختيارات
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+           <button type="submit" class="btn btn-success">حفظ</button>
+           <button type="button" (click)="close()" class="btn bg-gray-dark" data-dismiss="modal">إلغاء</button>
+           </div>
+
+               </form>
+     
+           </div>
+         
+       </div>
+     
+     </ng-template>
+     
+     
+     <ng-template #DeleteContent let-modal>
+     <div class="modal-header" style="background:#009B86 ">
+     <h4 class="modal-title" id="modal-basic-title" style="color:white">رساله تاكيديه</h4>
+     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+       <span aria-hidden="true">&times;</span>
+     </button>
+     </div>
+     <div class="modal-body"style="height: 100px !important;">
+         <label>هل انت متأكد من حذف هذا السؤال ؟</label>
+     </div>
+     <div class="modal-footer">
+     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">نعم</button>
+     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel')">الغاء</button>
+     </div>
+     </ng-template>

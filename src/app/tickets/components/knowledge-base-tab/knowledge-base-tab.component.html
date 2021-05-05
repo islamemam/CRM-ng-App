@@ -1,0 +1,54 @@
+<div class="box box-solid">
+        <div class="box-header with-border bg-default">
+          <h3 class="box-title text-green">{{'KNOWLEDGE_BASE.KNOWLEDGE_BASE' | translate}}</h3>
+          <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div><!-- /.box-header -->
+        <div class="box-body" *ngIf="!isLoading">
+            <form class="form-horizontal">
+                <div class="form-group">
+                  <div class="col-sm-12">
+                    <label for="inputTopicSearch" class="col-sm-3 control-label"> {{'KNOWLEDGE_BASE.SEARCH_SUBJECT' | translate}}</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="inputTopicSearch" placeholder=" بحث...">
+                      <button type="submit" name="search" id="search-btn" class="btn btn-flat search-btn"><i class="fa fa-search"></i></button>
+                    </div>
+                  </div><!-- /.col-->
+                </div><!-- /.form-group -->
+            </form><hr/>
+            <ngb-pagination [collectionSize]="hospitalsResponse.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                      [pageSize] = "pageSize" [(page)]="hospitalsResponse.meta.current_page" aria-label="Default pagination"></ngb-pagination>
+
+            <br>
+            <div class="page-header ">{{'GENERAL.HOSPITALS_ADDRESS' | translate}}</div>
+            <div class="box-group" id="accordion" >
+                <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                <!--start-->
+                <div class="panel box box-default" *ngFor="let hospital of hospitalsResponse.data | slice: (hospitalsResponse.meta.current_page-1) * pageSize : (hospitalsResponse.meta.current_page-1) * pageSize + pageSize">
+                    <div class="box-header with-border">
+                    <h4 class="box-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            {{hospital.title_ar}}
+
+                    </a>
+                    </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                        <dl class="dl-horizontal">
+                            <dt>{{'GENERAL.CODE' | translate}}:</dt><dd>{{hospital.code}}</dd>
+                            <dt>{{'GENERAL.HOSPITAL_ADDRESS' | translate}}:</dt><dd>{{hospital.address_ar}}</dd>
+                            <dt>{{'GENERAL.PHONE_NUMBER' | translate}}:</dt><dd>{{hospital.telephone}}</dd>
+                            <dt>{{'GENERAL.TRANSFORM' | translate}}:</dt><dd>{{hospital.hotline}}</dd>
+                        </dl>
+                        </div>
+                    </div>
+                </div>
+                <!--end-->
+              
+              
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->

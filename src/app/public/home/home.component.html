@@ -1,0 +1,182 @@
+<div class="content-wrapper" id="content-wrapper">
+  <section class="content-header">
+    <h1>
+      {{'GENERAL.DASH_BOARD' | translate}}
+      <small>{{'GENERAL.STATISTICS' | translate}}</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> {{'GENERAL.LAND_PAGE' | translate}}</a></li>
+      <li class="active">{{'GENERAL.DASH_BOARD' | translate}}</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="statistics-filter">
+          <p>{{'GENERAL.ORGANISATION' | translate}}</p>
+            <select class="form-control mt-5" [(ngModel)]="hospital_id">
+              <option value="0">{{'GENERAL.ALL_HOSPITALS' | translate}}</option>
+              <option *ngFor="let hosp of hospitalsData.data"  [value]="hosp.id">{{hosp.title_ar}}</option>
+            </select>
+            <button type="button" class="btn" (click)="filterdTicketsStatistics()">استعراض</button>
+          </div>
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="ticketSummary">
+          <h3>{{'TICKET.TICKET_SUMMARY_TODAY' | translate}}<span>{{ticketStatisticsValue.ticket_statistics.ticket_today}}</span></h3>
+        </div>
+      </div> <!-- ticketSummary -->
+      <div class="col-lg-3 col-sm-6">
+        <div class="ticketSummary">
+          <h3>{{'TICKET.TICKET_SUMMARY_NEW_TODAY' | translate}}<span>{{ticketStatisticsValue.ticket_statistics.ticket_today_new}}</span></h3>
+        </div>
+      </div> <!-- ticketSummary -->
+      <div class="col-lg-3 col-sm-6">
+        <div class="ticketSummary">
+          <h3>{{'TICKET.TICKET_SUMMARY_SOLVED_TODAY' | translate}}<span>{{ticketStatisticsValue.ticket_statistics.ticket_today_solved}}</span></h3>
+        </div>
+      </div> <!-- ticketSummary -->
+      <div class="col-lg-3 col-sm-6">
+        <div class="ticketSummary">
+          <h3>{{'TICKET.TICKET_SUMMARY_CLOSED_TODAY' | translate}}<span>{{ticketStatisticsValue.ticket_statistics.ticket_today_closed}}</span></h3>
+        </div>
+      </div> <!-- ticketSummary -->
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="box box-solid dashBoard-block-animate">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{'TICKET.TICKET_SUMMARY_LAST_30TODAY' | translate}}</h3>
+          </div>
+          <div class="box-body">
+            <div class="week" *ngFor="let w of extractWeeksStatistics(ticketStatisticsValue.ticket_numbers_per_week)">
+              <p>{{'TICKET.TICKET_SUMMARY_WEELKY' | translate}} {{w.text}}: <span>{{w.value}}</span><span
+                  class="pull-right">{{w.percent}}%</span></p>
+              <div class="progress progress-xxs">
+                <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="box box-solid dashBoard-block-animate">
+            <div class="box-header with-border">
+              <h3 class="box-title">{{'TICKET.OPEND_TICKET_SUMMARY' | translate}}</h3>
+            </div>
+            <div class="box-body centere">
+              <ul class="opened-ticket-monthly">
+                <li *ngFor="let ticketMonthly of ticketStatisticsValue.opened_ticket_monthly">
+                  <p>{{ticketMonthly.tickets_count}}</p>
+                  <span>{{ticketMonthly.title_ar}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+  
+    </div>
+
+</div>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="box box-solid dashBoard-block-animate">
+        <div class="box-header with-border">
+          <h3 class="box-title">{{'TICKET.TICKET_SUMMARY_TYPE_BASED' | translate}}</h3>
+        </div>
+        <div class="box-body">
+          <div id="donut-chart">
+            <div style="display: block;">
+              <canvas baseChart 
+                [data]="pieChartData" 
+                [labels]="pieChartLabels" 
+                [chartType]="pieChartType"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+              </canvas>
+            </div>
+          </div>
+          <ul class="pieChart-info">
+            <li *ngFor="let ticketType of ticketStatisticsValue.ticket_type_statistics.ticket_type_numbers">
+              <span>{{ticketType.title_ar}} :</span>
+              {{ticketType.tickets_count}}
+            </li>
+            <li>
+              <b>{{'GENERAL.TOTAL' | translate}} : {{ticketStatisticsValue.ticket_type_statistics.total}}</b>
+            </li>
+          </ul>
+        </div>
+      </div>
+  </div>
+  <div class="col-md-5">
+    <div class="box box-solid dashBoard-block-animate dashBoard-block-customH">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{'TICKET.TICKET_SUMMARY_DATE_BASED' | translate}}</h3>
+      </div>
+      <div class="box-body">
+        <ul class="tickets-basedOn-date">
+          <li>{{'TICKET.TICKET_SUMMARY_LATE' | translate}} <span class="label label-success pull-right round-widget">{{ticketStatisticsValue.due_date.late}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_TODAY_WORD' | translate}} <span class="label bg-blue pull-right round-widget">{{ticketStatisticsValue.due_date.today}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_TOMORROW' | translate}} <span class="label label-primary pull-right round-widget">{{ticketStatisticsValue.due_date.tomorrow}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_THIS_WEEK' | translate}} <span class="label label-primary pull-right round-widget">{{ticketStatisticsValue.due_date.this_week}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_NEXT_WEEK' | translate}} <span class="label label-primary pull-right round-widget">{{ticketStatisticsValue.due_date.next_week}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_THIS_MONTH' | translate}} <span class="label label-primary pull-right round-widget">{{ticketStatisticsValue.due_date.this_month}}</span></li>
+          <li>{{'TICKET.TICKET_SUMMARY_DUE_YEAR' | translate}} <span class="label label-primary pull-right round-widget">{{ticketStatisticsValue.due_date.this_year}}</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="box box-solid dashBoard-block-animate">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{'TICKET.TICKET_SUMMARY_MONTHLY_CLOSED' | translate}}</h3>
+          </div>
+          <div class="box-body">
+            <div class="chart" id="bar-chart">
+              <div style="display: block">
+                <canvas baseChart 
+                  [colors]="chartColors"
+                  [datasets]="amctChartData"
+                  [labels]="amctChartLabels"
+                  [options]="amctChartOptions"
+                  [plugins]="amctChartPlugins"
+                  [legend]="amctChartLegend"
+                  [chartType]="amctChartType">
+                </canvas>
+              </div>          
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="box box-solid dashBoard-block-animate">
+          <div class="box-header with-border">
+            <h3 class="box-title">{{'TICKET.TICKET_SUMMARY_REOPEND_YEARLY' | translate}} </h3>
+          </div>
+          <div class="box-body">
+            <div class="chart">
+              <div style="display: block;">
+                <canvas baseChart 
+                  [colors]="barChartColors"
+                  [datasets]="barChartData"
+                  [labels]="barChartLabels"
+                  [options]="barChartOptions"
+                  [plugins]="barChartPlugins"
+                  [legend]="barChartLegend"
+                  [chartType]="barChartType">
+                </canvas>
+              </div>
+              
+
+
+
+            </div>
+          </div><!-- /.box-body -->
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

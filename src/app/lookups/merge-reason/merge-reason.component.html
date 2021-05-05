@@ -1,0 +1,146 @@
+<div class="content-wrapper" style="min-height: 392px;">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        اسباب الربط و الدمج
+      </h1>
+      <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+          <li class="active"> اسباب الربط و الدمج</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+          <!-- Search Customers -->
+          <div class="col-xs-12">
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 class="box-title text-green">قائمة اسباب الربط و الدمج</h3>
+                  <div class="box-tools pull-right">
+                      <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                      <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <hr>
+                      <button *ngIf="isGranted('Add MergeReason')" type="button" (click)="openAddEdit(content)" class="btn btn-success" data-toggle="modal" data-target="#editCustomer"> إضافة السبب جديد</button>
+                    <hr>
+                    <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                      <div class="row"><div class="col-sm-6"><div id="example1_filter" class="dataTables_filter"><label> بحث:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example1"></label></div></div></div><div class="row"><div class="col-sm-12 table-responsive">
+                        <table id="example1" class="table table-bordered table-striped text-center dataTable no-footer" role="grid" aria-describedby="example1_info">
+                        <thead class="bg-gray-dark">
+                          <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="الاسم: activate to sort column descending" style="width: 122px;">
+                            السبب باللغه العربيه
+                        </th>
+                            <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="الهاتف: activate to sort column ascending" style="width: 122px;">
+                              السبب باللغه بالانجليزيه
+                            </th>
+                            
+                            <th *ngIf="isGranted('Edit MergeReason')" class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="تعديل: activate to sort column ascending" style="width: 70px;">تعديل</th>
+                            <th *ngIf="isGranted('Delete MergeReason')" class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="تعديل: activate to sort column ascending" style="width: 70px;">حذف</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="mergeReasonObj != null">
+                          <tr *ngFor="let r of mergeReasonObj.data" role="row" class="odd">
+                            <td class="sorting_1">{{r.title_ar}}</td>
+                            <td>{{r.title_en}}</td>
+                            <td *ngIf="isGranted('Edit MergeReason')">
+                              <a (click)="getbyId(r.id, content)" data-toggle="modal"  data-target="#editCustomer"><i class="fa fa-pencil margin-r-5 text-green"></i></a>
+                            </td>
+                            <td *ngIf="isGranted('Delete MergeReason')">
+                              <a (click)="openDeleteConfirmation(DeleteContent,r.id, $event)" class=""><i class="fa fa-trash-o margin-r-5 text-red"></i></a >
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div></div>
+          
+
+                <ngb-pagination *ngIf="mergeReasonObj != null" [collectionSize]="mergeReasonObj.meta.total" [rotate]="true"
+                [maxSize]="paginationMaxSize" class="pull-right"
+                [pageSize] = "pageSize" (pageChange)="onpageChange($event)" [(page)]="mergeReasonObj.meta.current_page"
+                aria-label="Default pagination"></ngb-pagination>
+
+                            </div>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div>
+
+
+  <ng-template #content let-modal>
+    <div class="modal-header bg-default">
+        <h4 class="modal-title text-green" id="exampleModalLabel">بيانات السبب</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" (click)="close()">×</span>
+        </button>
+      </div>
+      <div style="text-align:center" *ngIf="spinnerLoaded" >
+          <img src="../../../assets/img/loader.gif" alt="">
+      </div>
+      <!-- <div *ngIf="clientisadded" class="alert alert-sucsses" role="alert">
+        تم اضافة العميل بنجاح
+      </div> -->
+    <form [formGroup] ="addMergeReasonForm" (ngSubmit) = "addNationality()" >
+      <div *ngIf="!addMergeReasonForm.touched && submitted" class="alert alert-danger" role="alert">
+          الرجاء ادخال كافةالحقول
+      </div>
+   
+    <div class="modal-body">
+            <div class="form-group">
+                <label for="inputName"  name="name"class="col-sm-3 control-label">الإسم باللغه العربيه</label>
+                <div class="col-sm-9">
+                  <input (keypress)="arabicTitleChange()"  type="text"  class="form-control" placeholder="الإسم باللغه العربيه" formControlName="title_ar">
+                  <div *ngIf="addMergeReasonForm.get('title_ar').touched && addMergeReasonForm.get('title_ar').invalid" class="alert alert-danger" role="alert">
+                    الرجاء ادخال الإسم باللغه العربيه و ان يكون ثلاث احرف على الاقل
+                  </div>
+                  <div *ngIf="displayTitleArErrorDuplication && submitted" class="alert alert-danger" role="alert">
+                    الإسم مستخدم من قبل
+                  </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName"  name="name"class="col-sm-3 control-label">الإسم باللغه بالإنجليزيه</label>
+                <div class="col-sm-9">
+                  <input (keypress)="englishTitleChange()"  type="text"  class="form-control" placeholder="الإسم باللغه بالإنجليزيه" formControlName="title_en">
+                  <div *ngIf="addMergeReasonForm.get('title_en').touched && addMergeReasonForm.get('title_en').invalid" class="alert alert-danger" role="alert">
+                    الرجاء ادخال الإسم باللغه الإنجليزيه و ان يكون ثلاث احرف على الاقل
+                </div>
+                <div *ngIf="displayTitleEnErrorDuplication && submitted" class="alert alert-danger" role="alert">
+                  الإسم مستخدم من قبل
+                </div>
+                </div>
+            </div>
+
+       
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-success">حفظ</button>
+        <button type="reset" class="btn bg-gray-dark" data-dismiss="modal" (click)="close()">إلغاء</button>
+    </div>
+    </form>
+
+  </ng-template>
+
+  <ng-template #DeleteContent let-modal>
+    <div class="modal-header" style="background:#009B86 ">
+      <h4 class="modal-title" id="modal-basic-title" style="color:white">رساله تاكيديه</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body"style="height: 100px !important;">
+          <label>هل انت متأكد من حذف هذا السبب ؟</label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">نعم</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel')">الغاء</button>
+    </div>
+  </ng-template>

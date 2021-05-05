@@ -1,0 +1,114 @@
+<div class="active tab-pane" id="triggers">
+    <div class="box box-solid">
+      <div class="box-header with-border bg-default">
+        <h3 class="box-title text-green">إدارة المشغلات</h3>
+        <div class="box-tools pull-right">
+            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+          <span class="pull-right"> تفعيل الكل
+            <!-- Rounded switch -->
+            <label class="btn-switch">
+              <input type="checkbox">
+              <span class="switch-slider round"></span>
+            </label>
+          </span>
+          <a *ngIf="isGranted('Add Business Roles')" routerLink="/business-role" class="btn btn-success"> إضافة مشغل جديد</a>
+          <hr/>
+
+          <div class="box-group draggable" id="accordion">
+
+          <div *ngFor="let n of businessRolesList" class="row panel border-box gray">
+            <!-- controls start -->
+            <a *ngIf="isGranted('Delete Business Rules')" (click)="openDeleteBRConfirmationMessage(bsContent,n.id, $event)" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+            <a *ngIf="isGranted('Edit Business Rules')" routerLink="/business-role/{{n.id}}" class="pull-right"><i class="fa fa-pencil margin-r-10"></i></a>
+            <!-- <span class="pull-right margin-r-10"> تفعيل
+              <label class="btn-switch">
+                <input type="checkbox" disabled checked>
+                <span class="switch-slider round"></span>
+              </label>
+            </span> -->
+            <!-- controls end -->
+            <div class="col-md-9 col-xs-7">
+            <span class="handle">
+              <i class="fa fa-long-arrow-down"></i>
+              <i class="fa fa-long-arrow-up"></i>
+            </span>
+            <a (click)="displayDataFun(n.id)" class="margin-r-5">
+              <strong class="margin-r-5">{{n.title_ar}}</strong><small class="text-gray">
+                <i class="fa fa-clock-o"></i> اخر تحديث: {{n.updated_at}} </small>
+            </a>
+            <a href="#"><small class="text-gray">
+              <i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+            <p>الاستخدام (اخر ٧ ايام): ٠٠</p>
+            </div>
+            <div id="collapse1" [className]="n.displayData ?  'panel-collapse col-xs-12 collapse in': 'panel-collapse collapse col-xs-12'" class="panel-collapse collapse col-xs-12">
+              <div class="box-body">
+                <hr/>
+                <p>
+                  {{n.details_ar}}
+                </p>
+
+                <p class="bold">الشروط:</p>
+                <p class="text-gray">يجب ان تتحقق كل هذه الشروط</p>
+                <!-- Conditions Start -->
+                <div *ngFor="let r of n.brconditions" class="row margin-l-0 margin">
+                  <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{r.br_condition_key.key_title_ar}}</p><!-- ./col -->
+                  <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{r.operator}}</p><!-- ./col -->
+                  <p class="col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{r.conditionable.title_ar}}</p><!-- ./col -->
+                </div><!-- ./row -->
+                <!-- Conditions End -->
+
+                <p class="bold">الإجراءات:</p>
+
+                <!-- <div class="margin-buttom">
+                  <div *ngFor="let y of n.br_actions" class="row margin-l-0">
+                    <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{y.name_ar}}</p>
+                    <p class="col-lg-2 col-md-3 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{n.reciever_type}}</p>
+                  </div>
+                  <div class="row margin-l-0">
+                    <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{n.subject}}</p>
+                  </div>
+                  <div class="row margin-l-0">
+                    <p class="col-lg-6 col-md-9 col-sm-7 margin-r-10 bg-disable rnd-5 pad">{{n.body}}</p>
+                  </div>
+                </div> -->
+
+              </div>
+            </div>
+          </div>
+
+          <ngb-pagination *ngIf="dataLoded" [collectionSize]="brData.meta.total" [rotate]="true"
+          [maxSize]="paginationMaxSize" class="pull-right"
+          [pageSize] = "pageSize" (pageChange)="onpageChange($event)" [(page)]="brData.meta.current_page"
+          aria-label="Default pagination"></ngb-pagination>
+
+          <!-- <ul class="pagination pull-right no-margin inline-block ">
+            <li class="disabled"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a></li>
+            <li class="active"><a href="javascript:void(0)">1</a></li>
+            <li><a href="javascript:void(0)">2</a></li>
+            <li><a href="javascript:void(0)">3</a></li>
+            <li><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a></li>
+          </ul>  -->
+        </div><!-- /.box-group -->
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  </div><!-- /.tab-pane -->
+
+  <ng-template #bsContent let-modal>
+    <div class="modal-header" style="background:#009B86 ">
+      <h4 class="modal-title" id="modal-basic-title" style="color:white">رساله تاكيديه</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body"style="height: 100px !important;">
+          <label>هل انت متأكد من حذف هذا المشغل ؟</label>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save')">نعم</button>
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Cancel')">الغاء</button>
+    </div>
+  </ng-template>

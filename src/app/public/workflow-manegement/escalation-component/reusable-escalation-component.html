@@ -1,0 +1,135 @@
+<form [formGroup] ="addEscalationModel">
+
+<div class="form-group border-box gray alert">
+
+  <div class="form-group">
+      <div class="col-md-8">
+        <div class="col-md-4">
+            <input type="text" (change)="changeEscalation()" numbersOnly 
+            name="scale_remainder" 
+            formControlName="scale_escalation"
+            class="form-control" placeholder="وقت الاجابه">                      
+            <div *ngIf="addEscalationModel.get('scale_escalation').invalid"
+            class="alert alert-danger">
+            الرجاء ادخال القيمه
+          </div>
+          </div>
+        <div class="col-md-4">
+            <select class="form-control"
+            formControlName="unit_escalation"
+            (change)="changeEscalation()"
+              name="unit_remainder">
+              <option [ngValue]="i.id" *ngFor="let i of resolveDurationList">{{i.value}}</option>
+            </select>                          
+            <div *ngIf="addEscalationModel.get('unit_escalation').invalid"
+            class="alert alert-danger">
+            الرجاء ادخال المده
+          </div>
+          </div>
+      </div>
+  
+    </div>
+
+    <hr>
+    
+    <div *ngFor="let r of proceduresListIds" >
+      <div class="alert">
+        <br>
+        <button *ngIf="proceduresListIds.length > 1" type="button" class="btn btn-box-tool pull-right" 
+        (click)="removeProcedure(r)" data-dismiss="alert"
+         aria-hidden="true"><i class="fa fa-times"></i></button>
+
+         <proc-section-add-sla
+         [mainList]="mainList"
+         [mainModel]="getProcedureData(r)"
+         [id]="r"
+         [userList]="userList"
+         [actionList]="actionListToSend"
+         [token]="token"
+         [rolesList]="roleListToSend"
+         (procAdded)="onProcedureAdded($event)"
+         >
+         </proc-section-add-sla>
+      </div>
+     
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-12">
+         <button type="button" (click)="addProcedure()" class="pull-right btn btn-success">إضافة إجراء جديد</button>
+      </div>
+    </div>
+
+    <hr>
+    <div class="border-box gray alert">
+      <div class="form-group margin-l-0 pad">
+        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+          <label class="sr-only" for="condition">ٌReceived at</label>
+          <select class="form-control"
+          [ngModelOptions]="{standalone: true}"
+          (change)="onMainOptionChange($event.target.value)"
+          [(ngModel)]="selectedMainOption">
+          <option selected></option>
+          <option  *ngFor="let y of mainList"  [ngValue]="y">{{y.key_title_ar}}</option>
+        </select> 
+        </div>
+        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+          <label class="sr-only" for="is">ٌIs</label>
+          <select class="form-control"
+          [ngModelOptions]="{standalone: true}"
+          [(ngModel)]="selectedOperator" 
+          (change)="onOperatorChange($event.target.value)">
+          <option  *ngFor="let y of operatorList"  [ngValue]="y.id">{{y.value}}</option>
+        </select> 
+        </div>
+        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+          <label class="sr-only" for="InputEmail">Email</label>
+          <select class="form-control" [(ngModel)]="selectedSubMainOption"
+          [ngModelOptions]="{standalone: true}" 
+          (change)="onSubMainOptionChange($event.target.value)">
+          <option  *ngFor="let y of subMainList"  [ngValue]="y">{{y.title_ar}}</option>
+        </select>        
+                        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-xs-11">
+            <button type="button" (click)="addMainBR()" class="pull-right btn btn-success">إضافة شرط جديد</button>
+        </div>
+      </div>
+    </div> 
+
+  
+
+
+      <!-- should list -->
+      <div *ngFor="let o of shouldList" class="border-box gray alert">
+        <button type="button" class="btn btn-box-tool pull-right" 
+        (click)="removeShouldItem(o.id)"  data-dismiss="alert" 
+        aria-hidden="true"><i class="fa fa-times"></i></button>
+        <div class="form-group margin-l-0 pad">
+          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+            <label class="sr-only" for="condition">ٌReceived at</label>
+            <input disabled type="text" class="form-control" id="mainName" value="{{o.mainName}}">
+
+          </div><!-- ./col -->
+          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+            <label class="sr-only" for="is">ٌIs</label>
+            <input disabled type="text" class="form-control" id="operatorName" value="{{o.operatorName}}">
+
+          </div><!-- ./col -->
+          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+            <label class="sr-only" for="InputEmail">Email</label>
+            <input disabled type="text" class="form-control" id="subMainName" value="{{o.subMainName}}">
+          </div>
+        </div>
+      </div>
+
+      <div 
+      *ngIf="shouldList.length == 0" class="alert alert-danger">
+      يجب اختيار شرط على الاقل
+      </div>
+
+  </div>
+
+</form>

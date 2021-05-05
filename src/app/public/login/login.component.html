@@ -1,0 +1,42 @@
+<div class="login-box">
+    <div class="login-logo">
+      <a href="index.html"><span class="logo-lg"><img src="assets/img/logo.png" alt="logo"/></span></a>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body">
+      <p class="login-box-msg">{{'GENERAL.LOGIN' | translate}}</p>
+      <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)" >
+        <div class="form-group has-feedback">
+          <input type="email"  class="form-control" name= "emailid" placeholder="البريد الالكتروني" ngModel>
+          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <input type="password" class="form-control" name="password" placeholder="كلمة السر" ngModel>
+          <!-- <span class="glyphicon glyphicon-lock  form-control-feedback"></span> -->
+        </div>
+        <div class="row" *ngIf="loginError">
+          <div class="col-xs-12">
+            <div class="alert alert-danger" role="alert">
+              {{'MESSAGES.WRONG_PASS_OR_EMAIL' | translate}}
+            </div>
+          </div><!-- /.col -->
+         <!-- /.col -->
+        </div>
+        <div class="row">
+            <div class="col-xs-12 spinner" *ngIf="loginLoading">
+              <img src="../../../assets/img/loader.gif" alt="">
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <button type="submit" class="btn btn-success btn-block">{{'GENERAL.LOGIN' | translate}}</button>
+          </div><!-- /.col -->
+         <!-- /.col -->
+        </div>
+
+        
+
+      </form>
+
+
+
+    </div><!-- /.login-box-body -->

@@ -1,0 +1,140 @@
+.content-wrapper{
+    margin-right: 0px ;
+}
+.small-loading-spinner{
+    width: 32px;
+}
+#saveSucces{
+    display: block;
+}
+#select-client-modal{
+    display: block;
+}
+.tag-span{
+    background: #e0e0e0;
+    padding-left: 8px;
+    padding-right: 12px;
+    color: rgba(0, 0, 0, 0.87);
+    border-radius: 16px;
+    align-items: center;
+    cursor: default;
+    min-height: 32px;
+    height: 1px;
+    margin-top: 7px;
+    line-height: 3.5;
+    i{
+        color: grey;
+        margin: 6px;
+        font-size: 18px;
+        vertical-align: middle;
+    }
+}
+
+
+.ng-invalid:not(form) {
+    box-shadow: 0px 0px 5px rgba(255, 0, 0, 0.5);
+}
+.ng-untouched:not(form).ng-invalid:not(form){
+    // background: yellow;
+}
+ng-template{
+    .modal-header{
+        &.modal-success{
+            background-color: #009B86 !important;
+        }
+    }
+}
+.star {
+    position: relative;
+    display: inline-block;
+    font-size: 1.5em;
+    color: #d3d3d3;
+  }
+  .full {
+    color: #FF912C;
+  }
+  .half {
+    position: absolute;
+    display: inline-block;
+    overflow: hidden;
+    color: #FF912C;
+  }
+  .card.ng-star-inserted{
+    position: relative;
+    border-radius: 3px;
+    background: #ffffff;
+    border: 1px solid #DBDADA;
+    margin-bottom: 30px;
+    width: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    li{
+        border-bottom: 1px solid #eee;
+    }
+  }
+  .list-unstyled{
+    &.ng-star-inserted{
+        padding: 14px 25px;
+        li{
+            border-bottom: 1px solid #eee;
+            margin: 32px 0px;
+        }
+    }
+  } 
+  .rating-stars{
+    &.pull-right{
+        line-height: 0.50;
+    }
+  }
+  .parentSearch{
+    top: 50px;
+      left: 22px;
+      position: absolute;
+  }
+  .text-center{
+      text-align: center;
+  }
+  .rate-list{
+      line-height: 0;
+      
+  }
+  .mb{
+      margin-bottom: 12px;
+  }
+  .solved-ticket-details{
+      position: absolute !important;
+      right: 0;
+      width: 100%;
+      textarea{
+        resize: none;
+        height: 36px;
+        margin-bottom: 24px;
+        width: 100%;
+        border-radius: 6px;
+        padding: 12px;
+        line-height: 1.2;
+        overflow-x: hidden;
+        &:focus{
+            outline:none;
+        }
+        &.empty-text{
+            border: 1px solid red;
+        }
+      }
+  }
+  .ng-star-inserted{
+      position: relative;
+  }
+  .view-ticket-loader{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.829);
+      z-index: 2000000;
+      text-align: center;
+      img{
+        position: relative;
+        top: 50%;
+      }
+  }

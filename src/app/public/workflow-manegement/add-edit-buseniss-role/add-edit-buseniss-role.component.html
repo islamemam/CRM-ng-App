@@ -1,0 +1,233 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        إدارة سير العمل<small> إضافة/تعديل مشغل</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a routerLink="/workflow-management"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+        <li><a routerLink="/workflow-management">إدارة سير العمل</a></li>
+        <li class="active">إضافة مشغل</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+          <div class="col-xs-12">
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 *ngIf="brId == 0" class="box-title text-green">
+                    <a routerLink="/workflow-management" class="btn btn-box-tool">
+                      <i class="fa fa-chevron-right"></i>
+                    </a> إضافة</h3>
+
+                    <h3 *ngIf="brId > 0" class="box-title text-green">
+                      <a routerLink="/workflow-management" class="btn btn-box-tool">
+                        <i class="fa fa-chevron-right"></i>
+                      </a> تعديل مشغل</h3>
+
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+                <div class="b.ox-body">
+                  <div class="row">
+                    <!-- controls start -->
+                    <a *ngIf="brId != 0" href="#" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                    <span class="pull-right margin-r-10"> تفعيل
+                      <!-- Rounded switch -->
+                      <label class="btn-switch">
+                        <input type="checkbox" checked="">
+                        <span class="switch-slider round"></span>
+                      </label>
+                    </span>
+                    <!-- controls end -->
+                    <div class="col-md-10 col-xs-12">
+                      <h4 data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="margin-r-5">
+                        <span class="margin-r-5">اسم المشغل يظهر هنا...</span><small class="text-gray margin-r-5"><i class="fa fa-clock-o"></i> اخر تحديث:{{updated_at}}</small>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                      </h4>
+                      <a href="trigger-history.html" class="block">مراجعة سجل التعديلات</a>
+                    </div>
+                  </div><!-- ./row end -->
+                  <hr/>
+
+                  <form class="form-horizontal" [formGroup]="addBusinessModel" (ngSubmit) = "save()" >
+                    
+                    <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputTriggerName" class="col-sm-3 control-label"> اسم المشغل بالعربيه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9">
+                            <input type="text" formControlName="title_ar"
+                            (ngModelChange)="onArTitleChange($event)" class="form-control" id="inputTriggerName" placeholder="اسم المشغل">
+                            <div *ngIf="addBusinessModel.get('title_ar').invalid && submitted"
+                            class="alert alert-danger">
+                            الرجاء ادخال الاسم
+                          </div>
+                          <div *ngIf="displayDuplicationArabicTitleError && submitted"
+                          class="alert alert-danger">
+                          {{'USERS.TAKEN_USER_NAME' | translate}}
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputTriggerDesc" class="col-sm-3 control-label">الوصف بالعربيه:<i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9">
+                          <textarea rows="6" formControlName="details_ar" 
+                          class="form-control" id="inputTriggerDesc"
+                          (ngModelChange)="detailsArabicChanged($event)" 
+                          placeholder="وصف المشغل"></textarea>
+                          <div *ngIf="displayDetailArError && submitted"
+                          class="alert alert-danger">
+                          الرجاء ادخال الوصف و الا يقل عن ثلاث احرف
+                        </div> 
+                    
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9">
+                          <label for="inputTriggerName" class="col-sm-3 control-label"> اسم المشغل بالانجليزيه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-9">
+                              <input type="text" formControlName="title_en" (ngModelChange)="onEnTitleChange($event)" class="form-control" id="inputTriggerName" placeholder="اسم المشغل">
+                              <div *ngIf="addBusinessModel.get('title_en').invalid && submitted"
+                            class="alert alert-danger">
+                            الرجاء ادخال الاسم
+                          </div>
+                          <div *ngIf="displayDuplicationEnglishTitleError && submitted"
+                          class="alert alert-danger">
+                          {{'USERS.TAKEN_USER_NAME' | translate}}
+                        </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-9">
+                          <label for="inputTriggerDesc" class="col-sm-3 control-label">الوصف بالانجليزيه:<i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-9">
+                            <textarea rows="6" (ngModelChange)="detailsEnglishChanged($event)" formControlName="details_en" class="form-control" id="inputTriggerDesc" placeholder="وصف المشغل"></textarea>
+                            <div *ngIf="displayDetailEnError && submitted"
+                            class="alert alert-danger">
+                            الرجاء ادخال الوصف و الا يقل عن ثلاث احرف
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- trigger main data end -->
+                    <hr/>
+                    <!-- trigger conditions start -->
+                    <p class="bold">الشروط: <i class="text-red fa fa-asterisk text-xs"></i></p>
+                    <p class="text-gray">يجب ان تتحقق كل هذه الشروط</p>
+                    <!-- 1 condition box start -->
+                    <div class="border-box gray alert">
+                      <div class="form-group margin-l-0 pad">
+                        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                          <label class="sr-only" for="condition">ٌReceived at</label>
+                          <select class="form-control" 
+                          (change)="onMainOptionChange($event.target.value)"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="selectedMainOption">
+                          <option selected></option>
+                           <option  *ngFor="let y of mainList"  [ngValue]="y">{{y.key_title_ar}}</option>
+                         </select> 
+                        </div><!-- ./col -->
+                        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                          <label class="sr-only" for="is">ٌIs</label>
+                          <select class="form-control" 
+                          [ngModelOptions]="{standalone: true}"
+                           [(ngModel)]="selectedOperator">
+                           <option  *ngFor="let y of operatorList"  [ngValue]="y.id">{{y.value}}</option>
+                         </select> 
+                        </div><!-- ./col -->
+                        <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                          <label class="sr-only" for="InputEmail">Email</label>
+                          <select class="form-control"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="selectedSubMainOption" 
+                          (change)="onSubMainOptionChange($event.target.value)">
+                           <option  *ngFor="let y of subMainList"  [ngValue]="y">{{y.title_ar}}</option>
+                         </select>        
+                                         </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <button type="button" (click)="addMainBR()" class="pull-right btn btn-success">إضافة شرط جديد</button>
+                        </div>
+                      </div>
+
+                    <!-- should list -->
+                    <div *ngFor="let o of shouldList" class="border-box gray alert">
+                        <button type="button" class="btn btn-box-tool pull-right" (click)="removeShouldItem(o.id)"  data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+                        <div class="form-group margin-l-0 pad">
+                          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                            <label class="sr-only" for="condition">ٌReceived at</label>
+                            <input disabled type="text" class="form-control" id="InputEmail2" value="{{o.mainName}}">
+ 
+                          </div><!-- ./col -->
+                          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                            <label class="sr-only" for="is">ٌIs</label>
+                            <input disabled type="text" class="form-control" id="InputEmail2" value="{{o.operatorName}}">
+ 
+                          </div><!-- ./col -->
+                          <div class="col-lg-3 col-md-7 no-padding margin-r-15">
+                            <label class="sr-only" for="InputEmail">Email</label>
+                            <input disabled type="text" class="form-control" id="InputEmail2" value="{{o.subMainName}}">
+                           </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="displayCondetionsError && submitted"
+                      class="alert alert-danger">
+                        الرجاء اختيار شرط
+                      </div>
+                    <p class="bold">الإجراءات: <i class="text-red fa fa-asterisk text-xs"></i></p>
+                    <div *ngFor="let r of proceduresListIds" >
+                      <div class="alert">
+                        <br>
+                        <button *ngIf="proceduresListIds.length > 1" type="button" class="btn btn-box-tool pull-right" 
+                        (click)="removeProcedure(r)" data-dismiss="alert"
+                         aria-hidden="true"><i class="fa fa-times"></i></button>
+
+                         <!-- *ngIf="rolesList.length > 0" -->
+                         
+                         <proc-section-add-br
+                         [mainList]="mainList"
+                         [mainModel]="getProcedureData(r)"
+                         [id]="r"
+                         [userList]="userList"
+                         [actionList]="actionList"
+                         [token]="token"
+                         [rolesList]="rolesList"
+                         (procAdded)="onProcedureAdded($event)"
+                         >
+                         </proc-section-add-br>
+                      </div>
+                     
+                    </div>
+
+                    <div class="form-group">
+                      <div class="col-xs-12">
+                         <button type="button" (click)="addProcedure()" class="pull-right btn btn-success">إضافة إجراء جديد</button>
+                      </div>
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success margin-r-15 pull-right">حفظ</button>
+                        <button type="button" class="btn bg-gray-dark margin-r-15 pull-right">إلغاء</button>
+                    </div>
+
+                  </form>
+
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div>

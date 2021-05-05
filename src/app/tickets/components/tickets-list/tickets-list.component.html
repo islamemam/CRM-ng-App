@@ -1,0 +1,45 @@
+<div class="box box-solid">
+        <div class="box-header with-border bg-default">
+          <h3 class="box-title text-green">السجل</h3>
+          <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="box-body" >
+          <div class="content sort">
+              <ngb-pagination [collectionSize]="response.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                      [pageSize] = "pageSize" [(page)]="response.meta.current_page" aria-label="Default pagination"></ngb-pagination>
+<!-- 
+                      | slice: (ticketsResponse.meta.current_page-1) * pageSize : (ticketsResponse.meta.current_page-1) * pageSize + pageSize" -->
+          </div>
+          <div class="content">
+              <!-- <div class="row email-box history" *ngFor="let ticket of statuses" >
+                  <a href="#">
+                    <div class="col-sm-3 text-gray">
+                      <p style="white-space: nowrap;"> </p>
+                      <p>{{ticket.title_ar}}</p>
+                    </div>
+                    <div class="col-sm-9 history-info">
+                      
+                      <p> {{ticketObject.data[0].details}}</p>
+                    </div>
+                  </a>
+                </div> -->
+                <div class="row email-box history"  *ngFor="let ticket of statuses | slice: (response.meta.current_page-1) * pageSize : (response.meta.current_page-1) * pageSize + pageSize">
+                    <a href="#">
+                      <div class="col-sm-3 text-gray">
+                        <p>{{ticket.updated_at}}</p>
+                        <p>{{ticket.title_ar}}</p>
+                      </div>
+                      <div class="col-sm-9 history-info">
+                        <strong>{{ticketObject.data[0].main_reason.title_ar}} - {{ticketObject.data[0].ticket_type.title_ar}} </strong>
+                        <p>{{ticketObject.data[0].details}}</p>
+                      </div>
+                    </a>
+                  </div>
+ 
+          
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,391 @@
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        إدارة سير العمل
+        <small > إضافة</small>
+        <small *ngIf="slaId > 0">
+          تعديل سياسة
+        </small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> الرئيسية</a></li>
+        <li><a routerLink="/workflow-management" >إدارة سير العمل</a></li>
+        <li class="active">إضافة سياسة</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+          <div class="col-xs-12">
+              <div class="box box-solid">
+                <div class="box-header with-border bg-default">
+                  <h3 *ngIf="slaId == 0" class="box-title text-green">
+                    <a [routerLink]="['/workflow-management']" [queryParams]="{ form: 'sla'}">
+
+                      <i class="fa fa-chevron-right"></i>
+                  </a> إضافة
+                </h3>
+                <h3 *ngIf="slaId > 0" class="box-title text-green">
+                  <a routerLink="/workflow-management" class="btn btn-box-tool">
+                    <i class="fa fa-chevron-right"></i>
+                </a> تعديل سياسة
+              </h3>
+                  <div class="box-tools pull-right">
+                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                  </div>
+                </div><!-- /.box-header -->
+                <form class="box-body" (ngSubmit) = "saveSLA()" [formGroup] ="addPloicyModel">
+                  <div class="row">
+                    <!-- controls start -->
+                    <a (click)="deleteSLA($event)" class="pull-right"><i class="fa fa-trash-o text-red margin-r-10"></i></a>
+                    <span class="pull-right margin-r-10"> تفعيل
+                      <!-- Rounded switch -->
+                      <label class="btn-switch">
+                        <input type="checkbox" formControlName="status" checked="">
+                        <span class="switch-slider round"></span>
+                      </label>
+                    </span>
+                    <!-- controls end -->
+                    <div class="col-md-10 col-xs-12">
+                      <h4 data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="margin-r-5">
+                        <span class="margin-r-5">{{policyName}}</span><small class="text-gray margin-r-5">
+                          <i class="fa fa-clock-o"></i> اخر تحديث: {{updated_at}}</small>
+                        <a href="#"><small class="text-gray"><i class="fa fa-user"></i> {{'USERS.USERNAME' | translate}}</small></a>
+                      </h4>
+                      <a routerLink="/workflow-management" class="block">مراجعة سجل التعديلات</a>
+                    </div>
+                  </div><!-- ./row end -->
+                  <hr/>
+
+                   <div class="form-horizontal" >
+                    <!-- trigger main data start -->
+                    <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyName" class="col-sm-3 control-label"> اسم السياسة: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" formControlName="title_ar" placeholder="اسم السياسة">
+                           
+                            <div *ngIf="addPloicyModel.get('title_ar').invalid && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال الاسم
+                            </div>
+                        </div>
+                      </div><!-- /.col-->
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyDesc" class="col-sm-3 control-label">الوصف:<i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                          <textarea rows="6" (ngModelChange)="detailsArabicChanged($event)" class="form-control" formControlName="details_ar" placeholder="وصف السياسة"></textarea>
+                          <div *ngIf="displayDetailArError && submitted"
+                          class="alert alert-danger">
+                          الرجاء ادخال الوصف
+                        </div>                        </div>
+                      </div><!-- /.col-->
+                    </div>
+                    <!-- trigger main data end -->
+                    <hr/>
+
+
+                     <!-- trigger main data start -->
+                     <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyName" class="col-sm-3 control-label">اسم السياسه بالانجليزيه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9">
+                            <input type="text" required class="form-control" formControlName="title_en" placeholder="اسم السياسه بالانجليزيه">
+                           
+                            <div *ngIf="addPloicyModel.get('title_en').invalid && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال الاسم
+                            </div>
+                        </div>
+                      </div><!-- /.col-->
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-9">
+                        <label for="inputPolicyDesc" class="col-sm-3 control-label">وصف السياسه بالانجليزيه:<i class="text-red fa fa-asterisk text-xs"></i></label>
+                        <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                          <textarea rows="6" class="form-control" (ngModelChange)="detailsEnglishChanged($event)" formControlName="details_en" placeholder="وصف السياسه بالانجليزيه"></textarea>
+                          <div *ngIf="displayDetailEnError && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال الوصف
+                            </div>
+                        </div>
+                      </div><!-- /.col-->
+                    </div>
+                    <!-- trigger main data end -->
+                    <hr/>
+
+                    <div class="form-group">
+                        <div class="col-md-9">
+                          <label for="inputPolicyName" class="col-sm-3 control-label"> الاهميه: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div class="col-sm-9">
+                              <select class="form-control"  formControlName="priority_id"
+                               name="sel3">
+                                <option [ngValue]="i.id" *ngFor="let i of perioritiesList">{{i.title_ar}}</option>
+                              </select>               
+                            
+                              <div *ngIf="addPloicyModel.get('priority_id').invalid && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال الاهميه
+                            </div>
+
+                            <div *ngIf="displayDuplicatePriorityError && submitted"
+                            class="alert alert-danger">
+                            الاهميه مكرره من قبل
+                          </div>
+
+                            </div>
+                        </div><!-- /.col-->
+                      </div>
+
+                      
+
+                      <div class="form-group">
+                        <div class="col-md-9">
+                          <label for="inputPolicyName" class="col-sm-3 control-label"> نوع التذكره: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                          <div *ngIf="ticketTypesList.length > 0" class="col-sm-9">
+                             <ng-multiselect-dropdown *ngIf="slaId == 0 ? true : (selectedItems.length > 0)"
+                             [ngModelOptions]="{standalone: true}"
+                              [placeholder]="'اختر نوع التذكره'"
+                              [data]="ticketTypesList"
+                              [(ngModel)]="selectedItems"
+                              [settings]="dropdownSettings"
+                              (onSelect)="onItemSelect($event)"
+                              (onSelectAll)="onSelectAll($event)">
+                              </ng-multiselect-dropdown>   
+                              
+                              
+                              <div *ngIf="displayTicketsTypes && submitted"
+                              class="alert alert-danger">
+                              الرجاء ادخال الاهميه
+                            </div>
+                          </div>
+                          </div><!-- /.col-->
+                        </div>
+              
+                      <div class="form-group">
+                          <div class="col-md-9">
+                            <label for="inputPolicyName" class="col-sm-3 control-label"> وقت الرد: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                            <div class="col-sm-3">
+                                <input type="text" numbersOnly  formControlName="response_count" class="form-control" placeholder="وقت الرد">                      
+                                <div *ngIf="addPloicyModel.get('response_count').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال القيمه                              </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control"  formControlName="response_duration">
+                                  <option [ngValue]="i.id" *ngFor="let i of responseDuratopnList">{{i.value}}</option>
+                                </select>         
+                                <div *ngIf="addPloicyModel.get('response_duration').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال المده                              </div>                 
+                            </div>
+                          </div><!-- /.col-->
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-9">
+                              <label for="inputPolicyName" class="col-sm-3 control-label"> وقت الحل: <i class="text-red fa fa-asterisk text-xs"></i></label>
+                              <div class="col-sm-3">
+                                  <input type="text" numbersOnly formControlName="resolve_count" class="form-control" placeholder="وقت الحل">                      
+                                  <div *ngIf="addPloicyModel.get('resolve_count').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال القيمه
+                                </div>
+                                </div>
+                              <div class="col-sm-3">
+                                  <select class="form-control"  formControlName="resolve_duration">
+                                    <option [ngValue]="i.id" *ngFor="let i of resolveDurationList">{{i.value}}</option>
+                                  </select>                          
+                                  <div *ngIf="addPloicyModel.get('resolve_duration').invalid && submitted"
+                                  class="alert alert-danger">
+                                  الرجاء ادخال المده
+                                </div>
+                                </div>
+                            </div><!-- /.col-->
+                          </div>
+
+                      <hr/>
+
+
+                      <div class="form-horizontal">
+                        <!-- Reminders start -->
+                        <p class="bold">إنشاء تذكير</p>
+                        <p class="text-gray">إنشاء تذكير في حالة اقتراب وقت الاجابه على التذكرة</p>
+                        
+                        <div class="form-group border-box gray alert">
+                          <div class="col-md-8">
+                            <div class="col-md-4">
+                                <input type="text" numbersOnly formControlName="scale_remainder_respond" class="form-control" placeholder="وقت الاجابه">                      
+                                <div *ngIf="addPloicyModel.get('scale_remainder_respond').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال القيمه
+                              </div>
+                              </div>
+                            <div class="col-md-4">
+                                <select class="form-control"  formControlName="unit_remainder_respond">
+                                  <option [ngValue]="i.id" *ngFor="let i of resolveDurationList">{{i.value}}</option>
+                                </select>                          
+                                <div *ngIf="addPloicyModel.get('unit_remainder_respond').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال المده
+                              </div>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            
+                            <ng-multiselect-dropdown 
+                            *ngIf="displayRolesDropDownList && 
+                            (slaId == 0 || (slaId != 0 && selectedRespondRoles.length >0))"
+                              [ngModelOptions]="{standalone: true}"
+                               [placeholder]="'اختر وظيفه'"
+                               [data]="rolesList"
+                               [(ngModel)]="selectedRespondRoles"
+                               [settings]="dropdownSettings"
+                               (onSelect)="onResolveRoleSelect($event)"
+                               (onSelectAll)="onSelectResolveAllRoles($event)">
+                               </ng-multiselect-dropdown>   
+
+                               <div *ngIf="displayRespondSelectRolesError && submitted"
+                               class="alert alert-danger">
+                              الرجاء اختيار الوظيفه
+                              </div>
+                          </div>
+                        </div>
+                       
+    
+                       
+    
+                          <div *ngIf="displayCondetionsError && submitted"
+                          class="alert alert-danger">
+                            الرجاء اختيار شرط
+                          </div>
+                        
+
+                        <p class="text-gray">إنشاء تذكير في حالة اقتراب وقت حل التذكرة</p>
+                        <!-- box start -->
+                        <div class="form-group border-box gray alert">
+                          <div class="col-md-8">
+                            <div class="col-md-4">
+                                <input type="text" numbersOnly formControlName="scale_remainder_resolve" class="form-control" placeholder="وقت الحل">                      
+                                <div *ngIf="addPloicyModel.get('scale_remainder_resolve').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال القيمه
+                              </div>
+                              </div>
+                            <div class="col-md-4">
+                                <select class="form-control"  formControlName="unit_remainder_resolve">
+                                  <option [ngValue]="i.id" *ngFor="let i of resolveDurationList">{{i.value}}</option>
+                                </select>                          
+                                <div *ngIf="addPloicyModel.get('unit_remainder_resolve').invalid && submitted"
+                                class="alert alert-danger">
+                                الرجاء ادخال المده
+                              </div>
+                              </div>
+                          </div>
+                          <div class="col-md-3">
+                            
+                            <ng-multiselect-dropdown *ngIf="displayRolesDropDownList&& 
+                            (slaId == 0 || (slaId != 0 && selectedResolveRoles.length >0))"
+                              [ngModelOptions]="{standalone: true}"
+                               [placeholder]="'اختر وظيفه'"
+                               [data]="rolesList"
+                               [(ngModel)]="selectedResolveRoles"
+                               [settings]="dropdownSettings"
+                               (onSelect)="onResolveRoleSelect($event)"
+                               (onSelectAll)="onSelectResolveAllRoles($event)">
+                               </ng-multiselect-dropdown>
+                               
+                               
+                               <div *ngIf="displayResolveSelectRolesError && submitted"
+                               class="alert alert-danger">
+                              الرجاء اختيار الوظيفه
+                              </div>
+
+                          </div>
+                        </div>
+                       
+                        <hr>
+
+                        <!-- escalation start -->
+                        <p class="bold">إنشاء تصعيد</p>
+                        <p class="text-gray">إنشاء تصعيد في حالة لم يتم الاجابه على التذكرة في الوقت المحدد</p>
+                        <!-- box start -->
+                        <reusable-escalation
+                        *ngIf="rolesList.length > 0 
+                        && mainList.length > 0
+                        && actionList.length > 0
+                        &&(slaId == 0 || mainRespondObject != null)" 
+                          [mainObject]="mainRespondObject"
+                           [rolesList]="rolesList"
+                           [mainList]="mainList"
+                          [actionList]="actionList"
+                          [escalationType]="escalationRespondType"
+                          [resolveDurationList]="resolveDurationList"
+                          (escalationAdded)="esclationItemChanged($event)"
+                          [id]="0"
+                          [token]="token" ></reusable-escalation>
+
+                        <p class="text-gray">إنشاء تسلسل التصعيد في حالة لم يتم الاستجابة على التذكرة في الوقت المحدد</p>
+                       
+                        <div  *ngFor="let r of sla_escalationList_Ids">
+                          <button *ngIf="sla_escalationList_Ids.length > 1" type="button" class="btn btn-box-tool pull-right" (click)="removeProcedure(r.id)"  data-dismiss="alert" aria-hidden="true"><i class="fa fa-times"></i></button>
+                          <reusable-escalation
+                          *ngIf="rolesList.length > 0 
+                          && mainList.length > 0
+                          && actionList.length > 0
+                          &&(slaId == 0 || mainResolveObject != null)" 
+                            [mainObject]="mainResolveObject"
+                             [rolesList]="rolesList"
+                             [mainList]="mainList"
+                            [actionList]="actionList"
+                            [escalationType]="escalationResolveType"
+                            [resolveDurationList]="resolveDurationList"
+                            (escalationAdded)="esclationItemChanged($event)"
+                            [id]="r"
+                            [token]="token" ></reusable-escalation>
+                        </div>
+                        
+                        <hr>
+
+                     
+                      <!-- <div class="form-group text-right">
+                        <div class="col-xs-11">
+                            <button type="button" (click)="addEscalation()" class="pull-right btn btn-success">إضافة تصعيد</button>
+                        </div>
+                      </div> -->
+                      <hr>
+                        <!-- <div class="col-xs-12">
+                            <input type="checkbox" class="custom-control-input" id="check4">
+                            <label for="inputExperience" class="control-label"> حفظ هذه السياسه في النظام كأفتراضي</label>
+                          </div> -->
+                        
+                      
+                      
+                        <!-- form end -->
+                    
+                  </div>
+
+
+                      <div class="form-group pull-right">
+                          <button type="submit" class="btn btn-success margin-r-15">حفظ</button>
+                          <a routerLink="/workflow-management"  class="btn bg-gray-dark margin-r-15">إلغاء</a>
+                      </div>
+
+                    </div>
+                    <hr/>
+
+                  
+                </form><!-- /.box-body -->
+              </div><!-- /.box -->
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+         
+    </section><!-- /.content -->
+  </div><!-- /.content-wrapper -->

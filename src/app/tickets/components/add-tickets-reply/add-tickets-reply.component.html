@@ -1,0 +1,127 @@
+<div class="box box-solid">
+    <div class="box-header with-border bg-default">
+      <h3 class="box-title text-green">إضافة رد</h3>
+      <!-- tools box -->
+      <div class="box-tools pull-right">
+          <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+      </div>
+    </div>
+    <div class="box-body">
+    
+        <div class="radio radio-inline" style="padding-right: 0;margin-top:0;">
+          <label>
+            <input type="radio" name="subClient" required value="inner" (change)="selectDepartment($event.target.value)">
+              داخلي
+          </label>
+        </div>
+
+        <div class="radio radio-inline">
+            <label>
+              <input type="radio" name="subClient" required value="external" (change)="selectDepartment($event.target.value)">
+                خارجي
+            </label>
+          </div>
+      
+
+       
+      <form [formGroup]="ticketReplyForm" *ngIf="innerDepartment" style="margin-top:12px;">
+        
+        <div class="form-group"> 
+       <select class="form-control slecet-form-group" (change)="fromchangeUserType($event)" formControlName="from">
+          <option [ngValue]="null">من</option>
+          <option value="{{userTypes[0].type}}" disabled>{{userTypes[0].title}}</option>
+          <option value="user">{{userName}}</option>
+          <option value="{{userTypes[1].type}}" disabled>{{userTypes[1].title}}</option>
+          <option value="client">{{clientName}}</option>
+          <option value="{{userTypes[2].type}}" disabled>{{userTypes[2].title}}</option>
+          <option *ngFor="let departments of departments"  value="{{departments.id}}">{{departments.title_ar}}</option>
+
+
+        </select>
+    
+                  
+         </div>
+          
+        <div class="form-group">          
+          <select class="form-control slecet-form-group"(change)="tochangeUserType($event)" formControlName="to">
+              <option [ngValue]="null">إلى</option>
+              <option value="{{userTypes[0].type}}" disabled>{{userTypes[0].title}}</option>
+              <option value="user">{{userName}}</option>
+              <option value="{{userTypes[1].type}}" disabled>{{userTypes[1].title}}</option>
+              <option value="client">{{clientName}}</option>
+              <option value="{{userTypes[2].type}}" disabled>{{userTypes[2].title}}</option>
+              <option *ngFor="let departments of departments"  value="{{departments.id}}">{{departments.title_ar}}</option>
+    
+            </select>
+
+        </div>
+        <div class="form-group">
+            <!-- <input type="text" hidden class="form-control" formControlName="ticket_id" placeholder="الموضوع"> -->
+          <input type="text" class="form-control" formControlName="subject" placeholder="الموضوع">
+        </div>
+        <div class="form-group">
+          <!-- <input type="text" hidden class="form-control" formControlName="ticket_id" placeholder="الموضوع"> -->
+          <select class="form-control" (change)="getReplyTemplate(replyTemplate.value)" #replyTemplate>
+            <option value="null" selected>اختر قالب الرد التلقائي</option>
+            <option *ngFor="let template of repliestemplates" value="{{template.id}}">{{template.title_ar}}</option>
+          </select>
+      </div>
+        <div>
+          <textarea class="textarea" placeholder="الرسالة" formControlName="details" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+          <button type="submit"  id="save" class="pull-right btn btn-success reply-btn-mx" (click)="onSubmit(ticketReplyForm.value,'save',content)"  [disabled]="!ticketReplyForm.valid" >حفظ</button>
+          <button type="submit" *ngIf="showSendBtn" id="send" class="pull-right btn btn-success reply-btn-mx" (click)="onSubmit(ticketReplyForm.value,'send',content)" [disabled]="!ticketReplyForm.valid" >إرسال</button>
+          <button class="pull-right btn btn-success margin-r-20 reply-btn-mx"  type="reset" (click)="onReset()">الغاء</button>
+        </div>
+      </form>
+      <form [formGroup]="externalUnitForm" *ngIf="externalDepartment" (ngSubmit)="externalSubmit(externalUnitForm.value)" style="margin-top:12px;">
+        
+        <div  class="form-group">
+            <select class="form-control" formControlName="to">
+                <option [ngValue]="null">الى</option>
+                <option *ngFor="let external of externalUnits" value="{{external.id}}">{{external.title_ar}}</option>
+              </select>
+        </div>
+      
+
+      
+        <div class="form-group">
+            <!-- <input type="text" hidden class="form-control" formControlName="ticket_id" placeholder="الموضوع"> -->
+          <input type="text" class="form-control" formControlName="subject" placeholder="الموضوع">
+        </div>
+        <div class="form-group">
+            <!-- <input type="text" hidden class="form-control" formControlName="ticket_id" placeholder="الموضوع"> -->
+            <select class="form-control" (change)="getReplyTemplateExternal(replyTemplate.value)" #replyTemplate>
+              <option value="null" selected>اختر قالب الرد التلقائي</option>
+              <option *ngFor="let template of repliestemplates" value="{{template.id}}">{{template.title_ar}}</option>
+            </select>
+        </div>
+        <div>
+          <textarea class="textarea reply-btn-mx" placeholder="الرسالة" formControlName="details" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+          <button type="submit" id="save" class="pull-right btn btn-success reply-btn-mx" (click)="open(content)" [disabled]="!externalUnitForm.valid" >حفظ</button>
+
+        </div>
+      </form>
+    </div>
+    <ng-template #content let-modal>
+      <div class="modal-header bg-default">
+        <h4 class="modal-title text-green" id="exampleModalLabel">إضافة رد</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">x</span>
+        </button>
+      </div>
+      <div class="modal-body" style="height: 120px;">
+       <div style="text-align:center">
+        <img *ngIf="addReplySpinner" src="../../../../assets/img/loader.gif" alt="">
+        <h4 *ngIf="!addReplySpinner">تم {{action}} الرد بنجاح</h4>
+       </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" *ngIf="!addReplySpinner" class="btn btn-outline-dark" (click)="modal.close('Save click')">تم</button>
+      </div>
+    </ng-template>
+    
+    <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+    
+    
+  </div>

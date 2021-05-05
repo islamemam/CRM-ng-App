@@ -1,0 +1,552 @@
+<div class="nav-tabs-custom col-md-7">
+    <ngb-tabset  (tabChange)="onTabChange($event)">
+
+      <ngb-tab id="followReply">
+         <ng-template ngbTabTitle> {{ 'TICKET.FOLLOW_REPLY' | translate}}  </ng-template>
+        <ng-template ngbTabContent>
+
+          <div class="box box-solid">
+            <div class="box-header with-border bg-default">
+              <h3 class="box-title text-green">{{ 'TICKET.REPLIES' | translate}}</h3>
+              <div class="box-tools pull-right">
+                  <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+              </div>
+            </div><!-- /.box-header -->
+            <div class="box-body" *ngIf="viewOnly">
+
+              <div class="content sort">
+                <div class="controls inline-block ">
+                  <a class="filter active" data-filter="all">{{ 'GENERAL.SHOW_ALL' | translate}}</a>
+                  <a class="filter text-blue" data-filter=".sent"><i class="bg-blue box-widget"></i>{{ 'TICKET.SENDER' | translate}}</a>
+                  <a class="filter text-yellow" data-filter=".auto-responed"><i class="bg-yellow box-widget"></i>{{ 'TICKET.AUTO_REPLY' | translate}}</a>
+                  <a class="filter text-green" data-filter=".received"><i class="bg-green box-widget"></i>{{ 'TICKET.OUTCOME' | translate}}</a>
+                </div>
+
+                <ngb-pagination *ngIf="Replies != null" [collectionSize]="Replies.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                [pageSize] = "pageSize" [(page)]="Replies.meta.current_page" aria-label="Default pagination"></ngb-pagination>
+
+              </div><!-- content end-->
+              <div class="content" id="sort-list" *ngIf="Replies != null">
+
+                  <img class="small-loading-spinner" *ngIf="RepliesSpinner" src="../../../../assets/img/loader.gif">
+
+                  <div class="row email-box mix auto-responed"  *ngFor="let reply of Replies.data | slice: (Replies.meta.current_page-1) * pageSize : (Replies.meta.current_page-1) * pageSize + pageSize">
+                    <a href="" class="kn-save-link" title="{{'GENERAL.SAVE_KNOWLEDAGE'|translate}}"><i class="fa fa-save"></i></a>
+                    <a href="">
+                      <img src="/assets/img/user-160x160.png" class="col-xs-2">
+                      <div class="">
+
+                        <strong>{{reply.user.name}}</strong>
+                        <p>  {{reply.details}}<span class="pull-right margin-r-10 text-gray "> {{reply.created_at|date : 'dd/MM/yyyy | hh:mm a' }}  </span></p>
+                      </div>
+                    </a>
+                  </div>
+
+              </div><!-- content end-->
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+
+          <app-add-tickets-reply *ngIf="viewOnly" [ticketObject]="ticketObject"></app-add-tickets-reply>
+
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="linkTicket">
+          <ng-template ngbTabTitle>{{ 'TICKET.LINKTICKETS' | translate}}</ng-template>
+          <ng-template ngbTabContent>
+
+                  <div class="box box-solid">
+                      <div class="box-header with-border bg-default">
+                        <h3 class="box-title text-green">{{ 'TICKET.FILTER' | translate}}</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div><!-- /.box-header -->
+                      <div class="box-body">
+                          <form class="form-horizontal">
+                              <div class="form-group">
+                                  <div class="col-md-6">
+                                    <label for="inputTeckitNum2" class="col-sm-3 control-label">{{ 'TICKET.TICKET_ID' | translate}}</label>
+                                    <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                      <input type="number" class="form-control" id="inputTeckitNum2" placeholder="00 ">
+                                      <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                    </div>
+                                  </div><!-- /.col-->
+                                  <div class="col-md-6">
+                                      <label class="col-sm-3 control-label">{{ 'TICKET.SOURCE' | translate}}</label>
+                                      <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                        <select class="form-control">
+                                          <option selected="">اختر المصدر</option>
+                                          <option>اختيار 1</option>
+                                          <option>اختيار 2</option>
+                                          <option>اختيار 3</option>
+                                          <option>اختيار 4</option>
+                                          <option>اختيار 5</option>
+                                        </select>
+                                        <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                      </div>
+                                    </div><!-- /.col-->
+                                </div><!-- /.form-group -->
+                              <div class="form-group">
+                                  <div class="col-md-6">
+                                    <label for="inputGroup2" class="col-sm-3 control-label">{{ 'GENERAL.GENDER' | translate}}</label>
+                                    <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                      <select class="form-control">
+                                        <option selected="">{{ 'GENERAL.CHOSE_TYPE' | translate}}</option>
+                                        <option>اختيار 1</option>
+                                        <option>اختيار 2</option>
+                                        <option>اختيار 3</option>
+                                        <option>اختيار 4</option>
+                                        <option>اختيار 5</option>
+                                      </select>
+                                      <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                    </div>
+                                  </div><!-- /.col-->
+                                  <div class="col-md-6">
+                                      <label for="inputAssigned2" class="col-sm-3 control-label">{{ 'TICKET.DELIVER_TO' | translate}}</label>
+                                      <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                        <input type="text" class="form-control" id="inputAssigned2" placeholder="تسليم الى ">
+                                        <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                      </div>
+                                    </div><!-- /.col-->
+                                </div><!-- /.form-group -->
+
+                                <div class="form-group">
+                                  <div class="col-md-6">
+                                    <label class="col-sm-3 control-label">الحالة</label>
+                                    <div class="col-sm-9">
+                                      <select class="form-control">
+                                        <option selected="">اختر</option>
+                                        <option>اختيار 1</option>
+                                        <option>اختيار 2</option>
+                                        <option>اختيار 3</option>
+                                        <option>اختيار 4</option>
+                                        <option>اختيار 5</option>
+                                      </select>
+                                    </div>
+                                  </div><!-- /.col-->
+                                  <div class="col-md-6 dateTime">
+                                      <label for="inputName2" class="col-sm-3 control-label">تاريخ الاغلاق</label>
+                                      <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                        <input class="date form_date form-control" data-date-format="dd/MM/yyyy" type="text" value="" placeholder="dd/MM/yyyy">
+                                        <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                      </div>
+                                    </div><!-- /.col-->
+                                </div><!-- /.form-group -->
+                                <div class="form-group">
+                                  <div class="col-md-6">
+                                    <label class="col-sm-3 control-label">الاهمية</label>
+                                    <div class="col-sm-9">
+                                      <select class="form-control">
+                                        <option selected="">اختر</option>
+                                        <option>اختيار 1</option>
+                                        <option>اختيار 2</option>
+                                        <option>اختيار 3</option>
+                                        <option>اختيار 4</option>
+                                        <option>اختيار 5</option>
+                                      </select>
+                                    </div>
+                                  </div><!-- /.col-->
+                                  <div class="col-md-6">
+                                      <label for="inputFileNum2" class="col-sm-3 control-label">رقم الملف</label>
+                                      <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                        <input type="number" class="form-control" id="inputFileNum2" placeholder="00">
+                                        <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                      </div>
+                                    </div><!-- /.col-->
+                                </div><!-- /.form-group -->
+                                <div class="form-group">
+                                  <span class="col-xs-12">
+                                    <button type="reset" class="btn bg-gray-dark margin-r-15 pull-right">تفريغ الحقول</button>
+                                    <button type="submit" class="btn btn-success margin-r-10 pull-right"> تصفية النتائج</button>
+                                  </span>
+                                </div>
+                            </form>
+                        <hr/>
+                        <!-- <div class="content sort">
+                          <ul class="pagination pull-right">
+                            <li class="disabled"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a></li>
+                            <li class="active"><a href="javascript:void(0)">1</a></li>
+                            <li><a href="javascript:void(0)">2</a></li>
+                            <li><a href="javascript:void(0)">3</a></li>
+                            <li><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a></li>
+                          </ul>
+                        </div> -->
+
+                        <div class="content sort">
+                          <ngb-pagination [collectionSize]="mergedTicketsData.meta.total" [rotate]="true" [maxSize]="paginationMaxSize" class="pull-right"
+                          [pageSize] = "relatedPageSize" [(page)]="mergedTicketsData.meta.current_page" aria-label="Default pagination"></ngb-pagination>
+
+                        </div>
+                        <div class="content">
+                          <div *ngFor="let n of mergedTicketsData['data'] | slice: (mergedTicketsData.meta.current_page-1) * pageSize : (mergedTicketsData.meta.current_page-1) * pageSize + pageSize"
+                          class="row email-box history">
+                            <a href="#">
+                              <div class="col-sm-3 text-gray">
+                                <p>{{n.status[0].updated_at}}</p>
+                                <p>{{n.status[0].title_ar}}</p>
+                              </div>
+                              <div class="col-sm-9 history-info">
+                                <strong>{{n.id}}</strong>
+                                <p>{{n.details}}</p>
+                              </div>
+                            </a>
+                          </div>
+                          <!-- block End-->
+
+                      </div><!-- content end-->
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+
+
+       </ng-template>
+      </ngb-tab>
+      <ngb-tab id="perviousTicket">
+          <ng-template ngbTabTitle>{{ 'TICKET.PREVIOUSTICKETS' | translate}}</ng-template>
+          <ng-template ngbTabContent>
+
+              <div class="box box-solid">
+                  <div class="box-header with-border bg-default">
+                    <h3 class="box-title text-green">تصفية</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div><!-- /.box-header -->
+                  <div class="box-body" *ngIf="clientidselected">
+
+                      <form class="form-horizontal" [formGroup] ="pastTicketsForm" (ngSubmit) = "pastTicketFilter()">
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                <label for="inputTeckitNum" class="col-sm-3 control-label">رقم التذكرة</label>
+                                <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                  <input type="number" class="form-control" id="inputTeckitNum" placeholder="00 " formControlName="id">
+                                  <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                </div>
+                              </div><!-- /.col-->
+                              <div class="col-md-6">
+                                  <label class="col-sm-3 control-label">المصدر</label>
+                                  <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                  <img class="small-loading-spinner" *ngIf="sourcesSpinner" src="../../../../assets/img/loader.gif">
+                                    <select class="form-control"*ngIf="!sourcesSpinner" formControlName="source_id">
+                                      <option selected="" value="" disabled>اختر المصدر</option>
+                                      <option *ngFor="let source of sources" value="{{source.id}}"> {{source.title_ar}}</option>
+
+                                    </select>
+                                    <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                  </div>
+                                </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                          <div class="form-group">
+                              <div class="col-md-6">
+                                <label for="inputGroup"  class="col-sm-3 control-label">النوع</label>
+                                <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                  <img class="small-loading-spinner" *ngIf="typesSpinner" src="../../../../assets/img/loader.gif">
+                                  <select class="form-control" *ngIf="!typesSpinner" formControlName="ticket_type_id">
+                                    <option selected="" value="" disabled>اختر النوع</option>
+                                    <option *ngFor="let type of types" value="{{type.id}}"> {{type.title_ar}}</option>
+
+                                  </select>
+                                  <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                </div>
+                              </div><!-- /.col-->
+                              <div class="col-md-6">
+                                  <label for="inputAssigned" class="col-sm-3 control-label">تسليم الى</label>
+                                  <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                    <img class="small-loading-spinner" *ngIf="hospitalsSpinner" src="../../../../assets/img/loader.gif">
+                                    <select class="form-control" formControlName="hospital_id" *ngIf="!hospitalsSpinner" >
+                                      <option selected="" value="" disabled>اختر الجهة</option>
+                                      <option *ngFor="let hospital of hospitals" value="{{hospital.id}}"> {{hospital.title_ar}}</option>
+
+                                    </select>
+                                    <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                  </div>
+                                </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+
+                            <div class="form-group">
+                              <div class="col-md-6">
+                                <label class="col-sm-3 control-label">الحالة</label>
+                                <div class="col-sm-9">
+                                  <img class="small-loading-spinner" *ngIf="statusSpinner" src="../../../../assets/img/loader.gif">
+                                  <select class="form-control" formControlName="status_id" *ngIf="!statusSpinner" >
+                                    <option selected="" value="" disabled>اختر </option>
+                                    <option *ngFor="let statue of status" value="{{statue.id}}"> {{statue.title_ar}}</option>
+
+                                  </select>
+                                </div>
+                              </div><!-- /.col-->
+                              <div class="col-md-6 dateTime">
+                                  <label for="inputName" class="col-sm-3 control-label">تاريخ الاغلاق</label>
+                                  <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                    <input id="dateOfBirth" class="form-control"(click)="dp.toggle()"  placeholder="yyyy-mm-dd"  ngbDatepicker #dp="ngbDatepicker">
+                                    <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                  </div>
+                                </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <div class="col-md-6">
+                                <label class="col-sm-3 control-label">الاهمية</label>
+                                <div class="col-sm-9">
+                                  <img class="small-loading-spinner" *ngIf="statusSpinner" src="../../../../assets/img/loader.gif">
+                                  <select class="form-control" formControlName="priority_id">
+                                      <option selected="" value="" disabled>اختر </option>
+                                      <option *ngFor="let priority of priorities" value="{{priority.id}}"> {{priority.title_ar}}</option>
+                                  </select>
+                                </div>
+                              </div><!-- /.col-->
+                              <div class="col-md-6">
+                                  <label for="inputFileNum" class="col-sm-3 control-label">رقم الملف</label>
+                                  <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                    <input type="number" class="form-control" id="inputFileNum" formControlName="file_number"placeholder="00">
+                                    <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                  </div>
+                                </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <span class="col-xs-12">
+                                <button type="reset" class="btn bg-gray-dark margin-r-15 pull-right">تفريغ الحقول</button>
+                                <button type="submit" class="btn btn-success margin-r-10 pull-right"> تصفية النتائج</button>
+                              </span>
+                            </div>
+                        </form>
+                    <hr/>
+                    <!-- <div class="content sort">
+                      <ul class="pagination pull-right">
+                        <li class="disabled"><a href="javascript:void(0)"><i class="fa fa-angle-right"></i></a></li>
+                        <li class="active"><a href="javascript:void(0)">1</a></li>
+                        <li><a href="javascript:void(0)">2</a></li>
+                        <li><a href="javascript:void(0)">3</a></li>
+                        <li><a href="javascript:void(0)"><i class="fa fa-angle-left"></i></a></li>
+                      </ul>
+                    </div> -->
+                    <ngb-pagination [collectionSize]="pastTickets.meta.total" [(page)]="page" aria-label="Default pagination"
+                      class="custom-pagination" (click)="changePage($event)"></ngb-pagination><!-- ./row end-->
+                    <div>
+                        <img src="../../../../assets/img/loader.gif" alt="" *ngIf="pastTicketsLoaded">
+                    </div>
+                    <div class="content" style="text-align:center">
+                      <div class="row email-box history" *ngFor="let pastTicket of pastTickets.data" >
+                        <a href="#">
+                          <div class="col-sm-3 text-gray">
+                            <p>{{pastTicket.updated_at}}</p>
+                            <p>{{pastTicket.priority.title_ar}}</p>
+                          </div>
+                          <div class="col-sm-9 history-info">
+                            <strong>{{pastTicket.hospital.title_ar}}</strong>
+                            <p>{{pastTicket.details}} - {{pastTicket.main_reason.title_ar}}</p>
+                          </div>
+                        </a>
+                      </div>
+                      <!-- block End-->
+
+                      <!-- block End-->
+                  </div><!-- content end-->
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+
+       </ng-template>
+      </ngb-tab>
+      <ngb-tab   id="ticketHistory">
+        <ng-template ngbTabTitle>{{ 'TICKET.HISTORY' | translate}}</ng-template>
+        <ng-template ngbTabContent>
+            <div class="tab-pane" id="history">
+                <app-tickets-list *ngIf="viewOnly" [ticketObject]="ticketObject"></app-tickets-list>
+
+
+            </div><!-- /.tab-pane -->
+
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab  id="knowbase">
+          <ng-template ngbTabTitle>{{ 'TICKET.KNOWLEDAGE' | translate}}</ng-template>
+          <ng-template ngbTabContent>
+              <div class="box box-solid">
+                  <div class="box-header with-border bg-default">
+                    <h3 class="box-title text-green">للمعرفة</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                  </div><!-- /.box-header -->
+                  <div class="box-body">
+                      <form class="form-horizontal">
+                          <div class="form-group">
+                            <div class="col-sm-12">
+                              <label for="inputTopicSearch" class="col-sm-3 control-label"> بحث الموضوعات</label>
+                              <div class="col-sm-9">
+                                  <input type="text" name="Search" class="form-control" [(ngModel)]="keyWord" placeholder=" بحث...">
+                                  <button type="button" class="btn btn-flat search-btn" (click)="search()"><i
+                                      class="fa fa-search"></i></button>
+                                                            </div>
+                            </div><!-- /.col-->
+                          </div><!-- /.form-group -->
+                      </form><hr/>
+                      <ngb-pagination [collectionSize]="categoriesData.meta.total" [(page)]="page" aria-label="Default pagination"
+                      class="custom-pagination" (click)="changePage($event)"></ngb-pagination>
+                                              <br>
+                                              <div class="knBase" *ngFor="let cat of categoriesData.data">
+                                                  <div class="page-header ">{{cat.title_ar}}</div>
+                                                  <ngb-accordion #acc="ngbAccordion">
+                                                    <ngb-panel *ngFor="let kb of cat.knowledge_bases" id="toggle-{{kb.id}}" [title]="kb.title_ar">
+                                                      <ng-template ngbPanelContent>
+                                        <p>
+                                            {{kb.details_ar}}
+                                        </p>
+                                                      </ng-template>
+                                                    </ngb-panel>
+                                                  </ngb-accordion>
+                                                  <hr />
+                                                </div>
+                                                                                    </div><!-- /.box-body -->
+              </div><!-- /.box -->
+
+       </ng-template>
+      </ngb-tab>
+
+      <ngb-tab id="note">
+          <ng-template ngbTabTitle> {{ 'TICKET.NOTES' | translate}}  </ng-template>
+          <ng-template ngbTabContent *ngIf="viewOnly">
+
+                  <div class="box box-solid" >
+                      <div class="box-header with-border bg-default">
+                        <h3 class="box-title text-green">{{'TICKET.NOTES' | translate}}</h3>
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                      </div><!-- /.box-header -->
+                      <div class="box-body">
+                        <form class="form-horizontal" (ngSubmit)="saveNote(noteForm)" #noteForm="ngForm">
+
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <label for="inputNoteSubject" class="col-sm-3 control-label">{{'KNOWLEDGE_BASE.SUBJECT'|translate}} </label>
+                                <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                  <input type="text" class="form-control" id="inputNoteSubject" placeholder="{{'KNOWLEDGE_BASE.SUBJECT'|translate}} " name="title" [(ngModel)]="note.title" required>
+                                  <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                </div>
+                              </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <div class="col-sm-12">
+                                <label for="inputNoteDetails" class="col-sm-3 control-label">{{'GENERAL.DETAILS'|translate}}</label>
+                                <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                  <textarea rows="6" class="form-control" id="inputNoteDetails" placeholder="{{'GENERAL.DETAILS'|translate}}" name="details" [(ngModel)]="note.details" required></textarea>
+                                  <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                </div>
+                              </div><!-- /.col-->
+                            </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <span class="col-sm-12">
+                                <button type="button" class="btn btn-success margin-r-15 pull-right" (click)="loadNotesBasedOnClient()" [disabled]="!clientidselected"> تحميل كل الملاحظات</button>
+                                <button type="submit"   [disabled]="(!noteForm.valid) " class="btn btn-success margin-r-10 pull-right"> حفظ</button>
+                              </span>
+                            </div>
+                        </form>
+                      </div><!-- /.box-body -->
+                    </div><!-- /.box -->
+
+                    <div class="box box-solid">
+                        <div class="box-header with-border bg-default">
+                          <h3 class="box-title text-green">قائمة الملاحظات</h3>
+                          <div class="box-tools pull-right">
+                              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <img class="small-loading-spinner" *ngIf="loadingNotes" src="../../../../assets/img/loader.gif">
+                            <table id="example1" class="table table-bordered table-striped text-center">
+                                <thead class="bg-gray-dark">
+                                  <tr>
+                                    <th>{{'TICKET.TICKET_ID'|translate}}</th>
+                                    <th>{{'GENERAL.DETAILS' |translate}}</th>
+                                    <th>{{'USERS.USERNAME'|translate}}</th>
+                                    <th>{{'GENERAL.DATE'|translate}}</th>
+                                    <th>{{'GENERAL.EDIT'|translate}}</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody *ngIf="!loadingNotes">
+                                  <tr *ngFor="let relatednote of relatedTicketNotes;let i = index">
+                                      <td>{{relatednote.ticket_id}}</td>
+                                      <td>{{relatednote.details}}</td>
+                                      <td>{{relatednote.user.name}}</td>
+                                      <td>{{relatednote.created_at |date : 'dd/MM/yyyy  hh:mm a' }}</td>
+                                      <td>
+                                          <a style="cursor: pointer;"(click)="open(editNoteModal)"><i class="fa fa-pencil margin-r-5 text-green"></i></a>
+                                          <a style="cursor: pointer;"(click)="deleteNote(relatednote.id)"><i class="fa fa-trash-o margin-r-5 text-red"></i></a>
+                                        </td>
+                                        <ng-template #editNoteModal let-modal>
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-default">
+                                                  <h4 class="modal-title text-green" id="exampleModalLabel">تعديل الملاحظة</h4>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                  </button>
+                                                </div>
+                                                <div class="modal-body margin" style="height: unset;">
+                                                  <h3 *ngIf="updateNoteDone">تم تعديل التذكرة بنجاح</h3>
+                                                   <img class="small-loading-spinner" *ngIf="updateNoteSpinner" src="../../../../assets/img/loader.gif">
+                                                    <form class="form-horizontal" *ngIf="!updateNoteLoading"(ngSubmit)="updateNote(updateNoteForm.value,relatednote.id)" #updateNoteForm="ngForm" >
+                                                        <div class="form-group">
+                                                          <div class="col-sm-12">
+                                                            <label for="inputNoteEditSubject" class="col-sm-3 control-label">الموضوع </label>
+                                                            <div class="col-sm-9"><!-- add class "has-success" for validation-->
+                                                              <input type="text" class="form-control" id="inputNoteEditSubject" [(ngModel)]="relatednote.title" name="title" value="{{relatednote.title}}" placeholder="الموضوع ">
+
+
+                                                              <!-- <label class="control-label" for="inputSuccess"><i class="fa fa-check"></i>تم الأدخال بنجاح</label> -->
+                                                            </div>
+                                                          </div><!-- /.col-->
+                                                        </div><!-- /.form-group -->
+                                                        <div class="form-group">
+                                                          <div class="col-sm-12">
+                                                            <label for="inputNoteEditDetails" class="col-sm-3 control-label">الملاحظة</label>
+                                                            <div class="col-sm-9"><!-- add class "has-error" for validation-->
+                                                              <textarea rows="6" class="form-control" id="inputNoteEditDetails" [(ngModel)]="relatednote.details" name="details" placeholder="الملاحظة">{{relatednote.details}}</textarea>
+                                                              <!-- <label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i>خطأ في الأدخال</label> -->
+                                                            </div>
+                                                          </div><!-- /.col-->
+                                                        </div><!-- /.form-group -->
+                                                        <div class="form-group">
+                                                          <span class="col-sm-12">
+                                                            <button type="submit" class="btn bg-gray-dark margin-r-15 pull-right" data-dismiss="modal" (click)="modal.close('Save click')">إلغاء</button>
+                                                            <button type="submit" class="btn btn-success margin-r-10 pull-right"> حفظ</button>
+                                                          </span>
+                                                        </div>
+                                                    </form>
+                                                    <button *ngIf="updateNoteDone" class="btn bg-gray-dark margin-r-15 pull-right" data-dismiss="modal" (click)="modal.close('Save click')">إغلاق</button>
+
+                                                </div>
+                                              </div>
+                                          </ng-template>
+                                  </tr>
+
+                                 <!-- <tr *ngFor="let note of notesobject;let i = index">
+                                    <td>{{note.ticket_id}}</td>
+                                    <td>{{note.details}}</td>
+                                    <td>{{note.user.name}}</td>
+                                    <td>{{note.created_at |date : 'dd/MM/yyyy  hh:mm a' }}</td>
+                                    <td>
+                                        <a  routeLink="" data-toggle="modal" data-target="#editNote" (click)="editNote(i)"><i class="fa fa-pencil margin-r-5 text-green"></i></a>
+                                        <a  routeLink=""    (click)="deleteNote(i)"><i class="fa fa-trash-o margin-r-5 text-red"></i></a>
+                                      </td>
+                                 </tr> -->
+                                 <h3 class="text-center" *ngIf="noTickets">لايوجد ملاحظات </h3>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                      </div><!-- /.box -->
+
+
+    </ng-template>
+  </ngb-tab>
+
+     </ngb-tabset>
+
+  </div>
+
+

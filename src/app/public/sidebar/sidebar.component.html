@@ -1,0 +1,224 @@
+<nav class="main-menu">
+  <div class="scrollbar" id="style">
+    <ul>
+      <li>
+        <a routerLink="/" class="new-logo">
+          <i class="fa">
+            <img src="../../assets/img/min-logo.png" alt="logo" />
+          </i>
+          <img src="../../assets/img/logo.png" alt="logo" />
+        </a>
+      </li>
+      <li>
+        <a routerLink="/">
+          <i class="fa fa-home fa-lg"></i>
+          <span class="nav-text">{{'GENERAL.LAND_PAGE' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a *ngIf="isGranted('Display Messages')" routerLink="/messages">
+          <i class="fa fa-envelope-o"></i>
+          <span class="nav-text">{{'GENERAL.MESSAGES' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a *ngIf="isGranted('Display Clients')" routerLink="/clients">
+          <i class="fa fa-users"></i>
+          <span class="nav-text">{{'BENEFICIARIES.THE_BENEFICIARIES' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a *ngIf="isGranted('Display Ticket')" routerLink="/tickets">
+          <i class="fa fa-ticket"></i>
+          <span class="nav-text">{{'TICKET.TICKET' | translate}}</span>
+        </a>
+      </li>
+      <li ngbDropdown class="sidePanelDropDown">
+        <a id="ticketsFilter" ngbDropdownToggle>
+          <i class="fa fa-list"></i>
+          <span class="nav-text dropDownArrow">{{'TICKET.TICKET_SUMMARY' | translate}}</span>
+        </a>
+        <ul ngbDropdownMenu aria-labelledby="ticketsFilter">
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ viewname: 'delted-tickets'}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.DELETED_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ viewname: 'due-date-tickets'}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.due_date_tickets' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ status_id: 1}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.NEW_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ status_id:2}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.PENDING_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{  status_id:3}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.SOLVED_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{  status_id:4}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.CLOSED_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ viewname: 'unassigned-tickets'}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.WAITING_TICKETS' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="tickets-filter"
+              [queryParams]="{ viewname: 'unsolved-tickets'}">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text">{{'TICKET.NON_SOLVED_TICKETS' | translate}}</span>
+            </a>
+          </li>
+        </ul>
+
+      </li>
+      <li>
+        <a *ngIf="isGranted('')" routerLink="/reports">
+          <i class="fa fa-bullhorn"></i>
+          <span class="nav-text">{{'CAMPAIGNS.campaigns' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a *ngIf="isGranted('Display reports')" routerLink="/reports">
+          <i class="fa fa-file-text-o"></i>
+          <span class="nav-text">{{'REPORTS.REPORTS' | translate}}</span>
+        </a>
+      </li>
+
+      <li>
+        <a *ngIf="isGranted('Display KnBase')" routerLink="kn-base">
+          <i class="fa fa-question"></i>
+          <span class="nav-text">{{'KNOWLEDGE_BASE.KNOWLEDGE_BASE' | translate}}</span>
+        </a>
+      </li>
+      <li>
+        <a *ngIf="isGranted('Display Events')" routerLink="/events">
+          <i class="fa fa-calendar"></i>
+          <span class="nav-text">{{'EVENTS.EVENTS' | translate}}</span>
+        </a>
+      </li>
+      <li ngbDropdown class="sidePanelDropDown">
+        <a id="SETTINGS" ngbDropdownToggle>
+          <i class="fa fa-cog"></i>
+          <span class="nav-text dropDownArrow">{{'GENERAL.SETTINGS' | translate}}</span>
+        </a>
+        <ul ngbDropdownMenu aria-labelledby="SETTINGS">
+          <li>
+            <a ngbDropdownItem routerLink="lookups/auto-response">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.AUTO_REPLAY_MANAGMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display Users')" ngbDropdownItem routerLink="user-management">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'USERS.USERS_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a ngbDropdownItem>
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'HR.HUMAN_RESOURCES' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display Business Rules') || isGranted('Display SLA')" ngbDropdownItem
+              routerLink="workflow-management">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'WORK_FLOW.WORK_FLOW_MANAGMENT' | translate}}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li ngbDropdown class="sidePanelDropDown">
+        <a id="SYSTEM_ADMIN" ngbDropdownToggle>
+          <i class="fa fa-television"></i>
+          <span class="nav-text dropDownArrow"> {{'SYSTEM_ADMIN.SYSTEM_ADMIN' | translate}}</span>
+        </a>
+        <ul ngbDropdownMenu aria-labelledby="SYSTEM_ADMIN">
+          <li>
+            <a *ngIf="isGranted('Display Organizations')" ngbDropdownItem routerLink="lookups/organizations">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.ORGANISATIONS_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display Nationalities')" ngbDropdownItem routerLink="lookups/nationalities">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.NATIONALITIES_DEPARTMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display Statuses')" ngbDropdownItem routerLink="lookups/status">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.CASE_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display TicketTypes')" ngbDropdownItem routerLink="lookups/tickettypes">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.TICKETS_TYPE_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display SubReasons')" ngbDropdownItem routerLink="lookups/subreasons">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.SUB_CAUSES_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display Tags')" ngbDropdownItem routerLink="lookups/tags">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.NOTIFICATIONS_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display MergeReasons')" ngbDropdownItem routerLink="lookups/mergereasons">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.LINKING_AND_MERGING_MANAGEMENT' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a *ngIf="isGranted('Display QuestionCategories') || isGranted('Display Questions')" ngbDropdownItem
+              routerLink="lookups/questionnaire">
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'GENERAL.QUESTIONNAIRE' | translate}}</span>
+            </a>
+          </li>
+          <li>
+            <a ngbDropdownItem>
+              <i class="fa fa-circle-o"></i>
+              <span class="nav-text"> {{'SYSTEM_ADMIN.SYSTEM_ADMIN' | translate}}</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>

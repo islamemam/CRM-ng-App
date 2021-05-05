@@ -1,0 +1,45 @@
+<div class="content-wrapper" id="content-wrapper">
+  <section class="content-header">
+    <h1>
+      {{ page_title | translate}}
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> {{'GENERAL.LAND_PAGE' | translate}}</a></li>
+      <li class="active">{{'TICKET.TICKET' | translate}}</li>
+    </ol>
+  </section>
+
+    <section class="content">
+            <div class="box box-solid">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-striped text-center">
+                              <thead class="bg-gray-dark">
+                                  <tr>
+                                    <th>الاهمية</th>
+                                    <th>{{'BENEFICIARIES.BENEFICIARY_NAME' | translate}} </th>
+                                    <th>رقم التذكرة ونوعها</th>
+                                    <th>حالة التذكرة</th>
+                                    <th>اسم الموظف المسؤول</th>
+                                    <th>وقت اخر تعديل</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let ticket of viwetable.data">
+                                      <td>{{ticket.priority.title_ar}}</td>
+                                      <td>{{ticket.client.name}}</td>
+                                      <td><b>{{ticket.ticket_type.title_ar}}</b> -#{{ticket.id}}</td>
+                                      <td>{{ticket.status.title_ar}}</td>
+                                      <td>{{ticket.user.name}}</td>
+                                      <td class="text-gray">{{ticket.updated_at}}</td>
+                                    </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <ngb-pagination [collectionSize]="viwetable.meta.total" [(page)]="page" aria-label="Default pagination"
+                        class="custom-pagination" (click)="ticketsPages($event)"></ngb-pagination>                
+                        <!-- <ngb-pagination [collectionSize]="viwetable.meta.total" [(page)]="page" aria-label="Default pagination"
+                        class="custom-pagination" (click)="solvedTicketsPage($event)"></ngb-pagination>                 -->
+                        
+                  </div>
+    </section>
+  </div>
